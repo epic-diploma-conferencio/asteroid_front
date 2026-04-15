@@ -1,0 +1,82 @@
+@use '@/shared/styles/breakpoints' as *;
+
+.Header {
+  display: flex;
+  height: clamp(70px, 10dvh, 80px);
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--pad-lg);
+
+  &__name-and-icon {
+    align-items: center;
+    display: flex;
+    gap: var(--space-3);
+    max-height: fit-content;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: var(--space-1);
+
+    button {
+      font-size: var(--fs-md);
+      padding: var(--pad-xs) var(--pad-sm);
+    }
+
+    @include xs {
+      gap: var(--space-3);
+    }
+  }
+
+  &__profile-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    &__profile-pic {
+      width: 32px;
+      height: 32px;
+      border-radius: 100%;
+      border: 1px solid #000;
+    }
+
+    &__skeleton {
+      width: 80px;
+      height: 18px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(
+        90deg,
+        var(--color-surface-2) 25%,
+        var(--color-border) 50%,
+        var(--color-surface-2) 75%
+      );
+      background-size: 400% 100%;
+      animation: header-shimmer 1.2s ease infinite;
+    }
+
+    .name-span {
+      font-weight: 500;
+    }
+
+    .chevron {
+      color: var(--color-primary-active);
+    }
+  }
+
+  @include xs {
+    padding: 0 var(--pad-xl);
+  }
+
+  @include sm {
+    padding: 0 var(--pad-3xl);
+  }
+}
+
+@keyframes header-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

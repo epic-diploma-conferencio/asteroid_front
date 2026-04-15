@@ -1,0 +1,11 @@
+.badge {
+  padding: var(--pad-xs);
+  border-radius: var(--radius-md);
+}
+.blue {
+  background-color: var(--badge-blue);
+  color: var(--primary);
+}
+.rounded {
+  border-radius: var(--radius-xl);
+}

@@ -1,0 +1,32 @@
+.button {
+  padding: var(--pad-xs) var(--pad-md);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: background 0.1s ease;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.primary {
+  background-color: var(--primary);
+  &:hover {
+    transition: background 0.3s ease;
+    background-color: var(--primary-hover);
+  }
+  &:active {
+    transition: background 0.1s ease;
+    background-color: var(--primary-active);
+  }
+}
+.secondary {
+  background-color: transparent;
+  color: var(--secondary-text);
+  &:hover {
+    background-color: var(--primary);
+    color: var(--color-text);
+  }
+  &:active {
+    transition: background 0.1s ease;
+    background-color: var(--primary-active);
+  }
+}

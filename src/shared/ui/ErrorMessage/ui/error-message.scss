@@ -1,0 +1,9 @@
+@use '@/shared/styles/breakpoints' as *;
+
+.error {
+  color: var(--color-danger);
+  font-size: var(--fs-sm);
+  @include xs {
+    font-size: var(--fs-md);
+  }
+}

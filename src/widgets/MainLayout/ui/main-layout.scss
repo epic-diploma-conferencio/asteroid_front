@@ -1,0 +1,52 @@
+@use '@/shared/styles/breakpoints' as *;
+
+// .header {
+//   padding: 12px;
+
+//   @include md {
+//     padding: 24px;
+//   }
+
+//   @include lg {
+//     padding: 32px;
+//   }
+// }
+
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-inline: auto;
+  height: 100dvh;
+
+  &__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-x: clip;
+    padding: var(--pad-xs) var(--pad-lg);
+
+    @include xs {
+      padding: var(--pad-sm) var(--pad-xl);
+    }
+
+    @include sm {
+      padding: var(--pad-md) var(--pad-3xl);
+    }
+
+    &--no-padding {
+      padding: 0;
+      overflow: hidden;
+    }
+  }
+
+  @include lg {
+    max-width: 90dvw;
+  }
+  @include xl {
+    max-width: 80dvw;
+  }
+  @include xxl {
+    max-width: 70dvw;
+  }
+}

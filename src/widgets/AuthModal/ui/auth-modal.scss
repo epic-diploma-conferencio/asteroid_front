@@ -1,0 +1,87 @@
+@use '@/shared/styles/breakpoints' as *;
+
+@mixin skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface) 25%,
+    var(--color-surface-2) 50%,
+    var(--color-surface) 75%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.2s ease infinite;
+}
+
+.dialog__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  @include xs {
+    gap: var(--space-8);
+  }
+}
+
+.dialog__text-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.dialog__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.skeleton-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  @include skeleton-shimmer;
+}
+
+.skeleton-text-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.skeleton-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.skeleton-line {
+  border-radius: var(--radius-md);
+  @include skeleton-shimmer;
+
+  &--title {
+    height: 28px;
+    width: 55%;
+  }
+  &--subtitle {
+    height: 18px;
+    width: 80%;
+  }
+  &--label {
+    height: 14px;
+    width: 30%;
+    border-radius: var(--radius-xs);
+  }
+  &--input {
+    height: 42px;
+    margin-bottom: var(--space-2);
+  }
+  &--button {
+    height: 42px;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

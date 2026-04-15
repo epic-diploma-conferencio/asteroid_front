@@ -1,0 +1,71 @@
+@mixin shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface) 25%,
+    var(--color-surface-2) 50%,
+    var(--color-surface) 75%
+  );
+  background-size: 400% 100%;
+  animation: modal-shimmer 1.2s ease infinite;
+}
+
+@keyframes modal-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.modal-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-bottom: var(--space-4);
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    @include shimmer;
+  }
+
+  &__text-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  &__line {
+    border-radius: var(--radius-md);
+    @include shimmer;
+
+    &--title {
+      height: 28px;
+      width: 55%;
+    }
+    &--subtitle {
+      height: 18px;
+      width: 80%;
+    }
+    &--label {
+      height: 14px;
+      width: 30%;
+      border-radius: var(--radius-xs);
+    }
+    &--input {
+      height: 42px;
+      margin-bottom: var(--space-2);
+    }
+    &--button {
+      height: 42px;
+    }
+  }
+}
