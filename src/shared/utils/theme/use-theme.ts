@@ -7,7 +7,6 @@ export type ThemeMode = 'light' | 'dark' | 'system';
 interface ThemeState {
   mode: ThemeMode;
   setMode: (mode: ThemeMode) => void;
-  toggle: () => void;
 }
 
 const useThemeStore = createPersistedStore<ThemeState>(
@@ -17,10 +16,6 @@ const useThemeStore = createPersistedStore<ThemeState>(
     setMode: (mode) =>
       set((draft) => {
         draft.mode = mode;
-      }),
-    toggle: () =>
-      set((draft) => {
-        draft.mode = draft.mode === 'dark' ? 'light' : 'dark';
       }),
   }),
   { name: 'theme-store' },
@@ -37,28 +32,13 @@ function applyTheme(mode: ThemeMode) {
   document.documentElement.setAttribute('data-theme', getResolvedTheme(mode));
 }
 
-/**
- * Управление темой приложения.
- *
- * - `mode` — выбранный режим: `'light'`, `'dark'`, или `'system'` (по умолчанию).
- * - `resolvedTheme` — фактическая тема (`'light'` | `'dark'`), с учётом системной.
- * - `setMode` — установить конкретный режим.
- * - `toggle` — переключить между `light` и `dark`.
- *
- * Применяет `data-theme` на `<html>` и отслеживает системные изменения при `mode === 'system'`.
- *
- * @example
- * const { resolvedTheme, toggle } = useTheme();
- */
-export function useTheme() {
-  const { mode, setMode, toggle } = useThemeStore();
+export function useSyncThemeEffect() {
+  const { mode } = useThemeStore();
 
-  // Применяем тему при изменении mode
   useEffect(() => {
     applyTheme(mode);
   }, [mode]);
 
-  // Следим за системной темой, если выбран режим 'system'
   useEffect(() => {
     if (mode !== 'system') {
       return;
@@ -72,11 +52,30 @@ export function useTheme() {
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, [mode]);
+}
+
+/**
+ * Управление темой приложения.
+ *
+ * - `mode` — выбранный режим: `'light'`, `'dark'`, или `'system'` (по умолчанию).
+ * - `resolvedTheme` — фактическая тема (`'light'` | `'dark'`), с учётом системной.
+ * - `setMode` — установить конкретный режим.
+ * - `toggle` — переключить между `light` и `dark`.
+ *
+ * Синхронизацию `data-theme` выполняет `useSyncThemeEffect()` в `ThemeProvider`.
+ *
+ * @example
+ * const { resolvedTheme, toggle } = useTheme();
+ */
+export function useTheme() {
+  const { mode, setMode } = useThemeStore();
 
   return {
     mode,
     resolvedTheme: getResolvedTheme(mode),
     setMode,
-    toggle,
+    toggle: () => {
+      setMode(getResolvedTheme(mode) === 'dark' ? 'light' : 'dark');
+    },
   };
 }

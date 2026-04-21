@@ -1,5 +1,6 @@
 /* 1) Normalize */
 @import 'modern-normalize';
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Sarpanch:wght@700&display=swap');
 
 /* 2) Мягкий reset + удобные базовые правила */
 :root {
@@ -71,6 +72,7 @@
   --space-12: 48px;
   --space-14: 56px;
   --space-16: 64px;
+  --space-18: 128px;
 
   /* “Фасады” паддингов для компонентов */
   --pad-2xs: var(--space-1); /* 4px  */
@@ -82,6 +84,7 @@
   --pad-2xl: var(--space-12); /* 48px */
   --pad-3xl: var(--space-14); /* 56px */
   --pad-4xl: var(--space-16); /* 64px */
+  --pad-5xl: var(--space-18);
 
   /* =========================
      Типографика (из Figma)
@@ -89,6 +92,7 @@
   --font-heading: 'Rubik', ui-sans-serif, system-ui, sans-serif;
   --font-body: 'Lato', ui-sans-serif, system-ui, sans-serif;
   --font-caption: 'PT Sans Caption', ui-sans-serif, system-ui, sans-serif;
+  --font-logo: 'Sarpanch', var(--font-heading);
   --font-sans: var(--font-body);
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 

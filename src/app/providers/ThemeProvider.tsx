@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { useTheme } from '@/shared/utils/theme';
+import { useSyncThemeEffect } from '@/shared/utils/theme/use-theme';
 
 interface ThemeProviderProps {
   children: ReactNode;
@@ -13,6 +13,6 @@ interface ThemeProviderProps {
  * Оборачивает корневой узел в `AppProviders`.
  */
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  useTheme();
+  useSyncThemeEffect();
   return <>{children}</>;
 };

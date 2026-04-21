@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { useLogoutUser } from '@/features/authorization';
 import './account-dropdown.scss';
-import './header.scss';
 
 interface DropdownProps {
   open: boolean;
@@ -16,16 +15,13 @@ export const AccountDropdown = ({ open, onOpenChange }: DropdownProps) => {
   const navigate = useNavigate();
   return (
     <DropdownMenu.Root open={open} onOpenChange={onOpenChange}>
-      <DropdownMenu.Trigger className="dropdown-trigger">
-        <ChevronDown strokeWidth={3} className="chevron" />
+      <DropdownMenu.Trigger asChild>
+        <button type="button" className="Header__profile-trigger" aria-label="Открыть меню профиля">
+          <span>Профиль</span>
+          <ChevronDown size={16} strokeWidth={2.4} className="Header__profile-trigger-chevron" />
+        </button>
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content
-        className="dropdown"
-        side="bottom"
-        align="end"
-        sideOffset={12}
-        alignOffset={-12}
-      >
+      <DropdownMenu.Content className="dropdown" side="bottom" align="end" sideOffset={14}>
         <DropdownMenu.Item className="dropdown__item" onClick={() => {}}>
           <User2Icon />
           Профиль

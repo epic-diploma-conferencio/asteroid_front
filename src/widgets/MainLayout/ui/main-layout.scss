@@ -39,14 +39,4 @@
       overflow: hidden;
     }
   }
-
-  @include lg {
-    max-width: 90dvw;
-  }
-  @include xl {
-    max-width: 80dvw;
-  }
-  @include xxl {
-    max-width: 70dvw;
-  }
 }
