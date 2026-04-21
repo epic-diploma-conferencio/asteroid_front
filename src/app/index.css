@@ -3,57 +3,44 @@
 
 /* 2) Мягкий reset + удобные базовые правила */
 :root {
-  /* палитра/токены — под себя */
-  --radius: 8px;
-  color-scheme: light dark; /* если есть тёмная тема */
+  color-scheme: light dark;
 
-  /* Палитра (OKLCH приблизительно → хорошо смотрится в светлой/тёмной) */
-  --orange-50: #fff7ed;
-  --orange-100: #ffedd5;
-  --orange-200: #fed7aa;
-  --orange-300: #fdba74;
-  --orange-400: #fb923c;
-  --orange-500: #f97316; /* base */
-  --orange-600: #ea580c;
-  --orange-700: #c2410c;
-  --orange-800: #9a3412;
-  --orange-900: #7c2d12;
+  /* =========================
+     Палитра (из Figma)
+     ========================= */
+  --color-white: #f5f5f5;
+  --color-black: #161a1df2;
 
-  --gray-25: #fcfcfd;
-  --gray-50: #f9fafb;
-  --gray-100: #f2f4f7;
-  --gray-200: #e4e7ec;
-  --gray-300: #d0d5dd;
-  --gray-400: #98a2b3;
-  --gray-500: #667085;
-  --gray-600: #475467;
-  --gray-700: #344054;
-  --gray-800: #1d2939;
-  --gray-900: #101828;
-  --black: #0b0f14;
-  --white: #ffffff;
+  /* Бренд / статусы */
+  --color-success: #238636; /* Основной Зеленый */
+  --color-danger: #ba181b; /* Основной Красный */
 
-  /* Семантические токены */
-  --color-bg: var(--white);
-  --color-surface: var(--gray-25);
-  --color-surface-2: var(--gray-50);
-  --color-text: var(--gray-900);
-  --color-text-muted: var(--gray-600);
-  --color-border: var(--gray-200);
+  /* Нейтральные / служебные */
+  --color-inactive: #bec0c7; /* Неактивный */
+  --color-inactive-alpha: #7c7c7c40; /* Неактивн */
+  --color-checkbox: #00000040; /* Для чекбоксов */
+  --color-table-head: #7c7c7c; /* Для шапочек таблиц */
+  --color-contrast-1: #0d1117; /* Цвет контраста 1 */
+  --color-contrast-2: #11161c; /* Цвет контраста 2 */
+  --color-misc: #0f1c26f2; /* "хз" из фигмы */
 
-  --color-primary: oklch(0.55 0.22 255);
-  --color-primary-hover: oklch(0.5 0.22 255);
-  --color-primary-active: oklch(0.45 0.22 255);
-  --color-primary-ghost: color-mix(in oklab, oklch(0.55 0.22 255) 12%, transparent);
-  --color-primary-weak: color-mix(in oklab, oklch(0.55 0.22 255) 6%, transparent);
+  /* =========================
+     Светлая тема (дефолт)
+     ========================= */
+  --color-bg: #f5f5f5; /* Цвет Заливки Светлой Темы */
+  --color-surface: #f7f7f7; /* Шапочки светлые */
+  --color-text: #161a1df2; /* Основной черный (текст) */
+  --color-text-muted: #7c7c7c; /* Подписи */
+  --color-border: #00000026; /* Цвет линий Светлый */
 
-  --color-success: #16a34a;
-  --color-warning: #f59e0b;
-  --color-danger: #dc2626;
-  --color-info: #2563eb;
+  --color-primary: var(--color-success);
+  --color-primary-hover: color-mix(in oklab, var(--color-success) 85%, black);
+  --color-primary-active: color-mix(in oklab, var(--color-success) 70%, black);
+  --color-primary-ghost: color-mix(in oklab, var(--color-success) 12%, transparent);
+  --color-primary-weak: color-mix(in oklab, var(--color-success) 6%, transparent);
 
   --focus-ring: 3px;
-  --color-focus: color-mix(in oklab, var(--primary) 40%, transparent);
+  --color-focus: color-mix(in oklab, var(--color-primary) 40%, transparent);
 
   /* Радиусы/тени (универсально) */
   --radius-xs: 6px;
@@ -97,26 +84,23 @@
   --pad-4xl: var(--space-16); /* 64px */
 
   /* =========================
-     Типографика (универсальная)
+     Типографика (из Figma)
      ========================= */
-  --font-sans:
-    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Helvetica Neue',
-    Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  --font-heading: 'Rubik', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Lato', ui-sans-serif, system-ui, sans-serif;
+  --font-caption: 'PT Sans Caption', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-body);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Размеры (ремы от базового 16px) */
-  --fs-2xs: 0.75rem; /* 12 */
-  --fs-xs: 0.8125rem; /* 13 */
-  --fs-sm: 0.875rem; /* 14 */
-  --fs-smd: 15px; /* 14 */
-  --fs-md: 1rem; /* 16 */
-  --fs-lg: 1.125rem; /* 18 */
-  --fs-xl: 1.25rem; /* 20 */
-  --fs-2xl: 1.5rem; /* 24 */
-  --fs-2-5xl: 1.75rem; /* 28 */
-  --fs-3xl: 1.875rem; /* 30 */
-  --fs-3-5xl: 2rem; /* 32 */
-  --fs-4xl: 2.25rem; /* 36 */
+  /* Размеры из Figma */
+  --fs-12: 12px;
+  --fs-16: 16px;
+  --fs-20: 20px;
+  --fs-24: 24px;
+  --fs-32: 32px;
+  --fs-40: 40px;
+  --fs-48: 48px;
+  --fs-64: 64px;
 
   /* Высоты строк */
   --lh-tight: 1.2;
@@ -130,155 +114,74 @@
   --fw-bold: 700;
 }
 
-/* Тёмная тема */
+/* =========================
+   Типографические классы из Figma
+   ========================= */
+/* Figma: "little text 12pt" — PT Sans Caption Regular 12 */
+.t-little-12 {
+  font: var(--fw-regular) var(--fs-12) / var(--lh-normal) var(--font-caption);
+}
+/* Figma: "Common text" — Lato Regular 16 */
+.t-common {
+  font: var(--fw-regular) var(--fs-16) / var(--lh-relaxed) var(--font-body);
+}
+/* Figma: "CommonTextBalder" — Lato Medium 16 */
+.t-common-bold {
+  font: var(--fw-medium) var(--fs-16) / var(--lh-relaxed) var(--font-body);
+}
+/* Figma: "CommonText bigger" — Lato Regular 20 */
+.t-common-big {
+  font: var(--fw-regular) var(--fs-20) / var(--lh-relaxed) var(--font-body);
+}
+/* Figma: "Button text" — Rubik Medium 16 */
+.t-button {
+  font: var(--fw-medium) var(--fs-16) / var(--lh-tight) var(--font-heading);
+}
+/* Figma: "ButtonTextNoBold (Rubik regular 16)" — Rubik Regular 16, underline */
+.t-button-link {
+  font: var(--fw-regular) var(--fs-16) / var(--lh-tight) var(--font-heading);
+  text-decoration: underline;
+}
+/* Figma: "24pt Headline" — Rubik Regular 24 */
+.t-h-24 {
+  font: var(--fw-regular) var(--fs-24) / var(--lh-tight) var(--font-heading);
+}
+/* Figma: "32pt Headline" — Rubik Regular 32 */
+.t-h-32 {
+  font: var(--fw-regular) var(--fs-32) / var(--lh-tight) var(--font-heading);
+}
+/* Figma: "32pt HL balder" — Rubik Medium 32 */
+.t-h-32-bold {
+  font: var(--fw-medium) var(--fs-32) / var(--lh-tight) var(--font-heading);
+}
+/* Figma: "40pt Headline balder" — Rubik SemiBold 40 */
+.t-h-40 {
+  font: var(--fw-semibold) var(--fs-40) / var(--lh-tight) var(--font-heading);
+}
+/* Figma: "48pt Headline" — Rubik Regular 48 */
+.t-h-48 {
+  font: var(--fw-regular) var(--fs-48) / var(--lh-tight) var(--font-heading);
+}
+/* Figma: "64pt Headline" — Rubik Regular 64 */
+.t-h-64 {
+  font: var(--fw-regular) var(--fs-64) / var(--lh-tight) var(--font-heading);
+}
+
+/* =========================
+   Тёмная тема (из Figma)
+   ========================= */
 [data-theme='dark'] {
-  --color-bg: var(--black);
-  --color-surface: #0f141b;
-  --color-surface-2: #121922;
-  --color-text: #e6e9ef;
-  --color-text-muted: #858c97;
-  --color-border: #273244;
+  --color-bg: #0d1117; /* Цвет Заливки Темной Темы */
+  --color-surface: #151b23; /* Светлые шапочки (dark header caps) */
+  --color-text: #ccd4de; /* Текст Темная Тема */
+  --color-text-muted: #535e66; /* ТемнТема Подписи */
+  --color-border: #3d444d; /* Цвет линий */
+}
 
-  --color-primary: oklch(0.6 0.22 255);
-  --color-primary-hover: oklch(54.364% 0.18882 256.665);
-  --color-primary-active: oklch(50.51% 0.17791 256.814);
-  --color-primary-ghost: color-mix(in oklab, oklch(0.6 0.22 255) 18%, transparent);
-  --color-primary-weak: color-mix(in oklab, oklch(0.6 0.22 255) 10%, transparent);
-
-  --color-focus: color-mix(in oklab, oklch(0.6 0.22 255) 55%, transparent);
-  --color-danger: #f87171;
-  --color-danger-weak: color-mix(in oklab, #f87171 15%, transparent);
-
-  /*Kinchat auto-design variables: */
-  /* ===========================================
-   * TYPOGRAPHY
-   * =========================================== */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
-
-  /* ===========================================
-   * COLOR PALETTE - CORE
-   * =========================================== */
-
-  /* Background & Foreground */
-  --background: oklch(0.12 0.015 260); /* #0f1219 - Main dark bg */
-  --foreground: oklch(0.95 0.01 250); /* #f0f2f5 - Light text */
-
-  /* Primary (Bright Blue) */
-  --primary: oklch(0.6 0.22 255); /* #3b82f6 - Accent blue */
-  --primary-foreground: oklch(0.98 0 0); /* #ffffff - White on primary */
-  --primary-hover: oklch(54.364% 0.18882 256.665);
-  --primary-active: oklch(50.51% 0.17791 256.814);
-
-  /* Secondary */
-  --secondary: oklch(0.18 0.02 260); /* #1e2330 - Secondary bg */
-  --secondary-foreground: oklch(0.95 0.01 250); /* #f0f2f5 - Text on secondary */
-
-  /* ===========================================
-   * COLOR PALETTE - SURFACES
-   * =========================================== */
-
-  /* Cards */
-  --card: oklch(0.15 0.02 260); /* #161b26 - Card bg */
-  --card-foreground: oklch(0.95 0.01 250); /* #f0f2f5 - Card text */
-
-  /* Muted (Subtle elements) */
-  --muted: oklch(0.18 0.015 260); /* #1c2130 - Muted bg */
-  --muted-foreground: oklch(0.6 0.02 250); /* #8b92a0 - Muted text */
-
-  /* Popover */
-  --popover: oklch(0.14 0.02 260); /* #141924 - Popover bg */
-  --popover-foreground: oklch(0.95 0.01 250); /* #f0f2f5 - Popover text */
-
-  /* ===========================================
-   * COLOR PALETTE - INTERACTIVE
-   * =========================================== */
-
-  /* Accent */
-  --accent: oklch(0.6 0.22 255); /* #3b82f6 - Same as primary */
-  --accent-foreground: oklch(0.98 0 0); /* #ffffff */
-
-  /* Borders & Inputs */
-  --border: oklch(0.25 0.025 260); /* #2a3142 - Border color */
-  --input: oklch(0.18 0.02 260); /* #1e2330 - Input bg */
-  --ring: oklch(0.6 0.22 255); /* #3b82f6 - Focus ring */
-
-  /* ===========================================
-   * COLOR PALETTE - FEEDBACK
-   * =========================================== */
-
-  /* Destructive (Errors) */
-  --destructive: oklch(0.55 0.2 25); /* #dc2626 - Error red */
-  --destructive-foreground: oklch(0.98 0 0); /* #ffffff */
-
-  /* ===========================================
-   * COLOR PALETTE - SIDEBAR
-   * =========================================== */
-
-  --sidebar: oklch(0.1 0.02 260); /* #0c1018 - Sidebar bg (darker) */
-  --sidebar-foreground: oklch(0.95 0.01 250); /* #f0f2f5 */
-  --sidebar-border: oklch(0.22 0.025 260); /* #252d3d */
-  --sidebar-accent: oklch(0.16 0.02 260); /* #1a2030 - Hover state */
-  --sidebar-accent-foreground: oklch(0.95 0.01 250);
-  --sidebar-primary: oklch(0.6 0.22 255); /* #3b82f6 */
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-ring: oklch(0.6 0.22 255);
-
-  /* ===========================================
-   * COLOR PALETTE - MESSENGER SPECIFIC
-   * =========================================== */
-
-  /* Messages */
-  --message-sent: oklch(0.6 0.22 255); /* #3b82f6 - Outgoing (blue) */
-  --message-received: oklch(0.2 0.02 260); /* #242b3a - Incoming (dark) */
-
-  /* Status Indicators */
-  --online: oklch(0.72 0.18 145); /* #22c55e - Online (green) */
-  --offline: oklch(50% 0 0); /* #737373 - Offline (gray) */
-
-  --badge-blue: oklch(25% 0.08 260);
-  --secondary-text: oklch(57.61% 0.00007 271.152);
-
-  --secondary-text-brigther: oklch(64.094% 0.00117 13.753);
-  /* ===========================================
-   * BORDER RADIUS
-   * =========================================== */
-
-  --radius: 0.75rem; /* 12px - Default */
-  --radius-sm: 0.5rem; /* 8px  - Small */
-  --radius-md: 0.625rem; /* 10px - Medium */
-  --radius-lg: 0.75rem; /* 12px - Large */
-  --radius-xl: 1rem; /* 16px - Extra Large */
-
-  /* ===========================================
-   * SHADOWS & EFFECTS
-   * =========================================== */
-
-  --shadow-glow-primary: 0 0 40px oklch(0.6 0.22 255 / 0.3);
-  --shadow-glow-accent: 0 0 30px oklch(0.6 0.22 255 / 0.25);
-  --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-
-  /* ===========================================
-   * SPACING (reference)
-   * =========================================== */
-
-  /* Using Tailwind scale:
-   * 1 = 0.25rem (4px)
-   * 2 = 0.5rem  (8px)
-   * 3 = 0.75rem (12px)
-   * 4 = 1rem    (16px)
-   * 5 = 1.25rem (20px)
-   * 6 = 1.5rem  (24px)
-   * 8 = 2rem    (32px)
-   * 10 = 2.5rem (40px)
-   * 12 = 3rem   (48px)
-   * 16 = 4rem   (64px)
-   */
-
-  /* ===========================================
-   * TRANSITIONS
-   * =========================================== */
-
+/* =========================
+   Transitions
+   ========================= */
+:root {
   --transition-fast: 150ms ease;
   --transition-base: 200ms ease;
   --transition-slow: 300ms ease;

@@ -19,7 +19,7 @@
   }
 
   &__title {
-    font-size: var(--fs-lg);
+    font-size: var(--fs-20);
     font-weight: var(--fw-semibold);
     color: var(--color-text);
   }
@@ -56,7 +56,7 @@
   &__loading {
     padding: var(--pad-md);
     color: var(--color-text-muted);
-    font-size: var(--fs-sm);
+    font-size: var(--fs-12);
     text-align: center;
   }
 
@@ -98,7 +98,7 @@
     }
 
     span {
-      font-size: var(--fs-sm);
+      font-size: var(--fs-12);
       font-weight: var(--fw-semibold);
       color: #fff;
     }
@@ -120,7 +120,7 @@
   }
 
   &__name {
-    font-size: var(--fs-sm);
+    font-size: var(--fs-12);
     font-weight: var(--fw-medium);
     color: var(--color-text);
     white-space: nowrap;
@@ -129,13 +129,13 @@
   }
 
   &__time {
-    font-size: var(--fs-2xs);
+    font-size: var(--fs-12);
     color: var(--color-text-muted);
     flex-shrink: 0;
   }
 
   &__preview {
-    font-size: var(--fs-xs);
+    font-size: var(--fs-12);
     color: var(--color-text-muted);
     white-space: nowrap;
     overflow: hidden;

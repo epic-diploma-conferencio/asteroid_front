@@ -8,25 +8,25 @@
   }
 }
 .primary {
-  background-color: var(--primary);
+  background-color: var(--color-primary);
   &:hover {
     transition: background 0.3s ease;
-    background-color: var(--primary-hover);
+    background-color: var(--color-primary-hover);
   }
   &:active {
     transition: background 0.1s ease;
-    background-color: var(--primary-active);
+    background-color: var(--color-primary-active);
   }
 }
 .secondary {
   background-color: transparent;
-  color: var(--secondary-text);
+  color: var(--color-text-muted);
   &:hover {
-    background-color: var(--primary);
+    background-color: var(--color-primary);
     color: var(--color-text);
   }
   &:active {
     transition: background 0.1s ease;
-    background-color: var(--primary-active);
+    background-color: var(--color-primary-active);
   }
 }

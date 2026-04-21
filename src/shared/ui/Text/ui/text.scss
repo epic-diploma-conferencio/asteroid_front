@@ -1,19 +1,19 @@
 @use '@/shared/styles/breakpoints' as *;
 
 .heading {
-  font-size: var(--fs-2xl);
+  font-size: var(--fs-24);
   @include xs {
-    font-size: var(--fs-2-5xl);
+    font-size: var(--fs-24);
   }
 }
 
 .micro-heading {
-  font-size: var(--fs-xl);
+  font-size: var(--fs-20);
 }
 .under-heading {
-  color: var(--secondary-text);
-  font-size: var(--fs-smd);
+  color: var(--color-text-muted);
+  font-size: var(--fs-16);
   @include xs {
-    font-size: var(--fs-md);
+    font-size: var(--fs-16);
   }
 }

@@ -2,8 +2,8 @@
 
 .error {
   color: var(--color-danger);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-12);
   @include xs {
-    font-size: var(--fs-md);
+    font-size: var(--fs-16);
   }
 }

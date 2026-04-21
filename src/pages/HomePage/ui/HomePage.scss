@@ -9,17 +9,17 @@
   gap: var(--space-6);
 
   &__title {
-    font-size: var(--fs-4xl);
+    font-size: var(--fs-40);
     font-weight: var(--fw-bold);
     margin: 0;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-info));
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   &__desc {
-    font-size: var(--fs-lg);
+    font-size: var(--fs-20);
     color: var(--color-text-muted);
     max-width: 520px;
     margin: 0;
@@ -36,7 +36,7 @@
   &__link {
     padding: var(--pad-sm) var(--pad-md);
     border-radius: var(--radius-sm);
-    font-size: var(--fs-sm);
+    font-size: var(--fs-12);
     font-weight: var(--fw-medium);
     border: 1px solid var(--color-border);
     background: var(--color-surface);

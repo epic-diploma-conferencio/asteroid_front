@@ -5,7 +5,7 @@
   height: clamp(70px, 10dvh, 80px);
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--pad-lg);
+  padding: var(--pad-lg);
 
   &__name-and-icon {
     align-items: center;
@@ -19,7 +19,7 @@
     gap: var(--space-1);
 
     button {
-      font-size: var(--fs-md);
+      font-size: var(--fs-16);
       padding: var(--pad-xs) var(--pad-sm);
     }
 
