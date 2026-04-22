@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import { DemoPage } from '@/pages/DemoPage';
+import { SavedPage } from '@/pages/SavedPage';
 import { WelcomePage } from '@/pages/WelcomePage';
 import { MainLayout } from '@/widgets/MainLayout';
 
@@ -10,6 +11,7 @@ export const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       { index: true, element: <WelcomePage /> },
+      { path: 'saved', element: <SavedPage /> },
       { path: 'demo', element: <DemoPage /> },
     ],
   },
