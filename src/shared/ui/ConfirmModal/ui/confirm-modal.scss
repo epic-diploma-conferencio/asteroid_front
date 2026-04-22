@@ -33,6 +33,10 @@
     font-weight: var(--fw-regular);
     font-size: var(--fs-16);
     color: var(--color-text-muted);
+
+    [data-theme='dark'] & {
+      color: var(--color-white-muted);
+    }
   }
 
   &__actions {
@@ -46,7 +50,7 @@
   text-decoration: underline;
 
   &:hover {
-    background: var(--color-primary-weak);
+    background: color-mix(in oklab, var(--color-text-muted) 20%, white);
   }
 }
 

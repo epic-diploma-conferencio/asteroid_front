@@ -1,11 +1,14 @@
 import { Check, RefreshCw, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
+import { useAuthStore } from '@/features/authorization';
 import { mockProjects, type SavedProject } from '@/pages/SavedPage/ui/mock-projects';
 import { Button } from '@/shared/ui/Button';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { DeleteConfirmModal } from '@/shared/ui/DeleteConfirmModal/ui';
+import { AuthModal, type AuthMode } from '@/widgets/AuthModal';
 
 import { researchCards } from './research-cards';
 import { ResultCard } from './ResultCard';
@@ -15,11 +18,14 @@ import './research-page.scss';
 
 export const ResearchPage = () => {
   const navigate = useNavigate();
+  const isAuth = useAuthStore((state) => state.token !== null);
 
   const [projects, setProjects] = useState<SavedProject[]>(mockProjects);
   const [pendingDelete, setPendingDelete] = useState<SavedProject | null>(null);
   const [regenerateOpen, setRegenerateOpen] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<AuthMode>('login');
 
   const handleCardClick = (id: string) => {
     // TODO: открыть детальный просмотр раздела id
@@ -43,6 +49,20 @@ export const ResearchPage = () => {
   const handleSaveProject = (values: SaveProjectValues) => {
     // TODO: отправить исследование на сервер
     void values;
+  };
+
+  const handleSaveClick = () => {
+    if (isAuth) {
+      setSaveOpen(true);
+      return;
+    }
+
+    setAuthModalMode('login');
+    setAuthModalOpen(true);
+    toast.error('Требуется авторизация!', {
+      description:
+        'Войдите в аккаунт или создайте новый для того чтобы иметь возможность сохранять проекты!',
+    });
   };
 
   return (
@@ -70,7 +90,7 @@ export const ResearchPage = () => {
           <RefreshCw size={18} strokeWidth={2} />
           <span>Перегенерировать</span>
         </button>
-        <Button className="research-page__save" onClick={() => setSaveOpen(true)}>
+        <Button className="research-page__save" onClick={handleSaveClick}>
           <Check size={18} strokeWidth={2.5} />
           Сохранить
         </Button>
@@ -97,6 +117,13 @@ export const ResearchPage = () => {
       />
 
       <SaveProjectModal open={saveOpen} onOpenChange={setSaveOpen} onSave={handleSaveProject} />
+
+      <AuthModal
+        open={authModalOpen}
+        onOpenChange={setAuthModalOpen}
+        mode={authModalMode}
+        onModeChange={setAuthModalMode}
+      />
     </section>
   );
 };

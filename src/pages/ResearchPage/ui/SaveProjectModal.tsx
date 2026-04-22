@@ -59,6 +59,7 @@ export const SaveProjectModal = ({ open, onOpenChange, onSave }: Props) => {
       title="Сохранить исследование"
       description="Форма сохранения исследования"
       className="dialog--auth save-project-modal"
+      showCloseButton={false}
     >
       <form
         onSubmit={handleSubmit(handleFormSubmit)}

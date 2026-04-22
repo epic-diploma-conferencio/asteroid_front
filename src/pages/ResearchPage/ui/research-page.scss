@@ -71,7 +71,9 @@
   padding: 0;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
-  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+  transition:
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
 
   [data-theme='dark'] & {
     background: var(--color-contrast-2);
@@ -133,11 +135,19 @@
     align-items: baseline;
     column-gap: var(--space-2);
     row-gap: 2px;
+
+    [data-theme='dark'] & {
+      color: var(--color-white-muted);
+    }
   }
 
   &__subtitle-meta {
     flex-basis: 100%;
     color: color-mix(in oklab, var(--color-text-muted) 70%, transparent);
+
+    [data-theme='dark'] & {
+      color: color-mix(in oklab, var(--color-white-muted) 72%, transparent);
+    }
   }
 
   &__value {
