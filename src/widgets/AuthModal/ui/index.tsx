@@ -3,10 +3,8 @@ import { useRef, useState, type Dispatch, type SetStateAction } from 'react';
 
 import { LoginForm } from '@/features/authorization/ui/LoginForm';
 import { RegForm } from '@/features/authorization/ui/RegForm';
-import { BadgeWithName } from '@/shared/ui/BadgeWithName';
 import { Modal } from '@/shared/ui/Modal';
 import { ModalSkeleton } from '@/shared/ui/ModalSkeleton';
-import { Text } from '@/shared/ui/Text';
 import { breakpoints, useMediaQuery } from '@/shared/utils/use-media-query';
 import './auth-modal.scss';
 
@@ -23,6 +21,7 @@ export const AuthModal = ({ open, onOpenChange, mode, onModeChange }: AuthModalP
   const isDesktop = useMediaQuery(breakpoints.xs);
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const title = mode === 'register' ? 'Регистрация' : 'Вход в аккаунт';
 
   const switchMode = (newMode: AuthMode) => {
     setIsLoading(true);
@@ -30,21 +29,23 @@ export const AuthModal = ({ open, onOpenChange, mode, onModeChange }: AuthModalP
       onModeChange(newMode);
       setIsLoading(false);
       setTimeout(() => containerRef.current?.focus(), 0);
-    }, 500);
+    }, 250);
   };
 
   return (
     <Modal
       open={open}
       onOpenChange={onOpenChange}
-      title="Добро пожаловать"
-      description={`Форма ${mode === 'register' ? 'регистрации' : 'входа в аккаунт'}`}
+      title={title}
+      description={`Форма ${mode === 'register' ? 'регистрации' : 'авторизации'}`}
       showCloseButton={!isDesktop}
+      className="dialog--auth"
     >
       <AnimatePresence mode="wait">
         {isLoading ? (
           <motion.div
             key="skeleton"
+            className="auth-modal auth-modal--loading"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -56,21 +57,12 @@ export const AuthModal = ({ open, onOpenChange, mode, onModeChange }: AuthModalP
           <motion.div
             ref={containerRef}
             key={mode}
-            className="dialog__content"
+            className="auth-modal"
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             tabIndex={-1}
           >
-            <BadgeWithName />
-            <div className="dialog__text-block">
-              <Text style="Heading">Добро пожаловать</Text>
-              <Text style="UnderHeading">
-                {mode === 'register'
-                  ? 'Введите данные для регистрации'
-                  : 'Войдите в свой аккаунт для продолжения'}
-              </Text>
-            </div>
             {mode === 'register' ? (
               <RegForm onSwitch={() => switchMode('login')} onClose={onOpenChange} />
             ) : (

@@ -2,6 +2,72 @@
 @import 'modern-normalize';
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Sarpanch:wght@700&display=swap');
 
+/* Official self-hosted Lato webfont kit with Cyrillic support.
+   Google Fonts serves the older basic-Latin web version for Lato. */
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/lato/Lato-Regular.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/lato/Lato-Italic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/lato/Lato-Medium.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/lato/Lato-MediumItalic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/lato/Lato-Semibold.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/lato/Lato-SemiboldItalic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/lato/Lato-Bold.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/lato/Lato-BoldItalic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+}
+
 /* 2) Мягкий reset + удобные базовые правила */
 :root {
   color-scheme: light dark;

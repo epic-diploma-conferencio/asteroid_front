@@ -2,7 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import * as Label from '@radix-ui/react-label';
 import type { AxiosError } from 'axios';
-import { ArrowRight, Check, Eye, EyeOff } from 'lucide-react';
+import { clsx } from 'clsx';
+import { Check, Eye, EyeOff } from 'lucide-react';
 import {
   useRef,
   useState,
@@ -15,37 +16,30 @@ import { z } from 'zod';
 
 import { useCreateUser } from '@/features/authorization';
 import type { ErrorResponse } from '@/shared/types';
-import { Button } from '@/shared/ui/Button';
 import { ErrorMessage } from '@/shared/ui/ErrorMessage';
+
 import '../../styles/auth-form.scss';
-import './reg-form.scss';
+
+const passwordRule = 'Пароль должен содержать от 6 до 20 символов';
+const loginPattern = /^[a-zA-Z0-9._-]{5,30}$/;
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const RegSchema = z
   .object({
     login: z
       .string()
-      .min(5, 'Ваш логин не может быть короче 5-ти символов!')
-      .max(30, 'Ваш логин не может быть длиннее 30-ти символов!'),
-    firstName: z
-      .string()
-      .min(3, 'Ваше имя короче 3-х символов? Вы - Ян?')
-      .max(30, 'Ваше имя длиннее 30-ти символов? Вы Uvuvwevwevwe Onyetenyevwe Ugwemuhwem Osas?'),
-    lastName: z
-      .string()
-      .min(3, 'Ваша фамилия короче 3-х символов? Вы - Бо?')
-      .max(
-        30,
-        'Ваша фамилия длиннее 30-ти символов? Вы Uvuvwevwevwe Onyetenyevwe Ugwemuhwem Osas?',
+      .trim()
+      .min(1, 'Введите адрес электронной почты')
+      .refine(
+        (value) => emailPattern.test(value) || loginPattern.test(value),
+        'Введите корректный адрес электронной почты',
       ),
-    password: z
-      .string()
-      .min(8, 'Пароль должен быть не короче 8-ми символов!')
-      .max(50, 'Пароль должен быть не длиннее 50-ти символов!'),
-    confirmPassword: z.string(),
+    password: z.string().min(6, passwordRule).max(20, passwordRule),
+    confirmPassword: z.string().min(1, 'Повторите пароль'),
     remember: z.boolean(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Пароли не совпадают!',
+    message: 'Пароли не совпадают',
     path: ['confirmPassword'],
   });
 
@@ -58,17 +52,20 @@ export interface AuthFormProps {
 
 export const RegForm = ({ onSwitch, onClose }: AuthFormProps) => {
   const {
-    register, // привязывает поле к форме
-    handleSubmit, // обёртка onSubmit с валидацией
+    register,
+    handleSubmit,
     formState: { errors },
     setError,
-    reset, // сброс формы
+    reset,
     trigger,
     control,
+    watch,
   } = useForm<RegFormValues>({
-    resolver: zodResolver(RegSchema), // zod как валидатор
+    resolver: zodResolver(RegSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
     defaultValues: {
-      remember: true,
+      remember: false,
     },
   });
 
@@ -78,161 +75,158 @@ export const RegForm = ({ onSwitch, onClose }: AuthFormProps) => {
   const { mutate, isPending } = useCreateUser();
 
   const formRef = useRef<HTMLFormElement>(null);
+  const confirmPasswordValue = watch('confirmPassword');
 
-  //ПОКА запомнить меня НЕ РАБОТАЕТ - РЕЗУЛЬТАТ С ГАЛОЧКИ НЕ ОТПРАВЛЯЕТСЯ (реализовать на бэке это надо)
-  //как только бэк будет ждать поле remember - убрать его из игнор-значений (след. строка)
-  const onSubmit = ({ confirmPassword: _, remember: __, ...data }: RegFormValues) => {
-    mutate(data, {
-      onSuccess: () => {
-        onClose?.(false);
-        reset();
+  const onSubmit = ({ confirmPassword: _, remember: __, login, password }: RegFormValues) => {
+    mutate(
+      {
+        login,
+        password,
       },
-      onError: (error) => {
-        console.warn(error);
-        const axiosError = error as AxiosError<ErrorResponse>;
-        setError('root', {
-          message: axiosError.response?.data.message ?? 'Ошибка соединения с сервером',
-        });
-        setTimeout(() => {
-          formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-          formRef.current?.closest('.dialog')?.scrollBy({ top: 50, behavior: 'smooth' });
-        }, 100);
+      {
+        onSuccess: () => {
+          onClose?.(false);
+          reset();
+        },
+        onError: (error) => {
+          console.warn(error);
+          const axiosError = error as AxiosError<ErrorResponse>;
+          setError('root', {
+            message: axiosError.response?.data.message ?? 'Ошибка соединения с сервером',
+          });
+          setTimeout(() => {
+            formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            formRef.current?.closest('.dialog')?.scrollBy({ top: 50, behavior: 'smooth' });
+          }, 100);
+        },
       },
-    });
+    );
   };
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="form">
-      <div className="name-n-errors">
-        <div className="name-and-surname">
-          <div className="form__form-element">
-            <label className="form__form-element__label" htmlFor="name">
-              Имя
-            </label>
-            <input
-              className="form__form-element__input"
-              {...register('firstName')}
-              type="text"
-              id="name"
-              placeholder="Ваше имя"
-            />
-          </div>
-          <div className="form__form-element">
-            <label className="form__form-element__label" htmlFor="surname">
-              Фамилия
-            </label>
-            <input
-              className="form__form-element__input"
-              {...register('lastName')}
-              type="text"
-              id="surname"
-              placeholder="Ваша фамилия"
-            />
-          </div>
-        </div>
-        <div className="errors-block">
-          <ErrorMessage message={errors.firstName?.message} />
-          <ErrorMessage message={errors.lastName?.message} />
-        </div>
-      </div>
-
-      <div className="form__form-element">
-        <label className="form__form-element__label" htmlFor="login">
-          Логин
+    <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="auth-form" noValidate>
+      <div className="auth-form__field">
+        <label className="auth-form__label" htmlFor="login">
+          Электронная почта
         </label>
         <input
-          className="form__form-element__input"
+          className={clsx('auth-form__input', {
+            'auth-form__input--error': errors.login,
+          })}
           {...register('login')}
-          type="text"
+          type="email"
           id="login"
-          placeholder="ivandopulo.kipriansky"
+          placeholder="ivan@example.com"
+          autoComplete="email"
           autoCapitalize="none"
+          spellCheck={false}
+          aria-invalid={Boolean(errors.login)}
         />
-        <ErrorMessage message={errors.login?.message} />
+        <ErrorMessage message={errors.login?.message} className="auth-form__error" />
       </div>
-      <div className="form__form-element">
-        <label className="form__form-element__label" htmlFor="password">
+
+      <div className="auth-form__field">
+        <label className="auth-form__label" htmlFor="password">
           Пароль
         </label>
-        <div className="password-div">
+        <div className="auth-form__input-wrap">
           <input
-            className="form__form-element__input"
-            {...register('password')}
+            className={clsx('auth-form__input', 'auth-form__input--password', {
+              'auth-form__input--error': errors.password,
+            })}
+            {...register('password', {
+              onChange: () => {
+                if (confirmPasswordValue) {
+                  void trigger('confirmPassword');
+                }
+              },
+            })}
             type={isPasswordVisible ? 'text' : 'password'}
             id="password"
-            placeholder="Создайте пароль"
+            placeholder="от 6 до 20 символов"
+            autoComplete="new-password"
+            aria-invalid={Boolean(errors.password)}
           />
           <button
             title={isPasswordVisible ? 'Скрыть пароль' : 'Показать пароль'}
             type="button"
-            className="password-eye"
+            className="auth-form__toggle"
             onClick={() => setPasswordVisible((prevState) => !prevState)}
           >
-            {isPasswordVisible ? <EyeOff /> : <Eye />}
+            {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
-        <ErrorMessage message={errors.password?.message} />
+        <ErrorMessage message={errors.password?.message} className="auth-form__error" />
       </div>
-      <div className="form__form-element">
-        <label className="form__form-element__label" htmlFor="confirm-password">
+
+      <div className="auth-form__field">
+        <label className="auth-form__label" htmlFor="confirm-password">
           Повторите пароль
         </label>
-        <div className="password-div">
+        <div className="auth-form__input-wrap">
           <input
-            className="form__form-element__input"
+            className={clsx('auth-form__input', 'auth-form__input--password', {
+              'auth-form__input--error': errors.confirmPassword,
+            })}
             {...register('confirmPassword', {
-              onChange: () => trigger('confirmPassword'),
+              onChange: () => void trigger('confirmPassword'),
             })}
             type={isPasswordConfirmVisible ? 'text' : 'password'}
             id="confirm-password"
             placeholder="Повторите пароль"
+            autoComplete="new-password"
+            aria-invalid={Boolean(errors.confirmPassword)}
           />
           <button
             title={isPasswordConfirmVisible ? 'Скрыть пароль' : 'Показать пароль'}
             type="button"
-            className="password-eye"
+            className="auth-form__toggle"
             onClick={() => setPasswordConfirmVisible((prevState) => !prevState)}
           >
-            {isPasswordConfirmVisible ? <EyeOff /> : <Eye />}
+            {isPasswordConfirmVisible ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
-        <ErrorMessage message={errors.confirmPassword?.message} />
+        <ErrorMessage message={errors.confirmPassword?.message} className="auth-form__error" />
       </div>
-      <div className="form__form-element checkbox-field">
+
+      <div className="auth-form__check-row">
         <Controller
           control={control}
           name="remember"
           render={({ field }) => (
             <Checkbox.Root
-              className="checkbox"
+              className="auth-form__checkbox"
               id="remember"
-              checked={!field.value}
-              onCheckedChange={(checked) => field.onChange(!checked)}
+              checked={field.value}
+              onCheckedChange={(checked) => field.onChange(checked === true)}
             >
-              <Checkbox.Indicator className="checkbox__indicator">
-                <Check size={24} strokeWidth={3} />
+              <Checkbox.Indicator className="auth-form__checkbox-indicator">
+                <Check size={16} strokeWidth={3} />
               </Checkbox.Indicator>
             </Checkbox.Root>
           )}
         />
-        <Label.Root className="placeholder label-rem" htmlFor="remember">
-          Не запоминать меня
+        <Label.Root className="auth-form__checkbox-label" htmlFor="remember">
+          Запомнить меня
         </Label.Root>
       </div>
-      <div className="button-acc">
-        <Button type="submit" variant="primary" disabled={isPending}>
-          <div className="button-child">
-            {isPending ? 'Загрузка...' : 'Зарегистрироваться'}
-            <ArrowRight />
-          </div>
-        </Button>
-        <div className="placeholder acc-text">
-          Уже есть аккаунт?{' '}
-          <button className="acc-text__button" onClick={onSwitch}>
-            Войти
-          </button>
-        </div>
-        <ErrorMessage message={errors.root?.message} className="error-root" />
+
+      <ErrorMessage
+        message={errors.root?.message}
+        className="auth-form__error auth-form__error--root"
+      />
+
+      <button type="submit" className="auth-form__submit" disabled={isPending}>
+        {isPending ? 'Загрузка...' : 'Регистрация'}
+      </button>
+
+      <div className="auth-form__footer">
+        <button type="button" className="auth-form__link">
+          Забыли пароль?
+        </button>
+        <button type="button" className="auth-form__link" onClick={onSwitch}>
+          Вход в аккаунт
+        </button>
       </div>
     </form>
   );
