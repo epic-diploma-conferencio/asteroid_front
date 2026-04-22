@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import { DemoPage } from '@/pages/DemoPage';
+import { ResearchPage } from '@/pages/ResearchPage';
 import { SavedPage } from '@/pages/SavedPage';
 import { WelcomePage } from '@/pages/WelcomePage';
 import { MainLayout } from '@/widgets/MainLayout';
@@ -12,6 +13,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <WelcomePage /> },
       { path: 'saved', element: <SavedPage /> },
+      { path: 'research', element: <ResearchPage /> },
       { path: 'demo', element: <DemoPage /> },
     ],
   },

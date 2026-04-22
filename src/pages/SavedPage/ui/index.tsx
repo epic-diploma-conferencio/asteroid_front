@@ -4,10 +4,10 @@ import { useMemo, useState } from 'react';
 
 import { Button } from '@/shared/ui/Button';
 
-import { DeleteConfirmModal } from './DeleteConfirmModal';
 import { mockProjects, type SavedProject } from './mock-projects';
 import { Pagination } from './Pagination';
 import { ProjectCard } from './ProjectCard';
+import { DeleteConfirmModal } from '../../../shared/ui/DeleteConfirmModal/ui';
 import './saved-page.scss';
 
 const PAGE_SIZE = 3;
@@ -63,13 +63,26 @@ export const SavedPage = () => {
         </Button>
       </header>
 
-      <div className="saved-page__grid">
-        {visible.map((project) => (
-          <ProjectCard key={project.id} project={project} onDelete={setPendingDelete} />
-        ))}
+      <div className="saved-page__grid-viewport">
+        <AnimatePresence custom={direction} mode="wait" initial={false}>
+          <motion.div
+            key={currentPage}
+            custom={direction}
+            variants={pageVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.45, ease: [0.22, 0.61, 0.36, 1] }}
+            className="saved-page__grid"
+          >
+            {visible.map((project) => (
+              <ProjectCard key={project.id} project={project} onDelete={setPendingDelete} />
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      <Pagination page={currentPage} totalPages={totalPages} onChange={setPage} />
+      <Pagination page={currentPage} totalPages={totalPages} onChange={goToPage} />
 
       <DeleteConfirmModal
         open={pendingDelete !== null}

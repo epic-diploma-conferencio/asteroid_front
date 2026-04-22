@@ -1,0 +1,11 @@
+.save-project-form {
+  --auth-submit-bg: var(--color-success);
+  --auth-submit-text: var(--color-white);
+
+  &__textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: var(--font-body);
+    line-height: var(--lh-relaxed);
+  }
+}

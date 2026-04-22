@@ -31,9 +31,7 @@ export const Pagination = ({ page, totalPages, onChange }: Props) => {
         <button
           key={p}
           type="button"
-          className={`saved-pagination__page${
-            p === page ? ' saved-pagination__page--active' : ''
-          }`}
+          className={`saved-pagination__page${p === page ? ' saved-pagination__page--active' : ''}`}
           aria-current={p === page ? 'page' : undefined}
           onClick={() => onChange(p)}
         >
