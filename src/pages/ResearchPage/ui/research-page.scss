@@ -4,26 +4,32 @@
    Page container — fills main area & scrolls when content overflows
    ============================================================ */
 .research-page {
+  --research-frame-max: calc(1000px + var(--space-4));
+
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   width: 100%;
   max-width: 1280px;
   margin-inline: auto;
-  padding-block: var(--space-8) var(--space-6);
+  padding-block: var(--space-4) var(--space-3);
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
+  gap: var(--space-6);
 
   &__header {
     display: flex;
     align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-4);
+    justify-content: flex-start;
+    gap: var(--space-3);
+    width: min(100%, var(--research-frame-max));
+    margin-inline: auto;
   }
 
   &__title {
     margin: 0;
+    font-size: clamp(30px, 3.6vw, 36px);
+    line-height: 1.08;
 
     [data-theme='dark'] & {
       color: var(--color-white);
@@ -32,11 +38,15 @@
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-6);
+    grid-template-columns: repeat(2, minmax(300px, 500px));
+    gap: var(--space-4);
+    justify-content: center;
+    align-content: start;
+    width: min(100%, var(--research-frame-max));
+    margin-inline: auto;
 
     @media (max-width: 720px) {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(280px, 1fr);
     }
   }
 
@@ -44,8 +54,10 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: var(--space-6);
-    padding-top: var(--space-2);
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    width: min(100%, var(--research-frame-max));
+    margin-inline: auto;
   }
 
   &__save {
@@ -53,7 +65,16 @@
     align-items: center;
     gap: var(--space-2);
     color: var(--color-white);
-    padding: var(--pad-xs) var(--pad-md);
+    padding: 8px var(--pad-md);
+  }
+
+  @media (max-width: 720px) {
+    padding-block: var(--space-3);
+    gap: var(--space-3);
+
+    &__actions {
+      justify-content: flex-start;
+    }
   }
 }
 
@@ -91,7 +112,7 @@
 
   &__preview {
     width: 100%;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 8;
     background: color-mix(in oklab, var(--color-text) 18%, transparent);
     overflow: hidden;
 
@@ -106,15 +127,15 @@
   &__body {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
-    padding: var(--space-4) var(--space-5) var(--space-5);
+    gap: 6px;
+    padding: 12px 16px 14px;
   }
 
   &__title {
     margin: 0;
     font-family: var(--font-heading);
     font-weight: var(--fw-semibold);
-    font-size: var(--fs-24);
+    font-size: clamp(18px, 1.8vw, 20px);
     line-height: var(--lh-tight);
     color: var(--color-text);
 
@@ -127,7 +148,7 @@
     margin: 0;
     font-family: var(--font-caption);
     font-weight: var(--fw-regular);
-    font-size: 14px;
+    font-size: 13px;
     line-height: var(--lh-normal);
     color: var(--color-text-muted);
     display: flex;
@@ -171,10 +192,10 @@
   align-items: center;
   gap: var(--space-2);
   background: transparent;
-  padding: var(--space-2) var(--space-1);
+  padding: 6px 4px;
   font-family: var(--font-heading);
   font-weight: var(--fw-medium);
-  font-size: var(--fs-16);
+  font-size: 15px;
   line-height: var(--lh-tight);
   color: var(--color-text);
   cursor: pointer;
