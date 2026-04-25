@@ -2,25 +2,67 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { Settings, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import type { SavedProject } from './mock-projects';
+import type { SavedResearchListItem } from '@/entities/research';
 
-interface Props {
-  project: SavedProject;
-  onDelete: (project: SavedProject) => void;
-}
-
-const ownerLabel = (project: SavedProject) =>
+const ownerLabel = (project: SavedResearchListItem) =>
   project.ownerIsMe ? `Вы (${project.ownerEmail})` : project.ownerEmail;
 
+const formatCreatedAt = (iso: string): string => {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) {
+    return iso;
+  }
+  const diffMs = Date.now() - date.getTime();
+  const days = Math.floor(diffMs / 86400000);
+  if (days <= 0) {
+    return 'сегодня';
+  }
+  if (days === 1) {
+    return 'вчера';
+  }
+  if (days < 7) {
+    return `${days} дн. назад`;
+  }
+  const weeks = Math.floor(days / 7);
+  if (weeks === 1) {
+    return 'неделю назад';
+  }
+  if (weeks < 4) {
+    return `${weeks} нед. назад`;
+  }
+  const months = Math.floor(days / 30);
+  if (months === 1) {
+    return 'месяц назад';
+  }
+  if (months < 12) {
+    return `${months} мес. назад`;
+  }
+  return `${Math.floor(days / 365)} г. назад`;
+};
+
+interface Props {
+  project: SavedResearchListItem;
+  onDelete: (project: SavedResearchListItem) => void;
+}
+
 export const ProjectCard = ({ project, onDelete }: Props) => {
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <article className="saved-card">
-      <div className="saved-card__preview">
-        <img src={project.preview} alt="" loading="lazy" />
-      </div>
+      <button
+        type="button"
+        className="saved-card__preview-button"
+        onClick={() => navigate(`/saved/${project.id}`)}
+        aria-label={`Открыть исследование ${project.name}`}
+      >
+        <div className="saved-card__preview">
+          <img src={project.preview} alt="" loading="lazy" />
+        </div>
+      </button>
 
       <div className="saved-card__body">
         <div className="saved-card__text">
@@ -50,7 +92,7 @@ export const ProjectCard = ({ project, onDelete }: Props) => {
             <span className="saved-card__meta-sep" aria-hidden="true">
               •
             </span>
-            <span className="saved-card__meta-item">{project.createdAt}</span>
+            <span className="saved-card__meta-item">{formatCreatedAt(project.createdAt)}</span>
           </div>
         </div>
 

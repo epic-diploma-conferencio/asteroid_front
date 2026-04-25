@@ -12,8 +12,7 @@ export const welcomeFeatures: WelcomeFeature[] = [
   },
   {
     title: 'Выберите нужные файлы',
-    description:
-      'С помощью галочек отметьте те файлы, которые хотели бы включить в анализ проекта',
+    description: 'С помощью галочек отметьте те файлы, которые хотели бы включить в анализ проекта',
     image: 'https://picsum.photos/seed/asteroid-files/720/420',
   },
   {
@@ -23,7 +22,8 @@ export const welcomeFeatures: WelcomeFeature[] = [
   },
   {
     title: 'Получите полный отчет',
-    description: 'Система предоставит вам полную графическую сводку по указанным правилам и фильтрам',
+    description:
+      'Система предоставит вам полную графическую сводку по указанным правилам и фильтрам',
     image: 'https://picsum.photos/seed/asteroid-report/720/420',
   },
   {

@@ -9,4 +9,9 @@ export const endpoints = {
     ME: '/auth/me',
     UPLOAD_AVATAR: '/users/me/avatar',
   },
+  research: {
+    LIST: '/saved',
+    CREATE: '/saved',
+    DETAIL: (id: string) => `/saved/${id}`,
+  },
 };

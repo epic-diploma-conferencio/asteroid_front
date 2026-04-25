@@ -94,6 +94,8 @@
     &--ghost {
       background: transparent;
       color: var(--color-white);
+      text-decoration: underline;
+      line-height: var(--lh-relaxed);
 
       &:hover {
         background: color-mix(in oklab, var(--color-white) 14%, transparent);

@@ -54,6 +54,19 @@
   &__grid-viewport {
     position: relative;
     overflow: hidden;
+    min-height: 260px;
+  }
+
+  &__loading,
+  &__empty {
+    margin: 0;
+    padding: var(--space-6);
+    color: var(--color-text-muted);
+    text-align: center;
+
+    [data-theme='dark'] & {
+      color: var(--color-white-muted);
+    }
   }
 
   &__grid {
@@ -92,6 +105,20 @@
 
   &:hover {
     box-shadow: var(--shadow-md);
+  }
+
+  &__preview-button {
+    display: block;
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    width: 100%;
+    transition: transform var(--transition-fast);
+
+    &:hover {
+      transform: scale(1.01);
+    }
   }
 
   &__preview {

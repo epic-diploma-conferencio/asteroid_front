@@ -1,5 +1,11 @@
-.save-project-modal {
+@use '@/shared/styles/breakpoints' as *;
+
+.dialog.save-project-modal {
   padding-bottom: var(--space-6);
+
+  @include xs {
+    padding-bottom: var(--pad-md);
+  }
 
   [data-theme='dark'] & {
     --auth-text: var(--color-white);

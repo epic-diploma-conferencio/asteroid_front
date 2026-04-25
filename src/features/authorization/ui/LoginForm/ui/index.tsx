@@ -15,7 +15,6 @@ import type { AuthFormProps } from '../../RegForm';
 import '../../styles/auth-form.scss';
 import './login-form.scss';
 
-const loginPattern = /^[a-zA-Z0-9._-]{5,30}$/;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const LoginSchema = z.object({
@@ -23,10 +22,7 @@ const LoginSchema = z.object({
     .string()
     .trim()
     .min(1, 'Введите адрес электронной почты')
-    .refine(
-      (value) => emailPattern.test(value) || loginPattern.test(value),
-      'Введите корректный адрес электронной почты',
-    ),
+    .refine((value) => emailPattern.test(value), 'Введите корректный адрес электронной почты'),
   password: z
     .string()
     .min(6, 'Пароль должен содержать от 6 до 20 символов')

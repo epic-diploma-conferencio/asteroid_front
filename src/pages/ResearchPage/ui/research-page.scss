@@ -6,6 +6,7 @@
 .research-page {
   --research-frame-max: calc(1000px + var(--space-4));
 
+  position: relative;
   flex: 1;
   min-height: 0;
   overflow-y: auto;
@@ -17,13 +18,33 @@
   flex-direction: column;
   gap: var(--space-6);
 
+  &__loading {
+    margin: var(--space-8) auto;
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+
+    [data-theme='dark'] & {
+      color: var(--color-white-muted);
+    }
+  }
+
+  &--expanded {
+    overflow: hidden;
+  }
+
+  &--expanded .research-page__actions {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
   &__header {
     display: flex;
-    align-items: baseline;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: space-between;
     gap: var(--space-3);
     width: min(100%, var(--research-frame-max));
     margin-inline: auto;
+    flex-wrap: wrap;
   }
 
   &__title {

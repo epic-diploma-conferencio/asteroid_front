@@ -1,5 +1,8 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { useAuthStore } from '@/features/authorization';
 
 type Props = {
   onCreateAccount: () => void;
@@ -28,6 +31,8 @@ const item = {
 export const HeroScreen = ({ onCreateAccount, onUpload }: Props) => {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { amount: 0.55 });
+  const isAuth = useAuthStore((state) => state.token !== null);
+  const navigate = useNavigate();
 
   return (
     <section ref={ref} className="welcome-hero">
@@ -53,13 +58,23 @@ export const HeroScreen = ({ onCreateAccount, onUpload }: Props) => {
         </motion.p>
 
         <motion.div className="welcome-hero__actions" variants={item}>
-          <button
-            type="button"
-            className="welcome-hero__btn welcome-hero__btn--ghost"
-            onClick={onCreateAccount}
-          >
-            Создать аккаунт
-          </button>
+          {isAuth ? (
+            <button
+              type="button"
+              className="welcome-hero__btn welcome-hero__btn--ghost"
+              onClick={() => void navigate('/saved')}
+            >
+              Мои исследования
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="welcome-hero__btn welcome-hero__btn--ghost"
+              onClick={onCreateAccount}
+            >
+              Создать аккаунт
+            </button>
+          )}
           <button
             type="button"
             className="welcome-hero__btn welcome-hero__btn--primary"

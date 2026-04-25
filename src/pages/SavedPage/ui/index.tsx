@@ -1,13 +1,18 @@
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
+import {
+  useDeleteResearch,
+  useResearchList,
+  type SavedResearchListItem,
+} from '@/entities/research';
 import { Button } from '@/shared/ui/Button';
+import { DeleteConfirmModal } from '@/shared/ui/DeleteConfirmModal/ui';
 
-import { mockProjects, type SavedProject } from './mock-projects';
 import { Pagination } from './Pagination';
 import { ProjectCard } from './ProjectCard';
-import { DeleteConfirmModal } from '../../../shared/ui/DeleteConfirmModal/ui';
 import './saved-page.scss';
 
 const PAGE_SIZE = 3;
@@ -19,10 +24,12 @@ const pageVariants: Variants = {
 };
 
 export const SavedPage = () => {
-  const [projects, setProjects] = useState<SavedProject[]>(mockProjects);
+  const { data: projects = [], isLoading } = useResearchList();
+  const { mutateAsync: deleteResearch } = useDeleteResearch();
+
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState(1);
-  const [pendingDelete, setPendingDelete] = useState<SavedProject | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<SavedResearchListItem | null>(null);
 
   const goToPage = (next: number) => {
     if (next === page) {
@@ -40,11 +47,16 @@ export const SavedPage = () => {
     return projects.slice(start, start + PAGE_SIZE);
   }, [projects, currentPage]);
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (!pendingDelete) {
       return;
     }
-    setProjects((list) => list.filter((p) => p.id !== pendingDelete.id));
+    try {
+      await deleteResearch(pendingDelete.id);
+      toast.success('Исследование удалено');
+    } catch {
+      toast.error('Не удалось удалить исследование');
+    }
     setPendingDelete(null);
   };
 
@@ -64,22 +76,28 @@ export const SavedPage = () => {
       </header>
 
       <div className="saved-page__grid-viewport">
-        <AnimatePresence custom={direction} mode="wait" initial={false}>
-          <motion.div
-            key={currentPage}
-            custom={direction}
-            variants={pageVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.45, ease: [0.22, 0.61, 0.36, 1] }}
-            className="saved-page__grid"
-          >
-            {visible.map((project) => (
-              <ProjectCard key={project.id} project={project} onDelete={setPendingDelete} />
-            ))}
-          </motion.div>
-        </AnimatePresence>
+        {isLoading ? (
+          <p className="saved-page__loading">Загружаем список…</p>
+        ) : projects.length === 0 ? (
+          <p className="saved-page__empty">Пока нет сохраненных исследований</p>
+        ) : (
+          <AnimatePresence custom={direction} mode="wait" initial={false}>
+            <motion.div
+              key={currentPage}
+              custom={direction}
+              variants={pageVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.45, ease: [0.22, 0.61, 0.36, 1] }}
+              className="saved-page__grid"
+            >
+              {visible.map((project) => (
+                <ProjectCard key={project.id} project={project} onDelete={setPendingDelete} />
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        )}
       </div>
 
       <Pagination page={currentPage} totalPages={totalPages} onChange={goToPage} />

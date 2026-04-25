@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { clsx } from 'clsx';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -23,10 +24,20 @@ export type SaveProjectValues = z.infer<typeof SaveProjectSchema>;
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave?: (values: SaveProjectValues) => void;
+  onSave?: (values: SaveProjectValues) => void | Promise<void>;
+  mode?: 'create' | 'edit';
+  initialValues?: SaveProjectValues;
 }
 
-export const SaveProjectModal = ({ open, onOpenChange, onSave }: Props) => {
+const emptyValues: SaveProjectValues = { name: '', comment: '' };
+
+export const SaveProjectModal = ({
+  open,
+  onOpenChange,
+  onSave,
+  mode = 'create',
+  initialValues,
+}: Props) => {
   const {
     register,
     handleSubmit,
@@ -36,27 +47,36 @@ export const SaveProjectModal = ({ open, onOpenChange, onSave }: Props) => {
     resolver: zodResolver(SaveProjectSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
-    defaultValues: { name: '', comment: '' },
+    defaultValues: initialValues ?? emptyValues,
   });
 
-  const handleFormSubmit = (values: SaveProjectValues) => {
-    onSave?.(values);
-    reset();
+  useEffect(() => {
+    if (open) {
+      reset(initialValues ?? emptyValues);
+    }
+  }, [open, initialValues, reset]);
+
+  const handleFormSubmit = async (values: SaveProjectValues) => {
+    await onSave?.(values);
     onOpenChange(false);
+    reset(mode === 'edit' ? values : emptyValues);
   };
 
   const handleOpenChange = (next: boolean) => {
     onOpenChange(next);
     if (!next) {
-      reset();
+      reset(initialValues ?? emptyValues);
     }
   };
+
+  const modalTitle = mode === 'edit' ? 'Редактировать исследование' : 'Сохранить исследование';
+  const submitLabel = mode === 'edit' ? 'Сохранить изменения' : 'Сохранить';
 
   return (
     <Modal
       open={open}
       onOpenChange={handleOpenChange}
-      title="Сохранить исследование"
+      title={modalTitle}
       description="Форма сохранения исследования"
       className="dialog--auth save-project-modal"
       showCloseButton={false}
@@ -102,7 +122,7 @@ export const SaveProjectModal = ({ open, onOpenChange, onSave }: Props) => {
         </div>
 
         <button type="submit" className="auth-form__submit">
-          Сохранить
+          {submitLabel}
         </button>
       </form>
     </Modal>

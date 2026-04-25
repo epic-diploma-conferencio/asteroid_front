@@ -1,46 +1,37 @@
-import type { ResultCardData } from './ResultCard';
+import type { ResearchCard } from '@/entities/research';
 
 const mountains = (seed: number) => `https://picsum.photos/seed/research-mountains-${seed}/960/640`;
 
-export const researchCards: ResultCardData[] = [
+export const researchCards: ResearchCard[] = [
   {
     id: 'ast',
+    kind: 'ast',
     title: 'AST-деревья файлов',
-    subtitle: <>Проанализировано файлов: 15</>,
+    stat: { label: 'Проанализировано файлов', value: '15', tone: 'neutral' },
     preview: mountains(1),
+    files: ['main.ts', 'modules.ts', 'config.ts', 'router.ts', 'store.ts', 'auth.ts'],
   },
   {
     id: 'arch',
+    kind: 'arch',
     title: 'Архитектурные отклонения',
-    subtitle: (
-      <>
-        Количество архитектурных ошибок:{' '}
-        <span className="research-card__value research-card__value--danger">43</span>
-      </>
-    ),
+    stat: { label: 'Количество архитектурных ошибок', value: '43', tone: 'danger' },
     preview: mountains(2),
   },
   {
     id: 'structure',
+    kind: 'structure',
     title: 'Структурный анализ',
-    subtitle: (
-      <>
-        Соответствие проекта структуре FSD:{' '}
-        <span className="research-card__value research-card__value--success">96%</span>
-      </>
-    ),
+    stat: { label: 'Соответствие проекта структуре FSD', value: '96%', tone: 'success' },
     preview: mountains(3),
   },
   {
     id: 'deps',
+    kind: 'deps',
     title: 'Анализ зависимостей проекта',
-    subtitle: (
-      <>
-        Уязвимостей в проекте: 5, из них <u>критических</u>:{' '}
-        <span className="research-card__value research-card__value--success">0</span>
-        <span className="research-card__subtitle-meta">(на момент 05.03.2026 13:00 GMT)</span>
-      </>
-    ),
+    stat: { label: 'Уязвимостей в проекте', value: '5', tone: 'neutral' },
     preview: mountains(4),
   },
 ];
+
+export const buildCardsFromResearch = (cards: ResearchCard[]): ResearchCard[] => cards;
