@@ -38,10 +38,17 @@ export const ResultCard = ({ card, onClick, isHidden = false, isExpanding = fals
       opacity: isHidden || isExpanding ? 0 : 1,
       pointerEvents: isHidden || isExpanding ? 'none' : 'auto',
     }}
-    transition={{ opacity: { duration: 0.35, ease: 'easeOut' } }}
+    transition={{
+      opacity: {
+        duration: 0.3,
+        ease: 'easeOut',
+        delay: isHidden || isExpanding ? 0 : 0.5,
+      },
+    }}
     className="research-card"
     onClick={() => onClick?.(card.id)}
     aria-label={card.title}
+    data-card-id={card.id}
   >
     <motion.div layoutId={`research-card-preview-${card.id}`} className="research-card__preview">
       <img src={card.preview} alt="" loading="lazy" />

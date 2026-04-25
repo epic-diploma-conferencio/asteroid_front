@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import type { ResearchCard } from '@/entities/research';
 
@@ -33,10 +33,18 @@ const contentLabel = (card: ResearchCard, index: number): string => {
   return files[index] ?? `item-${index + 1}`;
 };
 
-const CONTENT_FADE_MS = 320;
+const SHRINK_MS = 550;
+const FADE_DELAY_MS = 180;
+const FADE_MS = 300;
 
 export const ASTTreeDetailScreen = ({ card, onClose }: Props) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [closing, setClosing] = useState(false);
+  const [shrinkStyle, setShrinkStyle] = useState<{
+    transform: string;
+    transition: string;
+  } | null>(null);
+
   const files = card.files ?? defaultFiles;
   const tiles = files.length ? files : [...Array(6)].map((_, i) => `item-${i + 1}`);
 
@@ -45,22 +53,53 @@ export const ASTTreeDetailScreen = ({ card, onClose }: Props) => {
       return;
     }
     setClosing(true);
-    window.setTimeout(onClose, CONTENT_FADE_MS);
+
+    const detailEl = containerRef.current;
+    const cardEl = document.querySelector<HTMLElement>(`[data-card-id="${card.id}"]`);
+
+    if (!detailEl || !cardEl) {
+      onClose();
+      return;
+    }
+
+    const detailRect = detailEl.getBoundingClientRect();
+    const cardRect = cardEl.getBoundingClientRect();
+
+    const tx =
+      cardRect.left + cardRect.width / 2 - (detailRect.left + detailRect.width / 2);
+    const ty =
+      cardRect.top + cardRect.height / 2 - (detailRect.top + detailRect.height / 2);
+    const sx = cardRect.width / detailRect.width;
+    const sy = cardRect.height / detailRect.height;
+
+    setShrinkStyle({
+      transform: `translate(${tx}px, ${ty}px) scale(${sx}, ${sy})`,
+      transition: `transform ${SHRINK_MS}ms cubic-bezier(0.22, 0.61, 0.36, 1)`,
+    });
+
+    window.setTimeout(onClose, SHRINK_MS);
   };
 
   return (
     <motion.div
+      ref={containerRef}
       layoutId={`research-card-${card.id}`}
       className="ast-detail"
       transition={{ type: 'spring', stiffness: 180, damping: 30, mass: 0.7 }}
+      style={
+        shrinkStyle
+          ? { transform: shrinkStyle.transform, transition: shrinkStyle.transition }
+          : undefined
+      }
     >
       <motion.div
         className="ast-detail__inner"
         initial={{ opacity: 0 }}
         animate={{ opacity: closing ? 0 : 1 }}
         transition={{
-          delay: closing ? 0 : 0.35,
-          duration: closing ? CONTENT_FADE_MS / 1000 : 0.4,
+          duration: closing ? FADE_MS / 1000 : 0.4,
+          delay: closing ? FADE_DELAY_MS / 1000 : 0.35,
+          ease: closing ? 'easeIn' : 'easeOut',
         }}
       >
         <button

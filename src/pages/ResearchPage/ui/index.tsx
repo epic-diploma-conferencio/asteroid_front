@@ -178,7 +178,11 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
         </div>
 
         {expandedCard ? (
-          <ASTTreeDetailScreen card={expandedCard} onClose={() => setExpandedCard(null)} />
+          <ASTTreeDetailScreen
+            key={expandedCard.id}
+            card={expandedCard}
+            onClose={() => setExpandedCard(null)}
+          />
         ) : null}
       </LayoutGroup>
 
