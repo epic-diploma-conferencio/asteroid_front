@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 
 import type { ResearchCard } from '@/entities/research';
 
@@ -39,15 +40,12 @@ const BLUR_MS = 260;
 
 export const ASTTreeDetailScreen = ({ card, onClose }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const shrinkAnimationRef = useRef<Animation | null>(null);
   const blurTimeoutRef = useRef<number | null>(null);
   const closeTimeoutRef = useRef<number | null>(null);
   const frameRef = useRef<number | null>(null);
   const [closing, setClosing] = useState(false);
   const [blurActive, setBlurActive] = useState(false);
-  const [shrinkStyle, setShrinkStyle] = useState<{
-    transform: string;
-    transition: string;
-  } | null>(null);
 
   const files = card.files ?? defaultFiles;
   const tiles = files.length ? files : [...Array(6)].map((_, i) => `item-${i + 1}`);
@@ -57,6 +55,7 @@ export const ASTTreeDetailScreen = ({ card, onClose }: Props) => {
       if (frameRef.current !== null) {
         window.cancelAnimationFrame(frameRef.current);
       }
+      shrinkAnimationRef.current?.cancel();
       if (blurTimeoutRef.current !== null) {
         window.clearTimeout(blurTimeoutRef.current);
       }
@@ -71,7 +70,6 @@ export const ASTTreeDetailScreen = ({ card, onClose }: Props) => {
     if (closing) {
       return;
     }
-    setClosing(true);
 
     const detailEl = containerRef.current;
     const cardEl = document.querySelector<HTMLElement>(`[data-card-id="${card.id}"]`);
@@ -89,31 +87,35 @@ export const ASTTreeDetailScreen = ({ card, onClose }: Props) => {
     const sx = cardRect.width / detailRect.width;
     const sy = cardRect.height / detailRect.height;
 
-    setClosing(true);
-    setBlurActive(false);
-
-    // Commit the fullscreen state first, then start shrink on the next frame.
-    // This avoids the "extra grow" flash before the real collapse begins.
-    setShrinkStyle({
-      transform: 'translate(0px, 0px) scale(1, 1)',
-      transition: 'none',
+    flushSync(() => {
+      setClosing(true);
+      setBlurActive(false);
     });
 
+    shrinkAnimationRef.current?.cancel();
+
     frameRef.current = window.requestAnimationFrame(() => {
-      frameRef.current = window.requestAnimationFrame(() => {
-        setShrinkStyle({
-          transform: `translate(${tx}px, ${ty}px) scale(${sx}, ${sy})`,
-          transition: `transform ${SHRINK_MS}ms cubic-bezier(0.22, 0.61, 0.36, 1)`,
-        });
+      detailEl.getBoundingClientRect();
 
-        blurTimeoutRef.current = window.setTimeout(() => {
-          setBlurActive(true);
-        }, BLUR_DELAY_MS);
+      shrinkAnimationRef.current = detailEl.animate(
+        [
+          { transform: 'translate(0px, 0px) scale(1, 1)' },
+          { transform: `translate(${tx}px, ${ty}px) scale(${sx}, ${sy})` },
+        ],
+        {
+          duration: SHRINK_MS,
+          easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
+          fill: 'forwards',
+        },
+      );
 
-        closeTimeoutRef.current = window.setTimeout(() => {
-          onClose();
-        }, SHRINK_MS);
-      });
+      blurTimeoutRef.current = window.setTimeout(() => {
+        setBlurActive(true);
+      }, BLUR_DELAY_MS);
+
+      closeTimeoutRef.current = window.setTimeout(() => {
+        onClose();
+      }, SHRINK_MS);
     });
   };
 
@@ -123,11 +125,6 @@ export const ASTTreeDetailScreen = ({ card, onClose }: Props) => {
       layoutId={closing ? undefined : `research-card-${card.id}`}
       className="ast-detail"
       transition={{ type: 'spring', stiffness: 180, damping: 30, mass: 0.7 }}
-      style={
-        shrinkStyle
-          ? { transform: shrinkStyle.transform, transition: shrinkStyle.transition }
-          : undefined
-      }
     >
       <motion.div
         className="ast-detail__inner"
