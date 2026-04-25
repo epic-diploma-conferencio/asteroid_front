@@ -21,5 +21,6 @@ export const useMe = () => {
       return response;
     },
     select: (data) => data,
+    retry: false,
   });
 };

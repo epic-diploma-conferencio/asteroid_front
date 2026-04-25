@@ -16,6 +16,14 @@ export interface SavedResearchRecord {
   cards: ResearchCard[];
 }
 
+export interface ArticleRecord {
+  id: string;
+  title: string;
+  excerpt: string;
+  coverImage: string;
+  content: string;
+}
+
 export interface ResearchCard {
   id: string;
   kind: 'ast' | 'arch' | 'structure' | 'deps';
@@ -26,6 +34,8 @@ export interface ResearchCard {
 }
 
 const placeholder = (seed: number | string) => `https://picsum.photos/seed/saved-${seed}/640/480`;
+
+const articleCover = (seed: string) => `https://picsum.photos/seed/article-${seed}/640/640`;
 
 const defaultCards: ResearchCard[] = [
   {
@@ -62,6 +72,7 @@ const defaultCards: ResearchCard[] = [
 export const db = {
   users: new Map<string, MockUser>(),
   researches: new Map<string, SavedResearchRecord>(),
+  articles: new Map<string, ArticleRecord>(),
   sessions: new Map<string, string>(),
 };
 
@@ -105,5 +116,94 @@ const seedResearches: SavedResearchRecord[] = [
   },
 ];
 seedResearches.forEach((r) => db.researches.set(r.id, r));
+
+const seedArticles: ArticleRecord[] = [
+  {
+    id: 'upload-project',
+    title: 'Как загрузить проект или архив',
+    excerpt: 'Какие форматы поддерживаются и как подготовить архив перед анализом.',
+    coverImage: articleCover('upload-project'),
+    content: `## Какие форматы можно загружать
+
+- одиночные файлы популярных языков программирования;
+- zip-архивы с проектом;
+- подготовленные каталоги без бинарных артефактов.
+
+## Что лучше проверить перед отправкой
+
+- удалите тяжёлые \`node_modules\`, \`.gradle\`, \`dist\` и другие сборочные папки;
+- убедитесь, что в архив попали исходники, конфиги и lock-файлы;
+- если проект большой, начните с отдельного модуля, чтобы быстрее получить первый отчёт.
+
+![Схема загрузки](https://picsum.photos/seed/article-upload/1200/680)
+
+## Что происходит после загрузки
+
+После отправки система распаковывает проект, строит карту файлов и даёт вам выбрать, какие части репозитория включать в анализ.`,
+  },
+  {
+    id: 'save-research',
+    title: 'Как сохранять исследования',
+    excerpt: 'Когда лучше сохранять отчёт, как назвать исследование и где искать его потом.',
+    coverImage: articleCover('save-research'),
+    content: `## Когда стоит сохранять исследование
+
+Сохраняйте результат сразу после получения нужного набора карточек, чтобы позже вернуться к тем же метрикам и описанию.
+
+## Как выбрать название
+
+- используйте имя проекта или модуля;
+- добавляйте короткий контекст: \`frontend-core / релиз 1.4\`;
+- в описание заносите, что именно вы проверяли.
+
+## Где потом искать результат
+
+Все сохранённые исследования лежат в разделе **Сохраненные исследования**. Оттуда можно открыть конкретный результат и при необходимости обновить его название или описание.`,
+  },
+  {
+    id: 'read-ast',
+    title: 'Как читать AST-карточки',
+    excerpt: 'Коротко о том, что показывают AST-деревья файлов и зачем они нужны в отчёте.',
+    coverImage: articleCover('read-ast'),
+    content: `## Что показывает AST-экран
+
+AST-карточки показывают структуру файла не как текст, а как дерево конструкций: условий, циклов, возвратов и присваиваний.
+
+## На что смотреть в первую очередь
+
+- много вложенных ветвлений;
+- громоздкие функции с несколькими ветками \`return\`;
+- повторяющиеся участки дерева в похожих файлах.
+
+\`\`\`ts
+if (user && user.role === 'admin') {
+  return canPublish(post);
+}
+\`\`\`
+
+Даже такой небольшой фрагмент в AST превращается в наглядную схему условий и ветвлений.`,
+  },
+  {
+    id: 'share-results',
+    title: 'Как делиться результатами с командой',
+    excerpt: 'Советы по оформлению исследования перед тем, как отправить его коллегам.',
+    coverImage: articleCover('share-results'),
+    content: `## Перед отправкой коллегам
+
+- дайте исследованию понятное название;
+- добавьте короткое описание, что именно было проверено;
+- зафиксируйте, какие карточки требуют внимания в первую очередь.
+
+## Что удобно обсуждать по сохранённому исследованию
+
+1. архитектурные отклонения;
+2. состояние зависимостей;
+3. AST-деревья самых спорных файлов.
+
+Так у команды всегда будет единая точка входа в обсуждение результата.`,
+  },
+];
+
+seedArticles.forEach((article) => db.articles.set(article.id, article));
 
 export const cloneDefaultCards = () => defaultCards.map((c) => ({ ...c }));

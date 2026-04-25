@@ -1,6 +1,6 @@
-import { AnimatePresence, motion, type Variants } from 'framer-motion';
+import { AnimatePresence, motion, useInView, type Variants } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { FeatureCard } from './FeatureCard';
 import { welcomeFeatures } from './features';
@@ -12,10 +12,25 @@ const slideVariants: Variants = {
 };
 
 export const HowItWorksScreen = () => {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const isInView = useInView(sectionRef, { amount: 0.55 });
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const total = welcomeFeatures.length;
   const current = welcomeFeatures[index];
+
+  useEffect(() => {
+    if (!isInView) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setDirection(1);
+      setIndex((prevIndex) => (prevIndex + 1) % total);
+    }, 4000);
+
+    return () => window.clearInterval(intervalId);
+  }, [isInView, total]);
 
   const paginate = (step: 1 | -1) => {
     setDirection(step);
@@ -31,7 +46,7 @@ export const HowItWorksScreen = () => {
   };
 
   return (
-    <section className="welcome-how">
+    <section ref={sectionRef} className="welcome-how">
       <div className="welcome-how__inner">
         <h2 className="welcome-how__title">Как это работает?</h2>
 

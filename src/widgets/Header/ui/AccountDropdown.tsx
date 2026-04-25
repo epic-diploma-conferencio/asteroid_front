@@ -11,10 +11,10 @@ interface DropdownProps {
 }
 
 export const AccountDropdown = ({ open, onOpenChange }: DropdownProps) => {
-  const { mutate: logout } = useLogoutUser();
+  const { mutateAsync: logout } = useLogoutUser();
   const navigate = useNavigate();
   const handleLogout = async () => {
-    logout();
+    await logout();
     await navigate('/');
   };
   return (

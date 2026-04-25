@@ -4,6 +4,7 @@ import { clsx } from 'clsx';
 import { Eye, EyeOff } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { useLoginUser } from '@/features/authorization';
@@ -32,6 +33,7 @@ const LoginSchema = z.object({
 type LoginFormValue = z.infer<typeof LoginSchema>;
 
 export const LoginForm = ({ onSwitch, onClose }: AuthFormProps) => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -55,6 +57,7 @@ export const LoginForm = ({ onSwitch, onClose }: AuthFormProps) => {
       onSuccess: () => {
         onClose?.(false);
         reset();
+        void navigate('/dashboard');
       },
       onError: (error) => {
         console.warn(error);
@@ -126,7 +129,7 @@ export const LoginForm = ({ onSwitch, onClose }: AuthFormProps) => {
       />
 
       <button type="submit" className="auth-form__submit login-submit" disabled={isPending}>
-        {isPending ? 'Загрузка...' : 'Войти в аккаунт'}
+        {isPending ? '...' : 'Войти в аккаунт'}
       </button>
 
       <div className="auth-form__footer">

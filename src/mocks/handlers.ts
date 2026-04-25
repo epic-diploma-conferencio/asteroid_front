@@ -67,14 +67,10 @@ export const handlers = [
     if (db.users.has(login)) {
       return json(errorBody('Пользователь уже существует', 'CONFLICT', 409, '/auth/register'), 409);
     }
-    const handle = login.includes('@') ? login.split('@')[0] : login;
     const user = {
       id: randomId(),
       login,
       password,
-      firstName: handle.charAt(0).toUpperCase() + handle.slice(1),
-      lastName: '',
-      avatarUrl: '',
     };
     db.users.set(login, user);
     const accessToken = createAccessToken(user.id, user.login);
@@ -217,5 +213,25 @@ export const handlers = [
     }
     db.researches.delete(id);
     return json({ message: 'Удалено' });
+  }),
+
+  http.get(url('/articles'), async () => {
+    await delay(220);
+    const articles = Array.from(db.articles.values()).map(
+      ({ content: _content, ...article }) => article,
+    );
+    return json(articles);
+  }),
+
+  http.get(url('/articles/:articleId'), async ({ params }) => {
+    await delay(220);
+    const articleId = String(params.articleId);
+    const article = db.articles.get(articleId);
+
+    if (!article) {
+      return json(errorBody('Статья не найдена', 'NOT_FOUND', 404, `/articles/${articleId}`), 404);
+    }
+
+    return json(article);
   }),
 ];

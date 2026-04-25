@@ -1,5 +1,5 @@
 import { LayoutGroup } from 'framer-motion';
-import { Check, Pencil, RefreshCw, Trash2 } from 'lucide-react';
+import { ArrowLeft, Check, Pencil, RefreshCw, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -15,6 +15,7 @@ import { useAuthStore } from '@/features/authorization';
 import { Button } from '@/shared/ui/Button';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { DeleteConfirmModal } from '@/shared/ui/DeleteConfirmModal/ui';
+import { Loader, useRouteLoaderStore } from '@/shared/ui/Loader';
 import { AuthModal, type AuthMode } from '@/widgets/AuthModal';
 
 import { ASTTreeDetailScreen } from './ASTTreeDetailScreen';
@@ -33,6 +34,7 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
   const navigate = useNavigate();
   const { resId } = useParams<{ resId: string }>();
   const isAuth = useAuthStore((state) => state.token !== null);
+  const isRouteLoading = useRouteLoaderStore((state) => state.isRouteLoading);
 
   const isSaved = mode === 'saved';
   const { data: savedResearch, isLoading: detailLoading } = useResearchDetail(
@@ -71,6 +73,15 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
     if (target) {
       setExpandedCard(target);
     }
+  };
+
+  const handleGoBack = () => {
+    if (window.history.length > 1) {
+      void navigate(-1);
+      return;
+    }
+
+    void navigate(isSaved ? '/saved' : isAuth ? '/dashboard' : '/');
   };
 
   const handleConfirmDelete = async () => {
@@ -125,11 +136,7 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
   };
 
   if (isSaved && detailLoading) {
-    return (
-      <section className="research-page">
-        <p className="research-page__loading">Загружаем исследование…</p>
-      </section>
-    );
+    return <section className="research-page">{isRouteLoading ? null : <Loader block />}</section>;
   }
 
   if (isSaved && !savedResearch) {
@@ -145,10 +152,16 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
   return (
     <section className={`research-page${isExpanded ? ' research-page--expanded' : ''}`}>
       <header className="research-page__header">
-        <h1 className="research-page__title t-h-40">{title}</h1>
-        {isSaved && savedResearch ? (
-          <DescriptionPopover description={savedResearch.description} />
-        ) : null}
+        <button type="button" className="research-page__back" onClick={handleGoBack}>
+          <ArrowLeft size={18} strokeWidth={2} />
+          Назад
+        </button>
+        <div className="research-page__heading">
+          <h1 className="research-page__title t-h-40">{title}</h1>
+          {isSaved && savedResearch ? (
+            <DescriptionPopover description={savedResearch.description} />
+          ) : null}
+        </div>
       </header>
 
       <LayoutGroup id="research-cards">

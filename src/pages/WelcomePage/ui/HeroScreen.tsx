@@ -24,7 +24,7 @@ const item = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: [0.22, 0.61, 0.36, 1] as const },
+    transition: { duration: 2, ease: [0.22, 0.61, 0.36, 1] as const },
   },
 };
 

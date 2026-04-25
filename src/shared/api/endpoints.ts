@@ -14,4 +14,8 @@ export const endpoints = {
     CREATE: '/saved',
     DETAIL: (id: string) => `/saved/${id}`,
   },
+  articles: {
+    LIST: '/articles',
+    DETAIL: (articleId: string) => `/articles/${articleId}`,
+  },
 };

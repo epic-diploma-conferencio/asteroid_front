@@ -4,7 +4,7 @@
    Page container — fills main area & scrolls when content overflows
    ============================================================ */
 .research-page {
-  --research-frame-max: calc(1000px + var(--space-4));
+  --research-frame-max: calc(1000px + var(--space-8));
 
   position: relative;
   flex: 1;
@@ -13,10 +13,10 @@
   width: 100%;
   max-width: 1280px;
   margin-inline: auto;
-  padding-block: var(--space-4) var(--space-3);
+  padding-block: var(--space-3) var(--space-2);
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-4);
 
   &__loading {
     margin: var(--space-8) auto;
@@ -39,11 +39,51 @@
 
   &__header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
     width: min(100%, var(--research-frame-max));
     margin-inline: auto;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: fit-content;
+    padding: 8px 12px;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-family: var(--font-heading);
+    font-size: var(--fs-14);
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast),
+      transform var(--transition-fast);
+
+    &:hover {
+      transform: translateX(-2px);
+      background: color-mix(in oklab, var(--color-text) 8%, transparent);
+      color: var(--color-text);
+    }
+
+    [data-theme='dark'] & {
+      color: var(--color-white-muted);
+
+      &:hover {
+        background: color-mix(in oklab, var(--color-white) 8%, transparent);
+        color: var(--color-white);
+      }
+    }
+  }
+
+  &__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    width: 100%;
     flex-wrap: wrap;
   }
 
@@ -60,7 +100,7 @@
   &__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(300px, 500px));
-    gap: var(--space-4);
+    gap: var(--space-3);
     justify-content: center;
     align-content: start;
     width: min(100%, var(--research-frame-max));
@@ -75,7 +115,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: var(--space-4);
+    gap: var(--space-3);
     flex-wrap: wrap;
     width: min(100%, var(--research-frame-max));
     margin-inline: auto;
@@ -90,7 +130,7 @@
   }
 
   @media (max-width: 720px) {
-    padding-block: var(--space-3);
+    padding-block: var(--space-2);
     gap: var(--space-3);
 
     &__actions {

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import {
@@ -10,6 +11,7 @@ import {
 } from '@/entities/research';
 import { Button } from '@/shared/ui/Button';
 import { DeleteConfirmModal } from '@/shared/ui/DeleteConfirmModal/ui';
+import { Loader, useRouteLoaderStore } from '@/shared/ui/Loader';
 
 import { Pagination } from './Pagination';
 import { ProjectCard } from './ProjectCard';
@@ -24,6 +26,8 @@ const pageVariants: Variants = {
 };
 
 export const SavedPage = () => {
+  const navigate = useNavigate();
+  const isRouteLoading = useRouteLoaderStore((state) => state.isRouteLoading);
   const { data: projects = [], isLoading } = useResearchList();
   const { mutateAsync: deleteResearch } = useDeleteResearch();
 
@@ -66,10 +70,10 @@ export const SavedPage = () => {
         <div className="saved-page__intro">
           <h1 className="saved-page__title t-h-40">Сохраненные исследования</h1>
           <p className="saved-page__subtitle t-common-big">
-            {'Здесь вы можете увидеть все            сохраненные анализы ваших проектов'}
+            Здесь вы можете увидеть все сохраненные анализы ваших проектов
           </p>
         </div>
-        <Button className="saved-page__add">
+        <Button className="saved-page__add" onClick={() => navigate('/research/demo-latest')}>
           <Plus size={20} strokeWidth={2.5} />
           Добавить
         </Button>
@@ -77,7 +81,9 @@ export const SavedPage = () => {
 
       <div className="saved-page__grid-viewport">
         {isLoading ? (
-          <p className="saved-page__loading">Загружаем список…</p>
+          isRouteLoading ? null : (
+            <Loader block />
+          )
         ) : projects.length === 0 ? (
           <p className="saved-page__empty">Пока нет сохраненных исследований</p>
         ) : (

@@ -17,7 +17,7 @@
     flex-direction: column;
     gap: var(--space-5);
     padding: var(--space-8) var(--space-10);
-
+  
     @media (max-width: 720px) {
       padding: var(--space-4) var(--space-4);
       gap: var(--space-4);
@@ -30,7 +30,7 @@
     align-items: center;
     gap: var(--space-2);
     background: transparent;
-    padding: 6px 8px;
+    padding: var(--pad-xs) var(--pad-sm);
     font-family: var(--font-heading);
     font-weight: var(--fw-medium);
     font-size: var(--fs-14);
@@ -68,11 +68,11 @@
 
   &__intro {
     margin: 0;
-    max-width: 680px;
+    max-width: 780px;
     font-family: var(--font-body);
-    font-size: var(--fs-16);
-    line-height: var(--lh-relaxed);
-    color: var(--color-text);
+    font-size: var(--fs-20);
+    
+    color: var(--color-text-muted);
 
     [data-theme='dark'] & {
       color: var(--color-white-muted);

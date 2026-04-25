@@ -5,42 +5,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import type { SavedResearchListItem } from '@/entities/research';
+import { formatCreatedAt } from '@/shared/lib/date/format-created-at';
+
+import './project-card.scss';
 
 const ownerLabel = (project: SavedResearchListItem) =>
   project.ownerIsMe ? `Вы (${project.ownerEmail})` : project.ownerEmail;
-
-const formatCreatedAt = (iso: string): string => {
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) {
-    return iso;
-  }
-  const diffMs = Date.now() - date.getTime();
-  const days = Math.floor(diffMs / 86400000);
-  if (days <= 0) {
-    return 'сегодня';
-  }
-  if (days === 1) {
-    return 'вчера';
-  }
-  if (days < 7) {
-    return `${days} дн. назад`;
-  }
-  const weeks = Math.floor(days / 7);
-  if (weeks === 1) {
-    return 'неделю назад';
-  }
-  if (weeks < 4) {
-    return `${weeks} нед. назад`;
-  }
-  const months = Math.floor(days / 30);
-  if (months === 1) {
-    return 'месяц назад';
-  }
-  if (months < 12) {
-    return `${months} мес. назад`;
-  }
-  return `${Math.floor(days / 365)} г. назад`;
-};
 
 interface Props {
   project: SavedResearchListItem;
@@ -68,7 +38,7 @@ export const ProjectCard = ({ project, onDelete }: Props) => {
         <div className="saved-card__text">
           <h3 className="saved-card__title">{project.name}</h3>
           <div className="saved-card__meta">
-            <Tooltip.Provider delayDuration={150}>
+            <Tooltip.Provider delayDuration={500}>
               <Tooltip.Root>
                 <Tooltip.Trigger asChild>
                   <span className="saved-card__meta-item saved-card__meta-item--truncate">
