@@ -172,7 +172,7 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
               card={card}
               onClick={handleCardClick}
               isHidden={expandedCard !== null && expandedCard.id !== card.id}
-              isExpanding={expandedCard?.id === card.id}
+              isGhosted={expandedCard?.id === card.id}
             />
           ))}
         </div>

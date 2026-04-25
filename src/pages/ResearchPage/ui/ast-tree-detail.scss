@@ -6,6 +6,8 @@
   border-radius: var(--radius-lg);
   overflow-x: hidden;
   overflow-y: auto;
+  will-change: transform;
+  backface-visibility: hidden;
 
   [data-theme='dark'] & {
     background: var(--color-bg);
@@ -17,7 +19,7 @@
     flex-direction: column;
     gap: var(--space-5);
     padding: var(--space-8) var(--space-10);
-  
+
     @media (max-width: 720px) {
       padding: var(--space-4) var(--space-4);
       gap: var(--space-4);
@@ -37,7 +39,9 @@
     color: var(--color-text-muted);
     cursor: pointer;
     border-radius: var(--radius-sm);
-    transition: background var(--transition-fast), color var(--transition-fast);
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast);
 
     &:hover {
       background: color-mix(in oklab, var(--color-text) 8%, transparent);
@@ -71,7 +75,7 @@
     max-width: 780px;
     font-family: var(--font-body);
     font-size: var(--fs-20);
-    
+
     color: var(--color-text-muted);
 
     [data-theme='dark'] & {
@@ -103,7 +107,9 @@
   border-radius: var(--radius-lg);
   padding: var(--space-3);
   box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+  transition:
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
 
   [data-theme='dark'] & {
     background: var(--color-contrast-2);

@@ -9,7 +9,7 @@ interface Props {
   card: ResearchCard;
   onClick?: (id: string) => void;
   isHidden?: boolean;
-  isExpanding?: boolean;
+  isGhosted?: boolean;
 }
 
 const renderSubtitle = (card: ResearchCard): ReactNode => {
@@ -30,19 +30,18 @@ const renderSubtitle = (card: ResearchCard): ReactNode => {
   );
 };
 
-export const ResultCard = ({ card, onClick, isHidden = false, isExpanding = false }: Props) => (
+export const ResultCard = ({ card, onClick, isHidden = false, isGhosted = false }: Props) => (
   <motion.button
     type="button"
     layoutId={`research-card-${card.id}`}
     animate={{
-      opacity: isHidden || isExpanding ? 0 : 1,
-      pointerEvents: isHidden || isExpanding ? 'none' : 'auto',
+      opacity: isHidden || isGhosted ? 0 : 1,
+      pointerEvents: isHidden || isGhosted ? 'none' : 'auto',
     }}
     transition={{
       opacity: {
-        duration: 0.3,
+        duration: isHidden ? 0.22 : 0.16,
         ease: 'easeOut',
-        delay: isHidden || isExpanding ? 0 : 0.5,
       },
     }}
     className="research-card"
