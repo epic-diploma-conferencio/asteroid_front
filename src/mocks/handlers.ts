@@ -234,4 +234,72 @@ export const handlers = [
 
     return json(article);
   }),
+
+  http.post(url('/upload'), async ({ request }) => {
+    await delay(420);
+    const formData = await request.formData();
+    const archive = formData.get('file');
+
+    if (!(archive instanceof File)) {
+      return json(errorBody('Файл не найден', 'BAD_REQUEST', 400, '/upload'), 400);
+    }
+
+    const archiveId = `upload-${randomId()}`;
+    const uploadedArchive = {
+      id: archiveId,
+      archiveName: archive.name,
+      fileCount: 1,
+      uploadedAt: new Date().toISOString(),
+    };
+
+    db.uploads.set(archiveId, uploadedArchive);
+
+    return json({
+      message: 'Архив успешно загружен',
+      archiveId,
+      archiveName: archive.name,
+      fileCount: 1,
+    });
+  }),
+
+  http.get(url('/rules/avaliable'), async () => {
+    await delay(280);
+    return json({
+      rules: db.rules,
+    });
+  }),
+
+  http.post(url('/startAnalysis'), async ({ request }) => {
+    await delay(260);
+    const body = (await request.json()) as {
+      rules?: Array<{ ruleName?: string; value?: boolean }>;
+      uploadId?: string | null;
+    };
+
+    const rules = (body.rules ?? []).filter(
+      (rule): rule is { ruleName: string; value: boolean } => typeof rule.ruleName === 'string',
+    );
+
+    if (rules.length < 2) {
+      return json(
+        errorBody('Нужно минимум два правила', 'BAD_REQUEST', 400, '/startAnalysis'),
+        400,
+      );
+    }
+
+    const analysisId = `analysis-${randomId()}`;
+
+    db.analysisJobs.set(analysisId, {
+      id: analysisId,
+      createdAt: new Date().toISOString(),
+      rules: rules.filter((rule) => rule.value).map((rule) => rule.ruleName),
+      uploadId: body.uploadId ?? null,
+    });
+
+    return json({
+      message: 'Анализ успешно запущен',
+      analysisId,
+      status: 'started',
+    });
+  }),
 ];

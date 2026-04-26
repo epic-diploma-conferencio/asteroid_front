@@ -73,7 +73,7 @@ export const SavedPage = () => {
             Здесь вы можете увидеть все сохраненные анализы ваших проектов
           </p>
         </div>
-        <Button className="saved-page__add" onClick={() => navigate('/research/demo-latest')}>
+        <Button className="saved-page__add" onClick={() => navigate('/load')}>
           <Plus size={20} strokeWidth={2.5} />
           Добавить
         </Button>

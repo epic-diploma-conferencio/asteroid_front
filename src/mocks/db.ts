@@ -24,6 +24,26 @@ export interface ArticleRecord {
   content: string;
 }
 
+export interface AvailableRuleRecord {
+  ruleName: string;
+  ruleRussian: string;
+  ruleDescription: string;
+}
+
+export interface UploadedArchiveRecord {
+  id: string;
+  archiveName: string;
+  fileCount: number;
+  uploadedAt: string;
+}
+
+export interface AnalysisJobRecord {
+  id: string;
+  createdAt: string;
+  rules: string[];
+  uploadId: string | null;
+}
+
 export interface ResearchCard {
   id: string;
   kind: 'ast' | 'arch' | 'structure' | 'deps';
@@ -73,7 +93,10 @@ export const db = {
   users: new Map<string, MockUser>(),
   researches: new Map<string, SavedResearchRecord>(),
   articles: new Map<string, ArticleRecord>(),
+  uploads: new Map<string, UploadedArchiveRecord>(),
+  analysisJobs: new Map<string, AnalysisJobRecord>(),
   sessions: new Map<string, string>(),
+  rules: [] as AvailableRuleRecord[],
 };
 
 const seedUser: MockUser = {
@@ -207,3 +230,53 @@ if (user && user.role === 'admin') {
 seedArticles.forEach((article) => db.articles.set(article.id, article));
 
 export const cloneDefaultCards = () => defaultCards.map((c) => ({ ...c }));
+
+db.rules = [
+  {
+    ruleName: 'structAnalysis',
+    ruleRussian: 'Структурный анализ',
+    ruleDescription:
+      'Система проверит, как разложены файлы и слои проекта относительно ожидаемой структуры.',
+  },
+  {
+    ruleName: 'archAnalysis',
+    ruleRussian: 'Архитектурный анализ',
+    ruleDescription:
+      'Поиск нарушений между модулями, слоями и потенциально опасных архитектурных связей.',
+  },
+  {
+    ruleName: 'dependencyAnalysis',
+    ruleRussian: 'Анализ зависимостей проекта',
+    ruleDescription: 'Проверка внешних зависимостей, связей между пакетами и критичных импортов.',
+  },
+  {
+    ruleName: 'buildAnalysis',
+    ruleRussian: 'Анализ билда проекта',
+    ruleDescription:
+      'Проверка сборочных конфигов, alias-ов и сценариев, которые могут ломать запуск.',
+  },
+  {
+    ruleName: 'lintAnalysis',
+    ruleRussian: 'Линт-анализ',
+    ruleDescription:
+      'Проверка типичных style issues, потенциальных багов и проблем читаемости кода.',
+  },
+  {
+    ruleName: 'unusedVarsAnalysis',
+    ruleRussian: 'Анализ неиспользуемых переменных',
+    ruleDescription:
+      'Поиск забытых импортов, переменных и параметров, которые больше не участвуют в логике.',
+  },
+  {
+    ruleName: 'vulnerabilityAnalysis',
+    ruleRussian: 'Анализ уязвимостей в проекте',
+    ruleDescription:
+      'Проверка зависимостей и конфигураций на признаки известных уязвимостей и рисков.',
+  },
+  {
+    ruleName: 'complexityAnalysis',
+    ruleRussian: 'Анализ сложности кода',
+    ruleDescription:
+      'Поиск самых перегруженных функций, тяжёлых ветвлений и сложно поддерживаемых мест.',
+  },
+];

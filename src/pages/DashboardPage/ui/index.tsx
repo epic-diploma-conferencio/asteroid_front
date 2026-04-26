@@ -62,7 +62,7 @@ export const DashboardPage = () => {
           <button
             type="button"
             className="dashboard-page__quick-action dashboard-page__quick-action--primary"
-            onClick={() => navigate('/research/demo-latest')}
+            onClick={() => navigate('/load')}
           >
             <PlusCircle size={20} strokeWidth={2.25} />
             <span>Новое исследование</span>
