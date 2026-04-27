@@ -1,17 +1,33 @@
 export { researchApi } from './api/research.api';
 export {
   researchKeys,
+  useAvailableRules,
   useCreateResearch,
   useDeleteResearch,
+  usePublicResearchDetail,
   useResearchDetail,
+  useResearchLongPolling,
   useResearchList,
+  useResearchStatus,
+  useStartAnalysis,
   useUpdateResearch,
+  useUploadProjectArchive,
 } from './api/research.queries';
 export type {
+  AvailableRule,
+  AvailableRulesResponse,
   CreateResearchDto,
   ResearchCard,
   ResearchCardTone,
+  ResearchDetail,
+  ResearchListItem,
+  ResearchStatus,
+  ResearchStatusResponse,
   SavedResearchDetail,
   SavedResearchListItem,
+  StartAnalysisDto,
+  StartAnalysisResponse,
+  StartAnalysisRule,
   UpdateResearchDto,
+  UploadProjectResponse,
 } from './model/research.types';

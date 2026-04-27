@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import {
   useCreateResearch,
   useDeleteResearch,
+  usePublicResearchDetail,
   useResearchDetail,
   useUpdateResearch,
   type ResearchCard,
@@ -40,6 +41,9 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
   const { data: savedResearch, isLoading: detailLoading } = useResearchDetail(
     isSaved ? resId : undefined,
   );
+  const { data: publicResearch, isLoading: publicDetailLoading } = usePublicResearchDetail(
+    !isSaved ? resId : undefined,
+  );
 
   const { mutateAsync: createResearch } = useCreateResearch();
   const { mutateAsync: deleteResearch } = useDeleteResearch();
@@ -56,17 +60,23 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
     setExpandedCard(null);
   }, [resId, mode]);
 
-  const cards: ResearchCard[] = isSaved
-    ? savedResearch
-      ? buildCardsFromResearch(savedResearch.cards)
-      : []
-    : defaultCards;
+  const research = isSaved ? savedResearch : publicResearch;
+  const isDetailLoading = isSaved ? detailLoading : publicDetailLoading;
 
-  const title = isSaved
-    ? savedResearch?.name
-      ? `Исследование: ${savedResearch.name}`
-      : 'Сохраненное исследование'
-    : 'Результаты исследования';
+  const cards: ResearchCard[] =
+    research && research.status === 'completed'
+      ? buildCardsFromResearch(research.cards)
+      : !isSaved
+        ? defaultCards
+        : [];
+
+  const title = research?.name
+    ? isSaved
+      ? `Исследование: ${research.name}`
+      : `Результаты исследования: ${research.name}`
+    : isSaved
+      ? 'Сохраненное исследование'
+      : 'Результаты исследования';
 
   const handleCardClick = (id: string) => {
     const target = cards.find((c) => c.id === id);
@@ -76,6 +86,11 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
   };
 
   const handleGoBack = () => {
+    if (isSaved) {
+      void navigate('/saved');
+      return;
+    }
+
     if (window.history.length > 1) {
       void navigate(-1);
       return;
@@ -86,17 +101,17 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
 
   const handleConfirmDelete = async () => {
     setConfirmDeleteOpen(false);
-    if (isSaved && resId) {
+    if (resId && (isSaved || research?.ownerIsMe)) {
       try {
         await deleteResearch(resId);
         toast.success('Исследование удалено');
-        await navigate('/saved');
+        await navigate(isSaved ? '/saved' : isAuth ? '/saved' : '/');
       } catch {
         toast.error('Не удалось удалить исследование');
       }
       return;
     }
-    await navigate('/saved');
+    await navigate(isAuth ? '/dashboard' : '/');
   };
 
   const handleConfirmRegenerate = () => {
@@ -106,16 +121,19 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
 
   const handleSaveProject = async (values: SaveProjectValues) => {
     try {
-      if (isSaved && resId) {
+      if (resId && (isSaved || research?.ownerIsMe)) {
         await updateResearch({ name: values.name, description: values.comment || null });
-        toast.success('Изменения сохранены');
+        toast.success(isSaved ? 'Изменения сохранены' : 'Исследование сохранено');
+        if (!isSaved) {
+          await navigate('/saved');
+        }
       } else {
-        const created = await createResearch({
+        await createResearch({
           name: values.name,
           description: values.comment || null,
         });
         toast.success('Исследование сохранено');
-        await navigate(`/saved/${created.id}`);
+        await navigate('/saved');
       }
     } catch {
       toast.error('Не удалось сохранить');
@@ -139,10 +157,22 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
     return <section className="research-page">{isRouteLoading ? null : <Loader block />}</section>;
   }
 
-  if (isSaved && !savedResearch) {
+  if (isDetailLoading) {
+    return <section className="research-page">{isRouteLoading ? null : <Loader block />}</section>;
+  }
+
+  if (!research) {
     return (
       <section className="research-page">
         <p className="research-page__loading">Исследование не найдено.</p>
+      </section>
+    );
+  }
+
+  if (research.status === 'processing') {
+    return (
+      <section className="research-page">
+        <Loader block />
       </section>
     );
   }
@@ -158,9 +188,7 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
         </button>
         <div className="research-page__heading">
           <h1 className="research-page__title t-h-40">{title}</h1>
-          {isSaved && savedResearch ? (
-            <DescriptionPopover description={savedResearch.description} />
-          ) : null}
+          <DescriptionPopover description={research.description} />
         </div>
       </header>
 
@@ -236,9 +264,7 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
         onSave={handleSaveProject}
         mode={isSaved ? 'edit' : 'create'}
         initialValues={
-          isSaved && savedResearch
-            ? { name: savedResearch.name, comment: savedResearch.description ?? '' }
-            : undefined
+          research ? { name: research.name, comment: research.description ?? '' } : undefined
         }
       />
 

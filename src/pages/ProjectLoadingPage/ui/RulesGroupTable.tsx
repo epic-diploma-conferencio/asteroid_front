@@ -1,7 +1,7 @@
 import type { CheckedState } from '@radix-ui/react-checkbox';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
-import type { AvailableRule } from '@/entities/analysis';
+import type { AvailableRule } from '@/entities/research';
 
 import { SelectionCheckbox } from './SelectionCheckbox';
 import { RULE_PRESENTATIONS } from '../lib/file-tree';

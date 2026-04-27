@@ -19,6 +19,22 @@
     box-shadow: var(--shadow-md);
   }
 
+  &--processing {
+    .saved-card__preview-button {
+      cursor: default;
+      transform: none;
+    }
+
+    .saved-card__title,
+    .saved-card__meta {
+      color: var(--color-text-muted);
+
+      [data-theme='dark'] & {
+        color: var(--color-white-muted);
+      }
+    }
+  }
+
   &__preview-button {
     display: block;
     padding: 0;
@@ -34,6 +50,7 @@
   }
 
   &__preview {
+    position: relative;
     width: 100%;
     aspect-ratio: 4 / 3;
     background: color-mix(in oklab, var(--color-text) 18%, transparent);
@@ -44,6 +61,49 @@
       height: 100%;
       object-fit: cover;
       display: block;
+    }
+
+    &--placeholder {
+      background: color-mix(in oklab, var(--color-text) 10%, var(--color-white));
+
+      [data-theme='dark'] & {
+        background: color-mix(in oklab, var(--color-white) 8%, var(--color-contrast-2));
+      }
+    }
+  }
+
+  &__preview-skeleton {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--color-text) 8%, transparent) 0%,
+      color-mix(in oklab, var(--color-text) 16%, transparent) 100%
+    );
+
+    [data-theme='dark'] & {
+      background: linear-gradient(
+        135deg,
+        color-mix(in oklab, var(--color-white) 8%, transparent) 0%,
+        color-mix(in oklab, var(--color-white) 14%, transparent) 100%
+      );
+    }
+  }
+
+  &__processing-loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+
+    .app-loader {
+      color: color-mix(in oklab, var(--color-text) 52%, var(--color-white));
+
+      [data-theme='dark'] & {
+        color: color-mix(in oklab, var(--color-white) 72%, var(--color-contrast-2));
+      }
     }
   }
 
@@ -91,6 +151,12 @@
   &__meta-item {
     flex-shrink: 0;
 
+    &--processing {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+    }
+
     &--truncate {
       min-width: 0;
       max-width: 120px;
@@ -104,6 +170,24 @@
   &__meta-sep {
     flex-shrink: 0;
     opacity: 0.7;
+  }
+
+  &__ellipsis {
+    display: inline-flex;
+    min-width: 18px;
+
+    span {
+      animation: saved-card-ellipsis 1.4s infinite;
+      opacity: 0.2;
+    }
+
+    span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
   }
 
   &__menu-trigger {
@@ -124,6 +208,21 @@
       background: color-mix(in oklab, var(--color-text) 8%, transparent);
       color: var(--color-text);
     }
+  }
+}
+
+@keyframes saved-card-ellipsis {
+  0%,
+  20% {
+    opacity: 0.2;
+  }
+
+  45% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.2;
   }
 }
 

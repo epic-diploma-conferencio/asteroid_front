@@ -12,6 +12,7 @@ export const MainLayout = () => {
   useMe();
   const { pathname, search } = useLocation();
   const setRouteLoadingState = useRouteLoaderStore((state) => state.setRouteLoading);
+  const consumeSkippedRouteLoader = useRouteLoaderStore((state) => state.consumeSkippedRouteLoader);
   const isHomePage = useMatch('/');
   const noPadding = isHomePage;
   const [isRouteLoading, setRouteLoading] = useState(false);
@@ -20,6 +21,12 @@ export const MainLayout = () => {
   useLayoutEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
+      setRouteLoadingState(false);
+      return;
+    }
+
+    if (consumeSkippedRouteLoader()) {
+      setRouteLoading(false);
       setRouteLoadingState(false);
       return;
     }
@@ -35,7 +42,7 @@ export const MainLayout = () => {
       window.clearTimeout(timeoutId);
       setRouteLoadingState(false);
     };
-  }, [pathname, search, setRouteLoadingState]);
+  }, [consumeSkippedRouteLoader, pathname, search, setRouteLoadingState]);
 
   return (
     <div className="main-layout">

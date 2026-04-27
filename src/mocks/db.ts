@@ -7,13 +7,17 @@ export interface MockUser extends PublicUser {
 
 export interface SavedResearchRecord {
   id: string;
-  ownerId: string;
+  ownerId: string | null;
   name: string;
   description: string | null;
+  isSaved: boolean;
   language: string;
   createdAt: string;
   preview: string;
   cards: ResearchCard[];
+  status: 'processing' | 'completed';
+  readyAt: string | null;
+  expiresAt: string | null;
 }
 
 export interface ArticleRecord {
@@ -35,6 +39,7 @@ export interface UploadedArchiveRecord {
   archiveName: string;
   fileCount: number;
   uploadedAt: string;
+  language: string;
 }
 
 export interface AnalysisJobRecord {
@@ -42,6 +47,14 @@ export interface AnalysisJobRecord {
   createdAt: string;
   rules: string[];
   uploadId: string | null;
+  researchId: string;
+}
+
+interface PersistedMockDb {
+  users: MockUser[];
+  researches: SavedResearchRecord[];
+  uploads: UploadedArchiveRecord[];
+  analysisJobs: AnalysisJobRecord[];
 }
 
 export interface ResearchCard {
@@ -99,6 +112,20 @@ export const db = {
   rules: [] as AvailableRuleRecord[],
 };
 
+const MOCK_DB_STORAGE_KEY = 'asteroid-front:mock-db:v1';
+
+const getStorage = () => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
+};
+
 const seedUser: MockUser = {
   id: 'u-1',
   login: 'mors@example.com',
@@ -112,30 +139,42 @@ const seedResearches: SavedResearchRecord[] = [
     ownerId: seedUser.id,
     name: 'ASTANAKEBAB',
     description: 'Главный проект команды, Java',
+    isSaved: true,
     language: 'Java',
     createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
     preview: placeholder(1),
     cards: defaultCards,
+    status: 'completed',
+    readyAt: null,
+    expiresAt: null,
   },
   {
     id: 'r-payments',
     ownerId: seedUser.id,
     name: 'payments-gateway',
     description: null,
+    isSaved: true,
     language: 'Kotlin',
     createdAt: new Date(Date.now() - 7 * 86400000).toISOString(),
     preview: placeholder(5),
     cards: defaultCards,
+    status: 'completed',
+    readyAt: null,
+    expiresAt: null,
   },
   {
     id: 'r-codebot',
     ownerId: seedUser.id,
     name: 'ai-code-review-bot',
     description: 'Экспериментальный бот для PR-ревью',
+    isSaved: true,
     language: 'Python',
     createdAt: new Date(Date.now() - 21 * 86400000).toISOString(),
     preview: placeholder(7),
     cards: defaultCards,
+    status: 'completed',
+    readyAt: null,
+    expiresAt: null,
   },
 ];
 seedResearches.forEach((r) => db.researches.set(r.id, r));
@@ -280,3 +319,67 @@ db.rules = [
       'Поиск самых перегруженных функций, тяжёлых ветвлений и сложно поддерживаемых мест.',
   },
 ];
+
+const hydrateMockDb = () => {
+  const storage = getStorage();
+  if (!storage) {
+    return;
+  }
+
+  const raw = storage.getItem(MOCK_DB_STORAGE_KEY);
+  if (!raw) {
+    return;
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as Partial<PersistedMockDb>;
+
+    if (Array.isArray(parsed.users)) {
+      db.users.clear();
+      parsed.users.forEach((user) => {
+        db.users.set(user.login, user);
+      });
+    }
+
+    if (Array.isArray(parsed.researches)) {
+      db.researches.clear();
+      parsed.researches.forEach((research) => {
+        db.researches.set(research.id, research);
+      });
+    }
+
+    if (Array.isArray(parsed.uploads)) {
+      db.uploads.clear();
+      parsed.uploads.forEach((upload) => {
+        db.uploads.set(upload.id, upload);
+      });
+    }
+
+    if (Array.isArray(parsed.analysisJobs)) {
+      db.analysisJobs.clear();
+      parsed.analysisJobs.forEach((job) => {
+        db.analysisJobs.set(job.id, job);
+      });
+    }
+  } catch {
+    storage.removeItem(MOCK_DB_STORAGE_KEY);
+  }
+};
+
+export const persistMockDb = () => {
+  const storage = getStorage();
+  if (!storage) {
+    return;
+  }
+
+  const payload: PersistedMockDb = {
+    users: Array.from(db.users.values()),
+    researches: Array.from(db.researches.values()),
+    uploads: Array.from(db.uploads.values()),
+    analysisJobs: Array.from(db.analysisJobs.values()),
+  };
+
+  storage.setItem(MOCK_DB_STORAGE_KEY, JSON.stringify(payload));
+};
+
+hydrateMockDb();

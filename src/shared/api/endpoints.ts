@@ -17,13 +17,11 @@ export const endpoints = {
     LIST: '/saved',
     CREATE: '/saved',
     DETAIL: (id: string) => `/saved/${id}`,
-  },
-  upload: {
-    PROJECT: '/upload',
-  },
-  analysis: {
+    PUBLIC_DETAIL: (id: string) => `/research/${id}`,
+    STATUS: (id: string) => `/research/${id}/status`,
+    UPLOAD: '/upload',
     RULES_AVAILABLE: '/rules/avaliable',
-    START: '/startAnalysis',
+    START_ANALYSIS: '/startAnalysis',
   },
   articles: {
     LIST: '/articles',

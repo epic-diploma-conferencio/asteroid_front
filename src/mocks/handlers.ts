@@ -2,10 +2,13 @@ import { HttpResponse, delay, http } from 'msw';
 
 import { env } from '@/shared/config';
 
-import { cloneDefaultCards, db, type SavedResearchRecord } from './db';
+import { cloneDefaultCards, db, persistMockDb, type SavedResearchRecord } from './db';
 import { createAccessToken, readAccessToken } from './token';
 
 const base = env.apiUrl;
+const ANALYSIS_DURATION_MS = 60_000;
+const LONG_POLL_TIMEOUT_MS = 20_000;
+const DRAFT_TTL_MS = 30 * 60_000;
 
 const url = (path: string) => `${base}${path}`;
 
@@ -25,6 +28,55 @@ const publicUser = (u: { id: string; login: string }) => ({
   login: u.login,
 });
 
+const normalizeResearchName = (archiveName: string) => {
+  const trimmed = archiveName.trim();
+  const nameWithoutZip = trimmed.replace(/\.zip$/i, '');
+  const normalized = nameWithoutZip.replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
+
+  if (!normalized) {
+    return 'Новое исследование';
+  }
+
+  return normalized;
+};
+
+const pruneExpiredDraft = (research: SavedResearchRecord) => {
+  if (research.isSaved || !research.expiresAt) {
+    return false;
+  }
+
+  if (Date.now() < Date.parse(research.expiresAt)) {
+    return false;
+  }
+
+  db.researches.delete(research.id);
+  persistMockDb();
+  return true;
+};
+
+const hydrateResearchIfReady = (research: SavedResearchRecord) => {
+  if (pruneExpiredDraft(research)) {
+    return null;
+  }
+
+  if (research.status !== 'processing' || !research.readyAt) {
+    return research;
+  }
+
+  if (Date.now() < Date.parse(research.readyAt)) {
+    return research;
+  }
+
+  research.status = 'completed';
+  research.readyAt = null;
+  research.preview = research.preview || `https://picsum.photos/seed/${research.id}/640/480`;
+  research.cards = research.cards.length > 0 ? research.cards : cloneDefaultCards();
+  research.expiresAt = research.isSaved ? null : new Date(Date.now() + DRAFT_TTL_MS).toISOString();
+  persistMockDb();
+
+  return research;
+};
+
 const authUser = (req: Request) => {
   const header = req.headers.get('authorization') ?? req.headers.get('Authorization') ?? '';
   const token = header.toLowerCase().startsWith('bearer ') ? header.slice(7) : '';
@@ -36,23 +88,55 @@ const authUser = (req: Request) => {
   return user ?? null;
 };
 
-const buildProjectListItem = (r: SavedResearchRecord, currentUserId: string) => ({
-  id: r.id,
-  name: r.name,
-  description: r.description,
-  ownerEmail: ownerEmailFor(r.ownerId),
-  ownerIsMe: r.ownerId === currentUserId,
-  language: r.language,
-  createdAt: r.createdAt,
-  preview: r.preview,
-});
+const buildProjectListItem = (r: SavedResearchRecord, currentUserId: string) => {
+  const research = hydrateResearchIfReady(r);
+  if (!research) {
+    return null;
+  }
 
-const ownerEmailFor = (ownerId: string) => {
+  return {
+    id: research.id,
+    name: research.name,
+    description: research.description,
+    ownerEmail: ownerEmailFor(research.ownerId),
+    ownerIsMe: research.ownerId === currentUserId,
+    isSaved: research.isSaved,
+    language: research.language,
+    createdAt: research.createdAt,
+    preview: research.preview,
+    status: research.status,
+  };
+};
+
+const ownerEmailFor = (ownerId: string | null) => {
+  if (!ownerId) {
+    return 'guest@asteroid.local';
+  }
   const user = Array.from(db.users.values()).find((u) => u.id === ownerId);
   if (!user) {
     return 'unknown@example.com';
   }
   return user.login.includes('@') ? user.login : `${user.login}@example.com`;
+};
+
+const buildResearchDetail = (research: SavedResearchRecord, currentUserId: string | null) => {
+  const hydratedResearch = hydrateResearchIfReady(research);
+  if (!hydratedResearch) {
+    return null;
+  }
+
+  return {
+    id: hydratedResearch.id,
+    name: hydratedResearch.name,
+    description: hydratedResearch.description,
+    ownerIsMe: hydratedResearch.ownerId !== null && hydratedResearch.ownerId === currentUserId,
+    isSaved: hydratedResearch.isSaved,
+    status: hydratedResearch.status,
+    language: hydratedResearch.language,
+    createdAt: hydratedResearch.createdAt,
+    preview: hydratedResearch.preview,
+    cards: hydratedResearch.status === 'completed' ? hydratedResearch.cards : [],
+  };
 };
 
 export const handlers = [
@@ -73,6 +157,7 @@ export const handlers = [
       password,
     };
     db.users.set(login, user);
+    persistMockDb();
     const accessToken = createAccessToken(user.id, user.login);
     return json({ accessToken, expiresIn: 3600, user: publicUser(user) });
   }),
@@ -121,9 +206,16 @@ export const handlers = [
       return json(errorBody('Нет сессии', 'UNAUTHORIZED', 401, '/saved'), 401);
     }
     const list = Array.from(db.researches.values())
-      .filter((r) => r.ownerId === user.id)
+      .map((research) => hydrateResearchIfReady(research))
+      .filter(
+        (research): research is SavedResearchRecord =>
+          research !== null &&
+          research.ownerId === user.id &&
+          (research.isSaved || research.status === 'processing'),
+      )
       .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
-      .map((r) => buildProjectListItem(r, user.id));
+      .map((research) => buildProjectListItem(research, user.id))
+      .filter((item): item is NonNullable<typeof item> => item !== null);
     return json({ items: list });
   }),
 
@@ -135,18 +227,14 @@ export const handlers = [
     }
     const id = String(params.id);
     const research = db.researches.get(id);
-    if (!research || research.ownerId !== user.id) {
+    if (!research || research.ownerId !== user.id || !research.isSaved) {
       return json(errorBody('Не найдено', 'NOT_FOUND', 404, `/saved/${id}`), 404);
     }
-    return json({
-      id: research.id,
-      name: research.name,
-      description: research.description,
-      language: research.language,
-      createdAt: research.createdAt,
-      preview: research.preview,
-      cards: research.cards,
-    });
+    const detail = buildResearchDetail(research, user.id);
+    if (!detail) {
+      return json(errorBody('Не найдено', 'NOT_FOUND', 404, `/saved/${id}`), 404);
+    }
+    return json(detail);
   }),
 
   http.post(url('/saved'), async ({ request }) => {
@@ -166,12 +254,17 @@ export const handlers = [
       ownerId: user.id,
       name,
       description: body.description ?? null,
+      isSaved: true,
       language: 'TypeScript',
       createdAt: new Date().toISOString(),
       preview: `https://picsum.photos/seed/${id}/640/480`,
       cards: cloneDefaultCards(),
+      status: 'completed',
+      readyAt: null,
+      expiresAt: null,
     };
     db.researches.set(id, record);
+    persistMockDb();
     return json(buildProjectListItem(record, user.id), 201);
   }),
 
@@ -197,7 +290,16 @@ export const handlers = [
     if (body.description !== undefined) {
       research.description = body.description;
     }
-    return json(buildProjectListItem(research, user.id));
+    research.isSaved = true;
+    research.expiresAt = null;
+    persistMockDb();
+
+    const item = buildProjectListItem(research, user.id);
+    if (!item) {
+      return json(errorBody('Не найдено', 'NOT_FOUND', 404, `/saved/${id}`), 404);
+    }
+
+    return json(item);
   }),
 
   http.delete(url('/saved/:id'), async ({ request, params }) => {
@@ -212,6 +314,7 @@ export const handlers = [
       return json(errorBody('Не найдено', 'NOT_FOUND', 404, `/saved/${id}`), 404);
     }
     db.researches.delete(id);
+    persistMockDb();
     return json({ message: 'Удалено' });
   }),
 
@@ -239,6 +342,7 @@ export const handlers = [
     await delay(420);
     const formData = await request.formData();
     const archive = formData.get('file');
+    const languageField = formData.get('language');
 
     if (!(archive instanceof File)) {
       return json(errorBody('Файл не найден', 'BAD_REQUEST', 400, '/upload'), 400);
@@ -250,15 +354,18 @@ export const handlers = [
       archiveName: archive.name,
       fileCount: 1,
       uploadedAt: new Date().toISOString(),
+      language: typeof languageField === 'string' && languageField.trim() ? languageField : 'Mixed',
     };
 
     db.uploads.set(archiveId, uploadedArchive);
+    persistMockDb();
 
     return json({
       message: 'Архив успешно загружен',
       archiveId,
       archiveName: archive.name,
       fileCount: 1,
+      language: uploadedArchive.language,
     });
   }),
 
@@ -269,8 +376,66 @@ export const handlers = [
     });
   }),
 
+  http.get(url('/research/:id'), async ({ request, params }) => {
+    await delay(220);
+    const currentUser = authUser(request);
+    const id = String(params.id);
+    const research = db.researches.get(id);
+
+    if (!research) {
+      return json(errorBody('Не найдено', 'NOT_FOUND', 404, `/research/${id}`), 404);
+    }
+
+    const detail = buildResearchDetail(research, currentUser?.id ?? null);
+    if (!detail) {
+      return json(errorBody('Не найдено', 'NOT_FOUND', 404, `/research/${id}`), 404);
+    }
+
+    return json(detail);
+  }),
+
+  http.get(url('/research/:id/status'), async ({ request, params }) => {
+    const id = String(params.id);
+    const research = db.researches.get(id);
+
+    if (!research) {
+      return json(errorBody('Не найдено', 'NOT_FOUND', 404, `/research/${id}/status`), 404);
+    }
+
+    const searchParams = new URL(request.url).searchParams;
+    const since = searchParams.get('since') === 'completed' ? 'completed' : 'processing';
+    const hydratedResearch = hydrateResearchIfReady(research);
+    if (!hydratedResearch) {
+      return json(errorBody('Не найдено', 'NOT_FOUND', 404, `/research/${id}/status`), 404);
+    }
+
+    if (hydratedResearch.status !== since) {
+      return json({
+        id: hydratedResearch.id,
+        status: hydratedResearch.status,
+      });
+    }
+
+    const remainingMs = research.readyAt
+      ? Math.max(0, Date.parse(research.readyAt) - Date.now())
+      : 0;
+    const waitMs = Math.min(LONG_POLL_TIMEOUT_MS, remainingMs);
+    await delay(waitMs);
+
+    const refreshedResearch = hydrateResearchIfReady(research);
+    if (!refreshedResearch) {
+      return json(errorBody('Не найдено', 'NOT_FOUND', 404, `/research/${id}/status`), 404);
+    }
+
+    return json({
+      id: refreshedResearch.id,
+      status: refreshedResearch.status,
+    });
+  }),
+
   http.post(url('/startAnalysis'), async ({ request }) => {
     await delay(260);
+    const currentUser = authUser(request);
     const body = (await request.json()) as {
       rules?: Array<{ ruleName?: string; value?: boolean }>;
       uploadId?: string | null;
@@ -280,26 +445,46 @@ export const handlers = [
       (rule): rule is { ruleName: string; value: boolean } => typeof rule.ruleName === 'string',
     );
 
-    if (rules.length < 2) {
+    if (rules.length < 1) {
       return json(
-        errorBody('Нужно минимум два правила', 'BAD_REQUEST', 400, '/startAnalysis'),
+        errorBody('Нужно минимум одно правило', 'BAD_REQUEST', 400, '/startAnalysis'),
         400,
       );
     }
 
     const analysisId = `analysis-${randomId()}`;
+    const researchId = `r-${randomId()}`;
+    const archive = body.uploadId ? db.uploads.get(body.uploadId) : undefined;
+    const researchRecord: SavedResearchRecord = {
+      id: researchId,
+      ownerId: currentUser?.id ?? null,
+      name: normalizeResearchName(archive?.archiveName ?? 'Новое исследование'),
+      description: null,
+      isSaved: false,
+      language: archive?.language ?? 'Mixed',
+      createdAt: new Date().toISOString(),
+      preview: '',
+      cards: [],
+      status: 'processing',
+      readyAt: new Date(Date.now() + ANALYSIS_DURATION_MS).toISOString(),
+      expiresAt: new Date(Date.now() + ANALYSIS_DURATION_MS + DRAFT_TTL_MS).toISOString(),
+    };
+
+    db.researches.set(researchId, researchRecord);
 
     db.analysisJobs.set(analysisId, {
       id: analysisId,
       createdAt: new Date().toISOString(),
       rules: rules.filter((rule) => rule.value).map((rule) => rule.ruleName),
       uploadId: body.uploadId ?? null,
+      researchId,
     });
+    persistMockDb();
 
     return json({
       message: 'Анализ успешно запущен',
-      analysisId,
-      status: 'started',
+      researchId,
+      status: 'processing',
     });
   }),
 ];

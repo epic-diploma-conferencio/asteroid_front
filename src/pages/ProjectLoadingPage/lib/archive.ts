@@ -1,13 +1,38 @@
 import { unzip, zip } from 'fflate';
 
-import type { NormalizedArchiveFile, PreparedArchive } from '../model/project-loading.types';
 import { buildPreparedArchive, describeFile, normalizeArchivePath } from './file-tree';
+import type { NormalizedArchiveFile, PreparedArchive } from '../model/project-loading.types';
 
 const MAX_ARCHIVE_BYTES = 528 * 1024 * 1024;
 const MAX_FILE_COUNT = 5000;
 const MAX_TOTAL_UNPACKED_BYTES = 1024 * 1024 * 1024;
 
 const ZIP_EXTENSION = '.zip';
+const LANGUAGE_BY_EXTENSION = new Map<string, string>([
+  ['ts', 'TypeScript'],
+  ['tsx', 'TypeScript'],
+  ['js', 'JavaScript'],
+  ['jsx', 'JavaScript'],
+  ['mjs', 'JavaScript'],
+  ['cjs', 'JavaScript'],
+  ['java', 'Java'],
+  ['kt', 'Kotlin'],
+  ['kts', 'Kotlin'],
+  ['py', 'Python'],
+  ['go', 'Go'],
+  ['rs', 'Rust'],
+  ['cs', 'C#'],
+  ['php', 'PHP'],
+  ['rb', 'Ruby'],
+  ['swift', 'Swift'],
+  ['scala', 'Scala'],
+  ['dart', 'Dart'],
+  ['vue', 'Vue'],
+  ['svelte', 'Svelte'],
+  ['cpp', 'C++'],
+  ['cc', 'C++'],
+  ['c', 'C'],
+]);
 
 const promisifiedUnzip = (data: Uint8Array) =>
   new Promise<Record<string, Uint8Array>>((resolve, reject) => {
@@ -132,8 +157,8 @@ export const validateSelectedArchiveFiles = (
 ): NormalizedArchiveFile[] => {
   const uniquePaths = Array.from(new Set(selectedPaths));
 
-  if (uniquePaths.length < 2) {
-    throw new Error('Для продолжения выберите минимум два поддерживаемых файла.');
+  if (uniquePaths.length < 1) {
+    throw new Error('Для продолжения выберите минимум один поддерживаемый файл.');
   }
 
   const selectedFiles = uniquePaths
@@ -150,6 +175,23 @@ export const validateSelectedArchiveFiles = (
   }
 
   return selectedFiles;
+};
+
+export const detectArchiveLanguage = (archive: PreparedArchive, selectedPaths: string[]) => {
+  const selectedFiles = validateSelectedArchiveFiles(archive, selectedPaths);
+  const scores = new Map<string, number>();
+
+  selectedFiles.forEach((file) => {
+    const language = file.extension ? LANGUAGE_BY_EXTENSION.get(file.extension) : null;
+    if (!language) {
+      return;
+    }
+
+    scores.set(language, (scores.get(language) ?? 0) + 1);
+  });
+
+  const dominant = Array.from(scores.entries()).sort((left, right) => right[1] - left[1])[0]?.[0];
+  return dominant ?? 'Mixed';
 };
 
 export const buildSelectedArchiveFile = async (

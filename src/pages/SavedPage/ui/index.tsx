@@ -1,12 +1,15 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { Plus } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import {
   useDeleteResearch,
+  useResearchLongPolling,
   useResearchList,
+  researchKeys,
   type SavedResearchListItem,
 } from '@/entities/research';
 import { Button } from '@/shared/ui/Button';
@@ -27,6 +30,8 @@ const pageVariants: Variants = {
 
 export const SavedPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryClient = useQueryClient();
   const isRouteLoading = useRouteLoaderStore((state) => state.isRouteLoading);
   const { data: projects = [], isLoading } = useResearchList();
   const { mutateAsync: deleteResearch } = useDeleteResearch();
@@ -34,6 +39,43 @@ export const SavedPage = () => {
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState(1);
   const [pendingDelete, setPendingDelete] = useState<SavedResearchListItem | null>(null);
+  const [hasShownPendingError, setHasShownPendingError] = useState(false);
+
+  const pendingState = (location.state as {
+    pendingResearchId?: string;
+    pendingResearchName?: string;
+  } | null) ?? { pendingResearchId: undefined, pendingResearchName: undefined };
+
+  const activePendingResearchId =
+    pendingState.pendingResearchId ??
+    projects.find((project) => project.status === 'processing')?.id ??
+    undefined;
+  const { data: pendingStatus, error: pendingStatusError } = useResearchLongPolling(
+    activePendingResearchId,
+    Boolean(activePendingResearchId),
+  );
+
+  const pendingFallbackProject = useMemo<SavedResearchListItem | null>(() => {
+    if (!pendingState.pendingResearchId) {
+      return null;
+    }
+
+    const normalizedName =
+      pendingState.pendingResearchName?.replace(/\.zip$/i, '').trim() || 'Новое исследование';
+
+    return {
+      id: pendingState.pendingResearchId,
+      name: normalizedName,
+      description: null,
+      ownerEmail: '',
+      ownerIsMe: true,
+      isSaved: false,
+      language: 'TypeScript',
+      createdAt: new Date().toISOString(),
+      preview: '',
+      status: 'processing',
+    };
+  }, [pendingState.pendingResearchId, pendingState.pendingResearchName]);
 
   const goToPage = (next: number) => {
     if (next === page) {
@@ -50,6 +92,43 @@ export const SavedPage = () => {
     const start = (currentPage - 1) * PAGE_SIZE;
     return projects.slice(start, start + PAGE_SIZE);
   }, [projects, currentPage]);
+
+  useEffect(() => {
+    if (!activePendingResearchId || pendingStatus?.status !== 'completed') {
+      return;
+    }
+
+    void queryClient.invalidateQueries({ queryKey: researchKeys.list() });
+    void queryClient.invalidateQueries({ queryKey: researchKeys.detail(activePendingResearchId) });
+    void queryClient.invalidateQueries({
+      queryKey: researchKeys.publicDetail(activePendingResearchId),
+    });
+    void navigate(`/research/${activePendingResearchId}`, { replace: true });
+  }, [activePendingResearchId, navigate, pendingStatus?.status, queryClient]);
+
+  useEffect(() => {
+    if (!activePendingResearchId) {
+      setHasShownPendingError(false);
+      return;
+    }
+
+    if (pendingStatus && hasShownPendingError) {
+      setHasShownPendingError(false);
+    }
+  }, [activePendingResearchId, hasShownPendingError, pendingStatus]);
+
+  useEffect(() => {
+    if (!activePendingResearchId || !pendingStatusError) {
+      return;
+    }
+
+    if (hasShownPendingError) {
+      return;
+    }
+
+    setHasShownPendingError(true);
+    toast.error('Не удалось дождаться завершения исследования. Попробуйте открыть его позже.');
+  }, [activePendingResearchId, hasShownPendingError, pendingStatusError]);
 
   const handleConfirmDelete = async () => {
     if (!pendingDelete) {
@@ -81,9 +160,17 @@ export const SavedPage = () => {
 
       <div className="saved-page__grid-viewport">
         {isLoading ? (
-          isRouteLoading ? null : (
+          pendingFallbackProject ? (
+            <div className="saved-page__grid">
+              <ProjectCard project={pendingFallbackProject} onDelete={setPendingDelete} />
+            </div>
+          ) : isRouteLoading ? null : (
             <Loader block />
           )
+        ) : projects.length === 0 && pendingFallbackProject ? (
+          <div className="saved-page__grid">
+            <ProjectCard project={pendingFallbackProject} onDelete={setPendingDelete} />
+          </div>
         ) : projects.length === 0 ? (
           <p className="saved-page__empty">Пока нет сохраненных исследований</p>
         ) : (

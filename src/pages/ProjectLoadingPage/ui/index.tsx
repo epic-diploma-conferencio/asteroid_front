@@ -9,7 +9,7 @@ import {
   useStartAnalysis,
   useUploadProjectArchive,
   type AvailableRule,
-} from '@/entities/analysis';
+} from '@/entities/research';
 import { Loader } from '@/shared/ui/Loader';
 
 import { buildSelectedArchiveFile, unpackProjectInput } from '../lib/archive';
@@ -59,7 +59,7 @@ const fileValidator = (file: File) => {
   if (file.size > 528 * 1024 * 1024) {
     return {
       code: 'file-too-large',
-      message: 'Сейчас поддерживаются архивы и исходники размером до 500 МБ.',
+      message: 'Архивы и исходники размером более 500 МБ не поддерживаются!',
     };
   }
 
@@ -74,7 +74,7 @@ const fileValidator = (file: File) => {
 
   return {
     code: 'file-invalid-type',
-    message: 'Сейчас можно загрузить zip-архив или исходный файл проекта.',
+    message: 'Пожалуйста, загрузите zip-архив или исходный файл проекта.',
   };
 };
 
