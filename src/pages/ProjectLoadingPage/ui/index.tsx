@@ -199,8 +199,8 @@ export const ProjectLoadingPage = () => {
   });
 
   const selectableCount = archive?.selectableFilePaths.length ?? 0;
-  const canChooseFiles = selectedFilePaths.length >= 2;
-  const canStartAnalysis = selectedRuleNames.length >= 2;
+  const canChooseFiles = selectedFilePaths.length >= 1;
+  const canStartAnalysis = selectedRuleNames.length >= 1;
 
   const handleChooseFiles = async () => {
     if (!archive) {
@@ -251,7 +251,7 @@ export const ProjectLoadingPage = () => {
 
   const handleStartAnalysis = async () => {
     if (!canStartAnalysis) {
-      toast.error('Для старта анализа выберите минимум два правила.');
+      toast.error('Для старта анализа выберите минимум одно правило.');
       return;
     }
 
@@ -337,7 +337,7 @@ export const ProjectLoadingPage = () => {
                 <div className="project-load__hint">
                   {canChooseFiles
                     ? 'Выбранные файлы будут отправлены на сервер.'
-                    : 'Для продолжения выберите минимум два поддерживаемых файла.'}
+                    : 'Для продолжения выберите хотя бы один поддерживаемый файл.'}
                 </div>
 
                 <div className="project-load__actions">
@@ -398,7 +398,7 @@ export const ProjectLoadingPage = () => {
                   <div className="project-load__hint">
                     {canStartAnalysis
                       ? 'Выбраны критерии, с которыми можно запускать исследование.'
-                      : 'Для старта анализа отметьте минимум два правила.'}
+                      : 'Для старта анализа отметьте минимум одно правила.'}
                   </div>
 
                   <div className="project-load__actions">
