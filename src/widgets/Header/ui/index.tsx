@@ -29,7 +29,7 @@ export const Header = () => {
     <>
       <header className="Header">
         <div className="Header__left">
-          <Link to="/" className="Header__brand" aria-label="ASTeroid">
+          <Link to={isAuth ? '/dashboard' : '/'} className="Header__brand" aria-label="ASTeroid">
             <span className="Header__logo">ASTeroid</span>
           </Link>
 
@@ -47,10 +47,10 @@ export const Header = () => {
             {isDarkTheme ? <SunMedium size={24} /> : <Moon size={24} />}
           </button>
 
-          <button type="button" className="Header__menu-link Header__menu-link--help">
+          <Link to="/articles" className="Header__menu-link Header__menu-link--help">
             <ChevronDown size={16} strokeWidth={2.4} />
             <span>Помощь</span>
-          </button>
+          </Link>
 
           {isAuth ? (
             <AccountDropdown open={accountDropdownIsOpen} onOpenChange={setAccountDropdownOpen} />

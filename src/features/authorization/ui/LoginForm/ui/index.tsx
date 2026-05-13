@@ -4,6 +4,7 @@ import { clsx } from 'clsx';
 import { Eye, EyeOff } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { useLoginUser } from '@/features/authorization';
@@ -15,7 +16,6 @@ import type { AuthFormProps } from '../../RegForm';
 import '../../styles/auth-form.scss';
 import './login-form.scss';
 
-const loginPattern = /^[a-zA-Z0-9._-]{5,30}$/;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const LoginSchema = z.object({
@@ -23,10 +23,7 @@ const LoginSchema = z.object({
     .string()
     .trim()
     .min(1, 'Введите адрес электронной почты')
-    .refine(
-      (value) => emailPattern.test(value) || loginPattern.test(value),
-      'Введите корректный адрес электронной почты',
-    ),
+    .refine((value) => emailPattern.test(value), 'Введите корректный адрес электронной почты'),
   password: z
     .string()
     .min(6, 'Пароль должен содержать от 6 до 20 символов')
@@ -36,6 +33,7 @@ const LoginSchema = z.object({
 type LoginFormValue = z.infer<typeof LoginSchema>;
 
 export const LoginForm = ({ onSwitch, onClose }: AuthFormProps) => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -59,6 +57,7 @@ export const LoginForm = ({ onSwitch, onClose }: AuthFormProps) => {
       onSuccess: () => {
         onClose?.(false);
         reset();
+        void navigate('/dashboard');
       },
       onError: (error) => {
         console.warn(error);
@@ -130,7 +129,7 @@ export const LoginForm = ({ onSwitch, onClose }: AuthFormProps) => {
       />
 
       <button type="submit" className="auth-form__submit login-submit" disabled={isPending}>
-        {isPending ? 'Загрузка...' : 'Войти в аккаунт'}
+        {isPending ? '...' : 'Войти в аккаунт'}
       </button>
 
       <div className="auth-form__footer">

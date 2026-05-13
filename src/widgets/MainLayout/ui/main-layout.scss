@@ -18,6 +18,7 @@
   width: 100%;
   margin-inline: auto;
   height: 100dvh;
+  position: relative;
 
   &__main {
     flex: 1;
@@ -37,6 +38,22 @@
     &--no-padding {
       padding: 0;
       overflow: hidden;
+    }
+  }
+
+  &__route-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in oklab, var(--color-bg) 90%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    [data-theme='dark'] & {
+      background: color-mix(in oklab, var(--color-contrast-1) 84%, transparent);
     }
   }
 }

@@ -12,8 +12,6 @@ export interface SearchResponse {
 
 export interface SearchParams {
   login?: string;
-  firstName?: string;
-  lastName?: string;
   matchMode?: 'PARTIAL' | 'EXACT';
   page?: number;
   size?: number;

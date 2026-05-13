@@ -1,0 +1,26 @@
+@use '@/shared/styles/breakpoints' as *;
+
+.dialog.save-project-modal {
+  padding-bottom: var(--space-6);
+
+  @include xs {
+    padding-bottom: var(--pad-md);
+  }
+
+  [data-theme='dark'] & {
+    --auth-text: var(--color-white);
+    --auth-placeholder: var(--color-text-muted);
+  }
+}
+
+.save-project-form {
+  --auth-submit-bg: var(--color-success);
+  --auth-submit-text: var(--color-white);
+
+  &__textarea {
+    min-height: 120px;
+    resize: none;
+    font-family: var(--font-body);
+    line-height: var(--lh-relaxed);
+  }
+}

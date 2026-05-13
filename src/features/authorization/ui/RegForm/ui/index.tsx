@@ -12,6 +12,7 @@ import {
   type SetStateAction,
 } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { useCreateUser } from '@/features/authorization';
@@ -51,6 +52,7 @@ export interface AuthFormProps {
 }
 
 export const RegForm = ({ onSwitch, onClose }: AuthFormProps) => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -87,6 +89,7 @@ export const RegForm = ({ onSwitch, onClose }: AuthFormProps) => {
         onSuccess: () => {
           onClose?.(false);
           reset();
+          void navigate('/dashboard');
         },
         onError: (error) => {
           console.warn(error);
@@ -217,7 +220,7 @@ export const RegForm = ({ onSwitch, onClose }: AuthFormProps) => {
       />
 
       <button type="submit" className="auth-form__submit" disabled={isPending}>
-        {isPending ? 'Загрузка...' : 'Регистрация'}
+        {isPending ? '...' : 'Регистрация'}
       </button>
 
       <div className="auth-form__footer">

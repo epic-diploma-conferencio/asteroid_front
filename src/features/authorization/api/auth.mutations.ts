@@ -1,5 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { articleKeys } from '@/entities/article/api/article.queries';
+import { researchKeys } from '@/entities/research/api/research.queries';
 import { userKeys } from '@/entities/user';
 import { useUserStore } from '@/entities/user/model/user.store';
 
@@ -38,17 +40,22 @@ export const useLoginUser = () => {
 };
 
 export const useRefreshUser = () => {
+  const queryClient = useQueryClient();
   const setToken = useAuthStore((state) => state.setToken);
+  const setUser = useUserStore((state) => state.setUser);
 
   return useMutation({
     mutationFn: () => authApi.refresh(),
-    onSuccess: ({ accessToken }) => {
+    onSuccess: ({ accessToken, user }) => {
       setToken(accessToken);
+      setUser(user);
+      queryClient.setQueryData(userKeys.me(), user);
     },
   });
 };
 
 export const useLogoutUser = () => {
+  const queryClient = useQueryClient();
   const clearToken = useAuthStore((state) => state.clearToken);
   const clearUser = useUserStore((state) => state.clearUser);
 
@@ -57,6 +64,9 @@ export const useLogoutUser = () => {
     onSuccess: async () => {
       clearToken();
       clearUser();
+      queryClient.removeQueries({ queryKey: userKeys.me() });
+      queryClient.removeQueries({ queryKey: researchKeys.all() });
+      queryClient.removeQueries({ queryKey: articleKeys.all() });
     },
   });
 };

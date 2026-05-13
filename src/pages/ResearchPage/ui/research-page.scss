@@ -1,0 +1,319 @@
+@use '@/shared/styles/breakpoints' as *;
+
+/* ============================================================
+   Page container — fills main area & scrolls when content overflows
+   ============================================================ */
+.research-page {
+  --research-frame-max: calc(1000px + var(--space-8));
+
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-block: var(--space-3) var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+
+  &__loading {
+    margin: var(--space-8) auto;
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+
+    [data-theme='dark'] & {
+      color: var(--color-white-muted);
+    }
+  }
+
+  &--expanded {
+    overflow: hidden;
+  }
+
+  &--expanded .research-page__actions {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    width: min(100%, var(--research-frame-max));
+    margin-inline: auto;
+  }
+
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: fit-content;
+    padding: 8px 12px;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-family: var(--font-heading);
+    font-size: var(--fs-14);
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast),
+      transform var(--transition-fast);
+
+    &:hover {
+      transform: translateX(-2px);
+      background: color-mix(in oklab, var(--color-text) 8%, transparent);
+      color: var(--color-text);
+    }
+
+    [data-theme='dark'] & {
+      color: var(--color-white-muted);
+
+      &:hover {
+        background: color-mix(in oklab, var(--color-white) 8%, transparent);
+        color: var(--color-white);
+      }
+    }
+  }
+
+  &__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: clamp(30px, 3.6vw, 36px);
+    line-height: 1.08;
+
+    [data-theme='dark'] & {
+      color: var(--color-white);
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(300px, 500px));
+    gap: var(--space-3);
+    justify-content: center;
+    align-content: start;
+    width: min(100%, var(--research-frame-max));
+    margin-inline: auto;
+
+    @media (max-width: 720px) {
+      grid-template-columns: minmax(280px, 1fr);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    width: min(100%, var(--research-frame-max));
+    margin-inline: auto;
+  }
+
+  &__save {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-white);
+    padding: 8px var(--pad-md);
+  }
+
+  @media (max-width: 720px) {
+    padding-block: var(--space-2);
+    gap: var(--space-3);
+
+    &__actions {
+      justify-content: flex-start;
+    }
+  }
+}
+
+/* ============================================================
+   Card
+   ============================================================ */
+.research-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-align: left;
+  padding: 0;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition:
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+
+  [data-theme='dark'] & {
+    background: var(--color-contrast-2);
+    border-color: color-mix(in oklab, var(--color-white) 8%, transparent);
+  }
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &__hero {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(circle at center, color-mix(in oklab, var(--color-text) 5%, transparent), transparent 70%),
+      color-mix(in oklab, var(--color-text) 3%, transparent);
+    overflow: hidden;
+
+    [data-theme='dark'] & {
+      background:
+        radial-gradient(circle at center, color-mix(in oklab, var(--color-white) 6%, transparent), transparent 70%),
+        color-mix(in oklab, var(--color-white) 3%, transparent);
+    }
+  }
+
+  &__hero-empty {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    color: var(--color-text-muted);
+
+    [data-theme='dark'] & {
+      color: var(--color-white-muted);
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px 16px;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-weight: var(--fw-semibold);
+    font-size: clamp(17px, 1.7vw, 19px);
+    line-height: var(--lh-tight);
+    color: var(--color-text);
+
+    [data-theme='dark'] & {
+      color: #f7f7f7;
+    }
+  }
+
+  &__summary {
+    margin: 0;
+    font-family: var(--font-caption);
+    font-weight: var(--fw-regular);
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--color-text-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    [data-theme='dark'] & {
+      color: var(--color-white-muted);
+    }
+  }
+
+  &__driver {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-text) 5%, transparent);
+    font-size: 12px;
+    align-self: flex-start;
+
+    [data-theme='dark'] & {
+      background: color-mix(in oklab, var(--color-white) 5%, transparent);
+    }
+  }
+
+  &__driver-label {
+    color: var(--color-text-muted);
+
+    [data-theme='dark'] & {
+      color: var(--color-white-muted);
+    }
+  }
+
+  &__driver-value {
+    font-family: var(--font-heading);
+    font-weight: var(--fw-semibold);
+    color: var(--color-text);
+
+    [data-theme='dark'] & {
+      color: var(--color-white);
+    }
+  }
+}
+
+/* ============================================================
+   Link-style action buttons (Удалить, Перегенерировать)
+   ============================================================ */
+.research-action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: transparent;
+  padding: 6px 4px;
+  font-family: var(--font-heading);
+  font-weight: var(--fw-medium);
+  font-size: 15px;
+  line-height: var(--lh-tight);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+
+  span {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: color-mix(in oklab, var(--color-text) 70%, var(--color-primary));
+  }
+
+  [data-theme='dark'] & {
+    color: var(--color-white);
+  }
+
+  &--danger {
+    color: var(--color-danger);
+
+    &:hover {
+      color: color-mix(in oklab, var(--color-danger) 88%, black);
+    }
+
+    [data-theme='dark'] & {
+      color: var(--color-danger);
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { ChevronDown, LogOut, MessageSquare, Settings, User2Icon } from 'lucide-react';
+import { BookmarkCheck, ChevronDown, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import { useLogoutUser } from '@/features/authorization';
@@ -11,8 +11,12 @@ interface DropdownProps {
 }
 
 export const AccountDropdown = ({ open, onOpenChange }: DropdownProps) => {
-  const { mutate: logout } = useLogoutUser();
+  const { mutateAsync: logout } = useLogoutUser();
   const navigate = useNavigate();
+  const handleLogout = async () => {
+    await logout();
+    await navigate('/');
+  };
   return (
     <DropdownMenu.Root open={open} onOpenChange={onOpenChange}>
       <DropdownMenu.Trigger asChild>
@@ -22,24 +26,14 @@ export const AccountDropdown = ({ open, onOpenChange }: DropdownProps) => {
         </button>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content className="dropdown" side="bottom" align="end" sideOffset={14}>
-        <DropdownMenu.Item className="dropdown__item" onClick={() => {}}>
-          <User2Icon />
-          Профиль
-        </DropdownMenu.Item>
-        <DropdownMenu.Separator className="dropdown__separator" />
-        <DropdownMenu.Item className="dropdown__item" onClick={() => navigate('/chats')}>
-          <MessageSquare />
-          Чаты
-        </DropdownMenu.Item>
-        <DropdownMenu.Separator className="dropdown__separator" />
-        <DropdownMenu.Item className="dropdown__item" onClick={() => {}}>
-          <Settings />
-          Настройки
+        <DropdownMenu.Item className="dropdown__item" onSelect={() => navigate('/saved')}>
+          <BookmarkCheck />
+          Сохраненные исследования
         </DropdownMenu.Item>
         <DropdownMenu.Separator className="dropdown__separator" />
         <DropdownMenu.Item
           className="dropdown__item dropdown__item--danger"
-          onClick={() => logout()}
+          onSelect={handleLogout}
         >
           <LogOut />
           Выйти

@@ -1,0 +1,77 @@
+.app-loader {
+  --loader-size: 58px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+
+  [data-theme='dark'] & {
+    color: var(--color-white-muted);
+  }
+
+  &--sm {
+    --loader-size: 34px;
+  }
+
+  &--md {
+    --loader-size: 58px;
+  }
+
+  &--lg {
+    --loader-size: 74px;
+  }
+
+  &--block {
+    width: 100%;
+    min-height: 220px;
+    padding: 24px 0;
+  }
+
+  &--overlay {
+    position: absolute;
+    inset: 0;
+    width: auto;
+    min-height: 0;
+    background: color-mix(in oklab, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+
+    [data-theme='dark'] & {
+      background: color-mix(in oklab, var(--color-contrast-1) 82%, transparent);
+    }
+  }
+
+  &--fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    background: color-mix(in oklab, var(--color-bg) 92%, transparent);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+
+    [data-theme='dark'] & {
+      background: color-mix(in oklab, var(--color-contrast-1) 88%, transparent);
+    }
+  }
+
+  &__spinner {
+    width: var(--loader-size);
+    height: var(--loader-size);
+    border-radius: 50%;
+    border: max(5px, calc(var(--loader-size) / 9)) solid
+      color-mix(in oklab, currentColor 24%, transparent);
+    border-top-color: color-mix(in oklab, currentColor 82%, transparent);
+    animation: app-loader-spin 0.9s linear infinite;
+  }
+}
+
+@keyframes app-loader-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,66 @@
+@use '@/shared/styles/breakpoints' as *;
+/* ============================================================
+   Delete confirmation modal
+   ============================================================ */
+.saved-confirm {
+  
+
+  padding: var(--space-5) var(--space-8) var(--space-3) var(--space-8);
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding-block: var(--space-2);
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-weight: var(--fw-semibold);
+    font-size: var(--fs-24);
+    line-height: var(--lh-tight);
+    color: var(--color-text);
+
+    [data-theme='dark'] & {
+      color: var(--color-white);
+    }
+  }
+
+  &__text {
+    margin: 0;
+    font-family: var(--font-body);
+    font-weight: var(--fw-regular);
+    font-size: var(--fs-16);
+    color: var(--color-text-muted);
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+  }
+  @include xs {
+    width: clamp(320px, 42%, 520px);
+  }
+}
+
+.button.saved-confirm__delete {
+  background: var(--color-danger);
+  color: var(--color-white);
+
+  &:hover {
+    background: color-mix(in oklab, var(--color-danger) 88%, black);
+  }
+
+  &:active {
+    background: color-mix(in oklab, var(--color-danger) 75%, black);
+  }
+  
+}
+.otmena{
+  &:hover {
+    background: var(--color-text-muted);
+  }
+  text-decoration: underline;
+}

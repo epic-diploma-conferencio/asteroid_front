@@ -1,0 +1,365 @@
+@use '@/shared/styles/breakpoints' as *;
+
+.welcome-page {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
+
+/* ============================================================
+   Screen 1 — Hero (gif background, theme-independent)
+   ============================================================ */
+.welcome-hero {
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--pad-xl) var(--pad-lg);
+  background-image: url('/gif1.gif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--color-white);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow: hidden;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(13, 17, 23, 0.55) 0%,
+      rgba(13, 17, 23, 0.65) 50%,
+      rgba(13, 17, 23, 0.8) 100%
+    );
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    pointer-events: none;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    max-width: 1280px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-4);
+  }
+
+  &__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(40px, 6vw, 80px);
+    line-height: 1.05;
+    margin: 0 0 var(--space-8);
+    letter-spacing: -0.02em;
+  }
+
+  &__line {
+    font-family: var(--font-body);
+    font-weight: var(--fw-medium);
+    font-size: clamp(16px, 2vw, 24px);
+    line-height: var(--lh-relaxed);
+    margin: 0;
+    max-width: 900px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--space-4);
+    margin-top: var(--space-10);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  &__btn {
+    font-family: var(--font-heading);
+    font-weight: var(--fw-medium);
+    font-size: var(--fs-16);
+    line-height: var(--lh-tight);
+    padding: 12px 12px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast),
+      transform var(--transition-fast);
+
+    &--ghost {
+      background: transparent;
+      color: var(--color-white);
+      text-decoration: underline;
+      line-height: var(--lh-relaxed);
+
+      &:hover {
+        background: color-mix(in oklab, var(--color-white) 14%, transparent);
+      }
+      &:active {
+        transform: translateY(1px);
+      }
+    }
+
+    &--primary {
+      background: var(--color-success);
+      color: var(--color-white);
+
+      &:hover {
+        background: color-mix(in oklab, var(--color-success) 88%, black);
+      }
+      &:active {
+        background: color-mix(in oklab, var(--color-success) 75%, black);
+        transform: translateY(1px);
+      }
+    }
+  }
+}
+
+/* ============================================================
+   Screen 2 — How it works
+   ============================================================ */
+.welcome-how {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: var(--pad-2xl) var(--pad-lg) var(--pad-xs);
+  background: var(--color-bg);
+  color: var(--color-text);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+
+  &__inner {
+    flex: 1;
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  &__title {
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.1;
+    margin: var(--space-6) 0 0;
+    text-align: left;
+    [data-theme='dark'] & {
+      color: var(--color-white);
+    }
+  }
+
+  &__body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(360px, 1fr);
+    gap: var(--space-10);
+    align-items: center;
+
+    @media (max-width: 960px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__lead {
+    font-family: var(--font-display);
+    font-weight: var(--fw-medium);
+    font-size: clamp(18px, 1.6vw, 24px);
+    line-height: 1.5;
+    margin: 0;
+    max-width: 560px;
+    text-align: center;
+    [data-theme='dark'] & {
+      color: var(--color-white-muted);
+    }
+  }
+
+  &__carousel-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    width: 100%;
+  }
+
+  &__carousel {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-2);
+    width: 100%;
+    justify-content: center;
+  }
+
+  &__arrow {
+    flex-shrink: 0;
+    width: 36px;
+    height: 130px;
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--color-text-muted);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast);
+
+    &:hover {
+      background: color-mix(in oklab, var(--color-text) 8%, transparent);
+      color: var(--color-text);
+    }
+  }
+
+  &__slide-viewport {
+    flex: 1;
+    position: relative;
+    min-height: 420px;
+    max-width: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  &__slide {
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--color-text) 22%, transparent);
+    cursor: pointer;
+    transition:
+      background var(--transition-fast),
+      transform var(--transition-fast);
+    padding: 0;
+
+    &:hover {
+      background: color-mix(in oklab, var(--color-text) 40%, transparent);
+    }
+
+    &--active {
+      background: var(--color-text);
+      transform: scale(1.2);
+    }
+  }
+
+  &__footer {
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: var(--fs-12);
+    color: var(--color-text-muted);
+    margin-top: var(--space-4);
+  }
+}
+
+/* ============================================================
+   Feature card (used inside carousel)
+   ============================================================ */
+.welcome-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 16px 12px; /* top, right, bottom (12), left — сверху/по бокам 16, снизу 12 */
+
+  [data-theme='dark'] & {
+    background: var(--color-contrast-2);
+    border-color: color-mix(in oklab, var(--color-white) 10%, transparent);
+    color: var(--color-surface);
+  }
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: color-mix(in oklab, var(--color-text) 8%, transparent);
+    position: relative;
+
+    .welcome-card__image-loader {
+      position: absolute;
+      inset: 0;
+      gap: 10px;
+      font-size: 12px;
+      background: color-mix(in oklab, var(--color-surface) 92%, transparent);
+
+      [data-theme='dark'] & {
+        background: color-mix(in oklab, var(--color-contrast-2) 88%, transparent);
+      }
+    }
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+
+    &--loaded {
+      opacity: 1;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+    text-align: center;
+  }
+
+  &__title {
+    font-family: var(--font-body);
+    font-weight: var(--fw-regular);
+    font-size: var(--fs-24);
+    line-height: 1.25;
+    margin: 0;
+    color: var(--color-text);
+
+    [data-theme='dark'] & {
+      color: var(--color-white);
+    }
+  }
+
+  &__text {
+    font-family: var(--font-body);
+    font-weight: var(--fw-regular);
+    font-size: var(--fs-16);
+    line-height: 1.4;
+    margin: 0;
+    color: var(--color-text-muted);
+    [data-theme='dark'] & {
+      color: var(--color-white-muted);
+    }
+  }
+}

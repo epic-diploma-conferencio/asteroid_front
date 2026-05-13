@@ -24,7 +24,7 @@
   box-shadow: var(--shadow-lg);
 }
 .dropdown {
-  min-width: 180px;
+  min-width: 260px;
   position: relative;
   z-index: 200;
   overflow: hidden;
@@ -51,8 +51,9 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: var(--pad-sm) var(--pad-md);
-    font-size: var(--fs-12);
+    padding: var(--pad-md) var(--pad-lg);
+    font-family: var(--font-heading);
+    font-size: var(--fs-16);
     font-weight: var(--fw-medium);
     color: var(--color-text);
     cursor: pointer;
@@ -62,8 +63,8 @@
     -webkit-tap-highlight-color: transparent;
 
     svg {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       flex-shrink: 0;
       color: var(--color-text-muted);
     }
