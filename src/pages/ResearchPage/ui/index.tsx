@@ -1,6 +1,6 @@
 import { LayoutGroup } from 'framer-motion';
 import { ArrowLeft, Check, Pencil, RefreshCw, Trash2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -19,11 +19,13 @@ import { DeleteConfirmModal } from '@/shared/ui/DeleteConfirmModal/ui';
 import { Loader, useRouteLoaderStore } from '@/shared/ui/Loader';
 import { AuthModal, type AuthMode } from '@/widgets/AuthModal';
 
-import { ASTTreeDetailScreen } from './ASTTreeDetailScreen';
+import { AnalysisSummary } from './AnalysisSummary';
 import { DescriptionPopover } from './DescriptionPopover';
 import { buildCardsFromResearch, researchCards as defaultCards } from './research-cards';
 import { ResultCard } from './ResultCard';
+import { RuleAnalyticsScreen } from './RuleAnalyticsScreen';
 import { SaveProjectModal, type SaveProjectValues } from './SaveProjectModal';
+import { findRuleResult, ruleNameFromCardId } from '../lib/rule-explainers';
 
 import './research-page.scss';
 
@@ -69,6 +71,27 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
       : !isSaved
         ? defaultCards
         : [];
+
+  const allRules = useMemo(() => {
+    if (!research?.graphByRules?.groups) {
+      return [];
+    }
+    return [
+      ...(research.graphByRules.groups.groupA ?? []),
+      ...(research.graphByRules.groups.groupB ?? []),
+    ];
+  }, [research?.graphByRules]);
+
+  const ruleByCardId = useMemo(() => {
+    const map: Record<string, ReturnType<typeof findRuleResult>> = {};
+    cards.forEach((card) => {
+      const ruleName = ruleNameFromCardId(card.id);
+      map[card.id] = ruleName ? findRuleResult(ruleName, research?.graphByRules) : null;
+    });
+    return map;
+  }, [cards, research?.graphByRules]);
+
+  const expandedRule = expandedCard ? (ruleByCardId[expandedCard.id] ?? null) : null;
 
   const title = research?.name
     ? isSaved
@@ -192,12 +215,21 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
         </div>
       </header>
 
+      {allRules.length ? (
+        <AnalysisSummary
+          overview={research.graphOverview}
+          rules={allRules}
+          language={research.language}
+        />
+      ) : null}
+
       <LayoutGroup id="research-cards">
         <div className="research-page__grid">
           {cards.map((card) => (
             <ResultCard
               key={card.id}
               card={card}
+              rule={ruleByCardId[card.id] ?? null}
               onClick={handleCardClick}
               isHidden={expandedCard !== null && expandedCard.id !== card.id}
               isGhosted={expandedCard?.id === card.id}
@@ -206,9 +238,11 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
         </div>
 
         {expandedCard ? (
-          <ASTTreeDetailScreen
+          <RuleAnalyticsScreen
             key={expandedCard.id}
             card={expandedCard}
+            rule={expandedRule}
+            overview={research.graphOverview}
             onClose={() => setExpandedCard(null)}
           />
         ) : null}

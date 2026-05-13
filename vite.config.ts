@@ -27,9 +27,18 @@ export default defineConfig(async ({ mode }) => {
 
     // ─── Dev-сервер ───────────────────────────────────────────────────────
     server: {
-      port: 3000,
+      host: true,
+      port: Number(env.VITE_DEV_PORT) || 5173,
       strictPort: false,
       open: false,
+      // Прокси для /api: бэкенд-manager слушает 3000 (внутри docker-сети — manager:3000)
+      proxy: {
+        '/api': {
+          target: env.VITE_DEV_PROXY_TARGET || 'http://localhost:3000',
+          changeOrigin: true,
+          secure: false,
+        },
+      },
     },
 
     // ─── Сборка ───────────────────────────────────────────────────────────
@@ -47,6 +56,7 @@ export default defineConfig(async ({ mode }) => {
             'router-vendor': ['react-router-dom'],
             'query-vendor': ['@tanstack/react-query', '@tanstack/react-query-devtools'],
             'zustand-vendor': ['zustand'],
+            'charts-vendor': ['recharts'],
           },
         },
       },

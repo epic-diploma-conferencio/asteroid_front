@@ -1,0 +1,558 @@
+{
+    "id": "dab966ee-ecec-4234-856f-41c65c10016c",
+    "name": "Исследование 29.04.2026, 14:57:58",
+    "description": null,
+    "ownerIsMe": false,
+    "isSaved": true,
+    "status": "completed",
+    "language": "typescript",
+    "createdAt": "2026-04-29T14:57:58.735Z",
+    "preview": "Проверено правил: 4. Стиль: balanced.",
+    "cards": [
+        {
+            "id": "card-1-dependency_analysis",
+            "kind": "structure",
+            "stat": {
+                "tone": "success",
+                "label": "Оценка",
+                "value": "87.4/100"
+            },
+            "files": [],
+            "title": "Анализ зависимостей проекта",
+            "preview": "Критерий пройден, критичных сигналов не найдено."
+        },
+        {
+            "id": "card-2-lint_analysis",
+            "kind": "deps",
+            "stat": {
+                "tone": "success",
+                "label": "Оценка",
+                "value": "78/100"
+            },
+            "files": [],
+            "title": "Линт-анализ",
+            "preview": "Критерий пройден, критичных сигналов не найдено."
+        },
+        {
+            "id": "card-3-structure_analysis",
+            "kind": "deps",
+            "stat": {
+                "tone": "neutral",
+                "label": "Оценка",
+                "value": "70/100"
+            },
+            "files": [],
+            "title": "Структурный анализ",
+            "preview": "Есть предупреждения, стоит проверить отмеченные зоны."
+        },
+        {
+            "id": "card-4-vulnerability_analysis",
+            "kind": "structure",
+            "stat": {
+                "tone": "neutral",
+                "label": "Оценка",
+                "value": "70/100"
+            },
+            "files": [],
+            "title": "Анализ уязвимостей в проекте",
+            "preview": "Есть предупреждения, стоит проверить отмеченные зоны."
+        }
+    ],
+    "graphOverview": {
+        "graph": {
+            "edges": [
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->import:react",
+                    "to": "external:react",
+                    "data": {
+                        "bindings": [
+                            {
+                                "kind": "named",
+                                "local": "StrictMode",
+                                "imported": "StrictMode"
+                            }
+                        ],
+                        "specifier": "react"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "imports"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->import:react-dom/client",
+                    "to": "external:react-dom/client",
+                    "data": {
+                        "bindings": [
+                            {
+                                "kind": "named",
+                                "local": "createRoot",
+                                "imported": "createRoot"
+                            }
+                        ],
+                        "specifier": "react-dom/client"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "imports"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->import:react-router-dom",
+                    "to": "external:react-router-dom",
+                    "data": {
+                        "bindings": [
+                            {
+                                "kind": "named",
+                                "local": "RouterProvider",
+                                "imported": "RouterProvider"
+                            }
+                        ],
+                        "specifier": "react-router-dom"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "imports"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->import:@/shared/config",
+                    "to": "external:@/shared/config",
+                    "data": {
+                        "bindings": [
+                            {
+                                "kind": "named",
+                                "local": "env",
+                                "imported": "env"
+                            }
+                        ],
+                        "specifier": "@/shared/config"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "imports"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->import:./providers",
+                    "to": "external:./providers",
+                    "data": {
+                        "bindings": [
+                            {
+                                "kind": "named",
+                                "local": "AppProviders",
+                                "imported": "AppProviders"
+                            }
+                        ],
+                        "specifier": "./providers"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "imports"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->import:./router",
+                    "to": "external:./router",
+                    "data": {
+                        "bindings": [
+                            {
+                                "kind": "named",
+                                "local": "router",
+                                "imported": "router"
+                            }
+                        ],
+                        "specifier": "./router"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "imports"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->import:./index.css",
+                    "to": "external:./index.css",
+                    "data": {
+                        "bindings": [],
+                        "specifier": "./index.css"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "imports"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:root:284:contains",
+                    "to": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:root:284",
+                    "data": {},
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "contains"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:removePreloader:471:contains",
+                    "to": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:removePreloader:471",
+                    "data": {},
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "contains"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader:contains",
+                    "to": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader",
+                    "data": {},
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "contains"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader->module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:preloader:505:contains",
+                    "to": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:preloader:505",
+                    "data": {},
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader",
+                    "kind": "contains"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader->call:document.getElementById:517",
+                    "to": "call:document.getElementById",
+                    "data": {
+                        "callee": "document.getElementById"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader",
+                    "kind": "calls"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader->call:<expr>.add:582",
+                    "to": "call:<expr>.add",
+                    "data": {
+                        "callee": "<expr>.add"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader",
+                    "kind": "calls"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader->call:setTimeout:621",
+                    "to": "call:setTimeout",
+                    "data": {
+                        "callee": "setTimeout"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader",
+                    "kind": "calls"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader->module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:<anonymous:632>:contains",
+                    "to": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:<anonymous:632>",
+                    "data": {},
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader",
+                    "kind": "contains"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:<anonymous:632>->call:preloader.remove:638",
+                    "to": "call:preloader.remove",
+                    "data": {
+                        "callee": "preloader.remove"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:<anonymous:632>",
+                    "kind": "calls"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:render:678:contains",
+                    "to": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:render:678",
+                    "data": {},
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "contains"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:render:contains",
+                    "to": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:render",
+                    "data": {},
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "contains"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:render->call:<expr>.render:697",
+                    "to": "call:<expr>.render",
+                    "data": {
+                        "callee": "<expr>.render"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:render",
+                    "kind": "calls"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:render->call:createRoot:697",
+                    "to": "call:createRoot",
+                    "data": {
+                        "callee": "createRoot"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:render",
+                    "kind": "calls"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:render->call:removePreloader:851",
+                    "to": "call:removePreloader",
+                    "data": {
+                        "callee": "removePreloader"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:render",
+                    "kind": "calls"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:bootstrap:880:contains",
+                    "to": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:bootstrap:880",
+                    "data": {},
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "contains"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx->module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:bootstrap:contains",
+                    "to": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:bootstrap",
+                    "data": {},
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "kind": "contains"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:bootstrap->call:import:954",
+                    "to": "call:import",
+                    "data": {
+                        "callee": "import"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:bootstrap",
+                    "kind": "calls"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:bootstrap->call:worker.start:991",
+                    "to": "call:worker.start",
+                    "data": {
+                        "callee": "worker.start"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:bootstrap",
+                    "kind": "calls"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:bootstrap->call:render:1111",
+                    "to": "call:render",
+                    "data": {
+                        "callee": "render"
+                    },
+                    "from": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:bootstrap",
+                    "kind": "calls"
+                }
+            ],
+            "nodes": [
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "data": {
+                        "hash": "6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82",
+                        "path": "main.tsx"
+                    },
+                    "kind": "module",
+                    "name": "main.tsx",
+                    "moduleId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "parentId": null
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:root:284",
+                    "data": {
+                        "runtimeKind": "VariableDeclarator"
+                    },
+                    "kind": "variable",
+                    "name": "root",
+                    "moduleId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "parentId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:removePreloader:471",
+                    "data": {
+                        "runtimeKind": "VariableDeclarator"
+                    },
+                    "kind": "variable",
+                    "name": "removePreloader",
+                    "moduleId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "parentId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader",
+                    "data": {
+                        "params": [],
+                        "runtimeKind": "ArrowFunctionExpression",
+                        "typeParameters": []
+                    },
+                    "kind": "function",
+                    "name": "removePreloader",
+                    "moduleId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "parentId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:preloader:505",
+                    "data": {
+                        "runtimeKind": "VariableDeclarator"
+                    },
+                    "kind": "variable",
+                    "name": "preloader",
+                    "moduleId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "parentId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:<anonymous:632>",
+                    "data": {
+                        "params": [],
+                        "runtimeKind": "ArrowFunctionExpression",
+                        "typeParameters": []
+                    },
+                    "kind": "function",
+                    "name": "<anonymous:632>",
+                    "moduleId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "parentId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:removePreloader"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:render:678",
+                    "data": {
+                        "runtimeKind": "VariableDeclarator"
+                    },
+                    "kind": "variable",
+                    "name": "render",
+                    "moduleId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "parentId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:render",
+                    "data": {
+                        "params": [],
+                        "runtimeKind": "ArrowFunctionExpression",
+                        "typeParameters": []
+                    },
+                    "kind": "function",
+                    "name": "render",
+                    "moduleId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "parentId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:variable:bootstrap:880",
+                    "data": {
+                        "runtimeKind": "VariableDeclarator"
+                    },
+                    "kind": "variable",
+                    "name": "bootstrap",
+                    "moduleId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "parentId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx"
+                },
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx:function:bootstrap",
+                    "data": {
+                        "params": [],
+                        "runtimeKind": "ArrowFunctionExpression",
+                        "typeParameters": []
+                    },
+                    "kind": "function",
+                    "name": "bootstrap",
+                    "moduleId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "parentId": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx"
+                }
+            ],
+            "modules": [
+                {
+                    "id": "module:6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82.tsx",
+                    "hash": "6c37a24802b328e752daf8c79134ef12a30c7e20e594b9a01704ea8ab1cd0e82",
+                    "name": "main.tsx",
+                    "path": "main.tsx",
+                    "language": "typescript"
+                }
+            ]
+        },
+        "summary": {
+            "density": 0.2889,
+            "totalEdges": 26,
+            "totalNodes": 10,
+            "moduleCount": 1,
+            "callEdgeCount": 10,
+            "importEdgeCount": 7
+        },
+        "formatVersion": "1.0"
+    },
+    "graphByRules": {
+        "style": "balanced",
+        "groups": {
+            "groupA": [
+                {
+                    "group": "group-a",
+                    "score": 87.4,
+                    "style": "balanced",
+                    "status": "passed",
+                    "metrics": {
+                        "density": 0.2889,
+                        "totalEdges": 26,
+                        "totalNodes": 10,
+                        "moduleCount": 1,
+                        "callEdgeCount": 10,
+                        "importEdgeCount": 7
+                    },
+                    "ruleName": "dependency_analysis",
+                    "severity": "low",
+                    "ruleRussian": "Анализ зависимостей проекта"
+                },
+                {
+                    "group": "group-a",
+                    "score": 70,
+                    "style": "balanced",
+                    "status": "warning",
+                    "metrics": {
+                        "density": 0.2889,
+                        "totalEdges": 26,
+                        "totalNodes": 10,
+                        "moduleCount": 1,
+                        "callEdgeCount": 10,
+                        "importEdgeCount": 7
+                    },
+                    "ruleName": "structure_analysis",
+                    "severity": "medium",
+                    "ruleRussian": "Структурный анализ"
+                }
+            ],
+            "groupB": [
+                {
+                    "group": "group-b",
+                    "score": 78,
+                    "style": "balanced",
+                    "status": "passed",
+                    "metrics": {
+                        "density": 0.2889,
+                        "totalEdges": 26,
+                        "totalNodes": 10,
+                        "moduleCount": 1,
+                        "callEdgeCount": 10,
+                        "importEdgeCount": 7
+                    },
+                    "ruleName": "lint_analysis",
+                    "severity": "low",
+                    "ruleRussian": "Линт-анализ"
+                },
+                {
+                    "group": "group-b",
+                    "score": 70,
+                    "style": "balanced",
+                    "status": "warning",
+                    "metrics": {
+                        "density": 0.2889,
+                        "totalEdges": 26,
+                        "totalNodes": 10,
+                        "moduleCount": 1,
+                        "callEdgeCount": 10,
+                        "importEdgeCount": 7
+                    },
+                    "ruleName": "vulnerability_analysis",
+                    "severity": "medium",
+                    "ruleRussian": "Анализ уязвимостей в проекте"
+                }
+            ]
+        },
+        "formatVersion": "1.0",
+        "selectedRuleNames": [
+            "dependency_analysis",
+            "lint_analysis",
+            "structure_analysis",
+            "vulnerability_analysis"
+        ]
+    },
+    "selectedRules": [
+        {
+            "value": true,
+            "ruleName": "dependency_analysis"
+        },
+        {
+            "value": true,
+            "ruleName": "lint_analysis"
+        },
+        {
+            "value": true,
+            "ruleName": "structure_analysis"
+        },
+        {
+            "value": true,
+            "ruleName": "vulnerability_analysis"
+        }
+    ],
+    "ruleStyle": "balanced"
+}

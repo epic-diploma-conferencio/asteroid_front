@@ -13,6 +13,31 @@ import './project-card.scss';
 const ownerLabel = (project: SavedResearchListItem) =>
   project.ownerIsMe ? `Вы (${project.ownerEmail})` : project.ownerEmail;
 
+/**
+ * Палитра «обложек» по языку: 2 цвета на градиент.
+ * Если язык не угадан — стандартная нейтральная пара.
+ */
+const LANGUAGE_PALETTE: Record<string, [string, string]> = {
+  typescript: ['#3178c6', '#1d4f8a'],
+  javascript: ['#f7df1e', '#c2a90f'],
+  python: ['#3776ab', '#1c4d75'],
+  java: ['#e76f51', '#a44b35'],
+  kotlin: ['#7f52ff', '#5a36b8'],
+  go: ['#00add8', '#007a96'],
+  rust: ['#dea584', '#9c6e54'],
+  csharp: ['#9b4f97', '#6a3469'],
+  php: ['#777bb4', '#525683'],
+  ruby: ['#cc342d', '#8c2520'],
+  swift: ['#ff5a35', '#b53a20'],
+  mixed: ['#577590', '#3c5266'],
+  unknown: ['#577590', '#3c5266'],
+};
+
+const paletteFor = (language: string | undefined): [string, string] => {
+  const key = (language || 'unknown').toLowerCase().replace(/[^a-z]/g, '');
+  return LANGUAGE_PALETTE[key] ?? LANGUAGE_PALETTE.unknown;
+};
+
 interface Props {
   project: SavedResearchListItem;
   onDelete: (project: SavedResearchListItem) => void;
@@ -42,9 +67,22 @@ export const ProjectCard = ({ project, onDelete }: Props) => {
           onClick={() => navigate(`/saved/${project.id}`)}
           aria-label={`Открыть исследование ${project.name}`}
         >
-          <div className="saved-card__preview">
-            <img src={project.preview} alt="" loading="lazy" />
-          </div>
+          {(() => {
+            const [from, to] = paletteFor(project.language);
+            return (
+              <div
+                className="saved-card__preview saved-card__preview--hero"
+                style={{
+                  background: `linear-gradient(135deg, ${from} 0%, ${to} 100%)`,
+                }}
+              >
+                <span className="saved-card__hero-lang">{project.language || 'project'}</span>
+                {project.preview ? (
+                  <span className="saved-card__hero-tagline">{project.preview}</span>
+                ) : null}
+              </div>
+            );
+          })()}
         </button>
       )}
 

@@ -373,8 +373,8 @@ export const flattenVisibleRows = (archive: PreparedArchive, expandedDirectoryPa
 };
 
 export const RULE_PRESENTATIONS: Record<string, RulePresentation> = {
-  structAnalysis: {
-    ruleName: 'structAnalysis',
+  structure_analysis: {
+    ruleName: 'structure_analysis',
     groupId: 'group-a',
     groupTitle: 'Группа А',
     previewTitle: 'Проверка структуры проекта',
@@ -382,8 +382,8 @@ export const RULE_PRESENTATIONS: Record<string, RulePresentation> = {
       'Система сверит расположение файлов, модулей и слоёв с ожидаемой структурой проекта.',
     previewCode: `src/\n  app/\n  pages/\n  widgets/\n  features/\n  entities/\n  shared/`,
   },
-  archAnalysis: {
-    ruleName: 'archAnalysis',
+  architecture_analysis: {
+    ruleName: 'architecture_analysis',
     groupId: 'group-a',
     groupTitle: 'Группа А',
     previewTitle: 'Архитектурный анализ',
@@ -391,8 +391,8 @@ export const RULE_PRESENTATIONS: Record<string, RulePresentation> = {
       'Поиск нарушений между слоями, циклических импортов и опасных зависимостей между модулями.',
     previewCode: `entities -> shared\nfeatures -> entities\npages -> widgets\nshared -/-> pages`,
   },
-  dependencyAnalysis: {
-    ruleName: 'dependencyAnalysis',
+  dependency_analysis: {
+    ruleName: 'dependency_analysis',
     groupId: 'group-a',
     groupTitle: 'Группа А',
     previewTitle: 'Карта зависимостей',
@@ -400,8 +400,8 @@ export const RULE_PRESENTATIONS: Record<string, RulePresentation> = {
       'Покажет плотные участки проекта, критические связи между пакетами и подозрительные внешние зависимости.',
     previewCode: `app -> widgets -> features\nfeatures -> entities\nshared -> npm packages`,
   },
-  buildAnalysis: {
-    ruleName: 'buildAnalysis',
+  build_analysis: {
+    ruleName: 'build_analysis',
     groupId: 'group-a',
     groupTitle: 'Группа А',
     previewTitle: 'Анализ сборки',
@@ -409,8 +409,8 @@ export const RULE_PRESENTATIONS: Record<string, RulePresentation> = {
       'Проверка конфигов сборки, alias-ов, путей и сценариев, которые могут ломать запуск проекта.',
     previewCode: `vite.config.ts\nwebpack.config.js\ntsconfig.json\npackage.json`,
   },
-  lintAnalysis: {
-    ruleName: 'lintAnalysis',
+  lint_analysis: {
+    ruleName: 'lint_analysis',
     groupId: 'group-b',
     groupTitle: 'Группа Б',
     previewTitle: 'Линт-анализ',
@@ -418,8 +418,8 @@ export const RULE_PRESENTATIONS: Record<string, RulePresentation> = {
       'Подсветит распространённые проблемы стиля, потенциальные баги и подозрительные конструкции.',
     previewCode: `if (foo = bar) {\n  console.log(foo)\n}\n// <- подозрительное присваивание`,
   },
-  unusedVarsAnalysis: {
-    ruleName: 'unusedVarsAnalysis',
+  unused_analysis: {
+    ruleName: 'unused_analysis',
     groupId: 'group-b',
     groupTitle: 'Группа Б',
     previewTitle: 'Неиспользуемые переменные',
@@ -427,8 +427,8 @@ export const RULE_PRESENTATIONS: Record<string, RulePresentation> = {
       'Найдёт забытые импорты, мёртвые переменные и параметры, которые больше не участвуют в логике.',
     previewCode: `const response = fetchData();\nconst cached = normalize(data);\nreturn response;`,
   },
-  vulnerabilityAnalysis: {
-    ruleName: 'vulnerabilityAnalysis',
+  vulnerability_analysis: {
+    ruleName: 'vulnerability_analysis',
     groupId: 'group-b',
     groupTitle: 'Группа Б',
     previewTitle: 'Уязвимости в проекте',
@@ -436,8 +436,8 @@ export const RULE_PRESENTATIONS: Record<string, RulePresentation> = {
       'Проверка известных рискованных зависимостей и конфигураций, которые могут требовать обновления.',
     previewCode: `dependencies:\n  lodash: 4.17.15\n  minimist: 0.0.8`,
   },
-  complexityAnalysis: {
-    ruleName: 'complexityAnalysis',
+  complexity_analysis: {
+    ruleName: 'complexity_analysis',
     groupId: 'group-b',
     groupTitle: 'Группа Б',
     previewTitle: 'Сложность и поддерживаемость',

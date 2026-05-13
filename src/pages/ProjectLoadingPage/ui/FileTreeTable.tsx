@@ -10,9 +10,9 @@ import {
 } from 'lucide-react';
 import { useMemo } from 'react';
 
+import { SelectionCheckbox } from './SelectionCheckbox';
 import { flattenVisibleRows } from '../lib/file-tree';
 import type { PreparedArchive } from '../model/project-loading.types';
-import { SelectionCheckbox } from './SelectionCheckbox';
 
 interface Props {
   archive: PreparedArchive;

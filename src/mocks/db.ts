@@ -130,6 +130,9 @@ const seedUser: MockUser = {
   id: 'u-1',
   login: 'mors@example.com',
   password: 'password1',
+  firstName: 'Mors',
+  lastName: 'Example',
+  avatarUrl: 'https://cdn.example.com/avatars/mors/default.webp',
 };
 db.users.set(seedUser.login, seedUser);
 
@@ -272,51 +275,44 @@ export const cloneDefaultCards = () => defaultCards.map((c) => ({ ...c }));
 
 db.rules = [
   {
-    ruleName: 'structAnalysis',
+    ruleName: 'structure_analysis',
     ruleRussian: 'Структурный анализ',
-    ruleDescription:
-      'Система проверит, как разложены файлы и слои проекта относительно ожидаемой структуры.',
+    ruleDescription: 'Проверка разбиения проекта на ожидаемые слои и директории.',
   },
   {
-    ruleName: 'archAnalysis',
+    ruleName: 'architecture_analysis',
     ruleRussian: 'Архитектурный анализ',
-    ruleDescription:
-      'Поиск нарушений между модулями, слоями и потенциально опасных архитектурных связей.',
+    ruleDescription: 'Поиск нежелательных связей между модулями и слоями.',
   },
   {
-    ruleName: 'dependencyAnalysis',
+    ruleName: 'dependency_analysis',
     ruleRussian: 'Анализ зависимостей проекта',
-    ruleDescription: 'Проверка внешних зависимостей, связей между пакетами и критичных импортов.',
+    ruleDescription: 'Проверка связности зависимостей и потенциально критичных импортов.',
   },
   {
-    ruleName: 'buildAnalysis',
+    ruleName: 'build_analysis',
     ruleRussian: 'Анализ билда проекта',
-    ruleDescription:
-      'Проверка сборочных конфигов, alias-ов и сценариев, которые могут ломать запуск.',
+    ruleDescription: 'Проверка build-конфигов и связности импортов для запуска.',
   },
   {
-    ruleName: 'lintAnalysis',
+    ruleName: 'lint_analysis',
     ruleRussian: 'Линт-анализ',
-    ruleDescription:
-      'Проверка типичных style issues, потенциальных багов и проблем читаемости кода.',
+    ruleDescription: 'Поиск style issues и потенциально проблемных мест.',
   },
   {
-    ruleName: 'unusedVarsAnalysis',
+    ruleName: 'unused_analysis',
     ruleRussian: 'Анализ неиспользуемых переменных',
-    ruleDescription:
-      'Поиск забытых импортов, переменных и параметров, которые больше не участвуют в логике.',
+    ruleDescription: 'Выявление неиспользуемых импортов, переменных и параметров.',
   },
   {
-    ruleName: 'vulnerabilityAnalysis',
+    ruleName: 'vulnerability_analysis',
     ruleRussian: 'Анализ уязвимостей в проекте',
-    ruleDescription:
-      'Проверка зависимостей и конфигураций на признаки известных уязвимостей и рисков.',
+    ruleDescription: 'Оценка рисков по зависимостям и техническим сигналам.',
   },
   {
-    ruleName: 'complexityAnalysis',
+    ruleName: 'complexity_analysis',
     ruleRussian: 'Анализ сложности кода',
-    ruleDescription:
-      'Поиск самых перегруженных функций, тяжёлых ветвлений и сложно поддерживаемых мест.',
+    ruleDescription: 'Поиск сложных и тяжело поддерживаемых участков.',
   },
 ];
 

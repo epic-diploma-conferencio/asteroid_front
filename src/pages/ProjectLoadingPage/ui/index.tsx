@@ -7,16 +7,16 @@ import { toast } from 'sonner';
 import {
   useAvailableRules,
   useStartAnalysis,
-  useUploadProjectArchive,
+  useUploadProjectFiles,
   type AvailableRule,
 } from '@/entities/research';
 import { Loader } from '@/shared/ui/Loader';
 
-import { buildSelectedArchiveFile, unpackProjectInput } from '../lib/archive';
-import { RULE_PRESENTATIONS, describeFile } from '../lib/file-tree';
-import type { PreparedArchive } from '../model/project-loading.types';
 import { FileTreeTable } from './FileTreeTable';
 import { RulesGroupTable } from './RulesGroupTable';
+import { buildSelectedFiles, unpackProjectInput } from '../lib/archive';
+import { RULE_PRESENTATIONS, describeFile } from '../lib/file-tree';
+import type { PreparedArchive } from '../model/project-loading.types';
 
 import './project-loading-page.scss';
 
@@ -106,7 +106,7 @@ export const ProjectLoadingPage = () => {
   const [showRulesSection, setShowRulesSection] = useState(false);
   const [uploadedArchiveId, setUploadedArchiveId] = useState<string | null>(null);
 
-  const { mutateAsync: uploadArchive } = useUploadProjectArchive();
+  const { mutateAsync: uploadFiles } = useUploadProjectFiles();
   const { mutateAsync: startAnalysis } = useStartAnalysis();
   const { data: rulesResponse, isLoading: rulesLoading } = useAvailableRules(showRulesSection);
 
@@ -211,9 +211,15 @@ export const ProjectLoadingPage = () => {
     await waitForPaint();
 
     try {
-      const uploadFile = await buildSelectedArchiveFile(archive, selectedFilePaths);
-      const response = await uploadArchive(uploadFile);
+      const filesToUpload = buildSelectedFiles(archive, selectedFilePaths);
+      const response = await uploadFiles({ files: filesToUpload });
       setUploadedArchiveId(response.archiveId);
+
+      if (response.failedFiles && response.failedFiles.length) {
+        const firstError =
+          response.failedFiles[0].error || 'Часть файлов не удалось проанализировать.';
+        toast.warning(`Анализ продолжается, но не все файлы прошли: ${firstError}`);
+      }
 
       if (showRulesSection) {
         rulesSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });

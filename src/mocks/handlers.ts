@@ -24,8 +24,17 @@ const errorBody = (message: string, code: string, status: number, path: string) 
 
 const randomId = () => Math.random().toString(36).slice(2, 10);
 
-const publicUser = (u: { id: string; login: string }) => ({
+const publicUser = (u: {
+  login: string;
+  firstName?: string;
+  lastName?: string;
+  avatarUrl?: string;
+}) => ({
   login: u.login,
+  firstName: u.firstName ?? u.login,
+  lastName: u.lastName ?? u.login,
+  avatarUrl:
+    u.avatarUrl ?? `https://cdn.example.com/avatars/${encodeURIComponent(u.login)}/default.webp`,
 });
 
 const normalizeResearchName = (archiveName: string) => {
@@ -155,6 +164,9 @@ export const handlers = [
       id: randomId(),
       login,
       password,
+      firstName: login,
+      lastName: login,
+      avatarUrl: `https://cdn.example.com/avatars/${encodeURIComponent(login)}/default.webp`,
     };
     db.users.set(login, user);
     persistMockDb();

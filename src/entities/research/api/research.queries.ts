@@ -151,9 +151,10 @@ export const useAvailableRules = (enabled = true) =>
     queryFn: researchApi.getAvailableRules,
   });
 
-export const useUploadProjectArchive = () =>
+export const useUploadProjectFiles = () =>
   useMutation({
-    mutationFn: (archive: File) => researchApi.uploadArchive(archive),
+    mutationFn: ({ files, language }: { files: File[]; language?: string }) =>
+      researchApi.uploadFiles(files, language),
   });
 
 export const useStartAnalysis = () => {

@@ -1,4 +1,4 @@
-import { unzip, zip } from 'fflate';
+import { unzip } from 'fflate';
 
 import { buildPreparedArchive, describeFile, normalizeArchivePath } from './file-tree';
 import type { NormalizedArchiveFile, PreparedArchive } from '../model/project-loading.types';
@@ -43,18 +43,6 @@ const promisifiedUnzip = (data: Uint8Array) =>
       }
 
       resolve(unzipped);
-    });
-  });
-
-const promisifiedZip = (entries: Record<string, Uint8Array>) =>
-  new Promise<Uint8Array>((resolve, reject) => {
-    zip(entries, { level: 6 }, (error, zipped) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-
-      resolve(zipped);
     });
   });
 
@@ -194,18 +182,22 @@ export const detectArchiveLanguage = (archive: PreparedArchive, selectedPaths: s
   return dominant ?? 'Mixed';
 };
 
-export const buildSelectedArchiveFile = async (
-  archive: PreparedArchive,
-  selectedPaths: string[],
-): Promise<File> => {
+/**
+ * Возвращает массив File-объектов, готовых к multipart-загрузке через поле `files[]`.
+ * Раньше тут была обратная упаковка в zip — но бэк zip'ы не распаковывает,
+ * он ждёт отдельные файлы и распределяет каждый по воркеру по расширению.
+ *
+ * Имя файла нормализуем: оставляем только basename, чтобы избежать риска
+ * слэшей в filename'ах multipart (некоторые серверы их интерпретируют как путь).
+ */
+export const buildSelectedFiles = (archive: PreparedArchive, selectedPaths: string[]): File[] => {
   const selectedFiles = validateSelectedArchiveFiles(archive, selectedPaths);
-  const entries = Object.fromEntries(selectedFiles.map((file) => [file.path, file.content]));
-  const zipped = await promisifiedZip(entries);
-  const fileName = archive.sourceName.toLowerCase().endsWith(ZIP_EXTENSION)
-    ? archive.sourceName
-    : `${archive.displayName}.zip`;
 
-  return new File([zipped], fileName, {
-    type: 'application/zip',
+  return selectedFiles.map((entry) => {
+    const baseName = entry.name || entry.path.split('/').pop() || 'file';
+    const blob = new Blob([entry.content as BlobPart], {
+      type: 'application/octet-stream',
+    });
+    return new File([blob], baseName, { type: 'application/octet-stream' });
   });
 };

@@ -49,10 +49,27 @@ export const researchApi = {
   delete: (id: string): Promise<void> =>
     api.delete(endpoints.research.DETAIL(id)).then(() => undefined),
 
-  uploadArchive: (archive: File, language: string): Promise<UploadProjectResponse> => {
+  /**
+   * Загрузка одного или нескольких исходных файлов на анализ.
+   * Бэк ожидает поле `files` (массив) либо `file` (одиночный) — НЕ zip.
+   * Каждый файл будет распределён воркеру по расширению.
+   */
+  uploadFiles: (files: File[], language?: string): Promise<UploadProjectResponse> => {
+    if (files.length === 0) {
+      return Promise.reject(new Error('Не выбрано ни одного файла для загрузки.'));
+    }
+
     const formData = new FormData();
-    formData.append('file', archive);
-    formData.append('language', language);
+    if (files.length === 1) {
+      formData.append('file', files[0], files[0].name);
+    } else {
+      files.forEach((file) => {
+        formData.append('files', file, file.name);
+      });
+    }
+    if (language) {
+      formData.append('language', language);
+    }
 
     return api
       .post<UploadProjectResponse>(endpoints.research.UPLOAD, formData, {

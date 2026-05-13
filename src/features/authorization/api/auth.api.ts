@@ -10,10 +10,22 @@ import type {
 
 export const authApi = {
   register: (dto: CreateUserDto): Promise<AuthResponse> =>
-    api.post<AuthResponse>(endpoints.auth.REGISTER, dto).then((r) => r.data),
+    api
+      .post<AuthResponse>(endpoints.auth.REGISTER, {
+        login: dto.login,
+        password: dto.password,
+        firstName: dto.firstName ?? dto.login,
+        lastName: dto.lastName ?? dto.login,
+      })
+      .then((r) => r.data),
 
   login: (dto: LoginUserDto): Promise<AuthResponse> =>
-    api.post<AuthResponse>(endpoints.auth.LOGIN, dto).then((r) => r.data),
+    api
+      .post<AuthResponse>(endpoints.auth.LOGIN, {
+        login: dto.login,
+        password: dto.password,
+      })
+      .then((r) => r.data),
 
   refresh: (): Promise<AuthResponse> =>
     api.post<AuthResponse>(endpoints.auth.REFRESH).then((r) => r.data),
