@@ -58,7 +58,6 @@ export const RegForm = ({ onSwitch, onClose }: AuthFormProps) => {
     setError,
     reset,
     trigger,
-    control,
     watch,
   } = useForm<RegFormValues>({
     resolver: zodResolver(RegSchema),
