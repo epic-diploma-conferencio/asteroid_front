@@ -233,9 +233,6 @@ export const RULE_EXPLAINERS: Record<string, RuleExplainer> = {
 export const explainerForRule = (ruleName: string): RuleExplainer | null =>
   RULE_EXPLAINERS[ruleName] ?? null;
 
-/**
- * Парсит id вида `card-3-structure_analysis` и достаёт rule name.
- */
 export const ruleNameFromCardId = (cardId: string): string | null => {
   const match = cardId.match(/^card-\d+-(.+)$/);
   return match ? match[1] : null;

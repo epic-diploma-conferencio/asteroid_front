@@ -13,10 +13,6 @@ import './project-card.scss';
 const ownerLabel = (project: SavedResearchListItem) =>
   project.ownerIsMe ? `Вы (${project.ownerEmail})` : project.ownerEmail;
 
-/**
- * Палитра «обложек» по языку: 2 цвета на градиент.
- * Если язык не угадан — стандартная нейтральная пара.
- */
 const LANGUAGE_PALETTE: Record<string, [string, string]> = {
   typescript: ['#3178c6', '#1d4f8a'],
   javascript: ['#f7df1e', '#c2a90f'],

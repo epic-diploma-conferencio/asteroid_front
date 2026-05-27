@@ -1,12 +1,5 @@
 import { useEffect, useState } from 'react';
 
-/**
- * Отслеживает соответствие CSS media query и реагирует на изменения.
- *
- * @example
- * const isMobile = useMediaQuery(breakpoints.md);     // < 768px
- * const isDesktop = useMediaQuery('(min-width: 1024px)');
- */
 export function useMediaQuery(query: string): boolean {
   const [matches, setMatches] = useState(() =>
     typeof window !== 'undefined' ? window.matchMedia(query).matches : false,
@@ -24,12 +17,6 @@ export function useMediaQuery(query: string): boolean {
   return matches;
 }
 
-/**
- * Пресеты брейкпоинтов (mobile-first, min-width).
- *
- * @example
- * const isTablet = useMediaQuery(breakpoints.md);   // >= 768px
- */
 export const breakpoints = {
   xs: '(min-width: 480px)',
   sm: '(min-width: 640px)',

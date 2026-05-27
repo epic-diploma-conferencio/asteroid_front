@@ -12,7 +12,6 @@ interface QueryProviderProps {
 export const QueryProvider = ({ children }: QueryProviderProps) => (
   <QueryClientProvider client={queryClient}>
     {children}
-    {/* Панель DevTools (правый нижний угол) — рендерится только в dev-сборках */}
     {env.enableDevtools && <ReactQueryDevtools initialIsOpen={false} />}
   </QueryClientProvider>
 );

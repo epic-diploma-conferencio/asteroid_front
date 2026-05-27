@@ -36,7 +36,6 @@ export type RuleScoreSeverity = 'low' | 'medium' | 'high';
 
 export type RuleGroup = 'group-a' | 'group-b';
 
-/** Метрики графа AST, по которым считается каждый score. */
 export interface GraphMetrics {
   totalNodes: number;
   totalEdges: number;
@@ -46,7 +45,6 @@ export interface GraphMetrics {
   density: number;
 }
 
-/** Результат одного правила в составе исследования. */
 export interface RuleResult {
   ruleName: string;
   ruleRussian: string;

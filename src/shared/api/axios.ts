@@ -15,7 +15,6 @@ export const api = axios.create({
   },
 });
 
-// ─── Request-интерсептор ──────────────────────────────────────────────────────
 api.interceptors.request.use(
   (config) => {
     const token = useAuthStore.getState().token;
@@ -27,7 +26,6 @@ api.interceptors.request.use(
   (error: unknown) => Promise.reject(error),
 );
 
-// ─── Response-интерсептор ─────────────────────────────────────────────────────
 api.interceptors.response.use(
   (response) => response,
   async (error: unknown) => {

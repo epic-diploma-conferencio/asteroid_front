@@ -9,9 +9,6 @@
   scrollbar-gutter: stable;
 }
 
-/* ============================================================
-   Screen 1 — Hero (gif background, theme-independent)
-   ============================================================ */
 .welcome-hero {
   position: relative;
   min-height: 100%;
@@ -122,9 +119,6 @@
   }
 }
 
-/* ============================================================
-   Screen 2 — How it works
-   ============================================================ */
 .welcome-how {
   min-height: 100%;
   display: flex;
@@ -275,9 +269,6 @@
   }
 }
 
-/* ============================================================
-   Feature card (used inside carousel)
-   ============================================================ */
 .welcome-card {
   width: 100%;
   max-width: 520px;
@@ -288,7 +279,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: 16px 16px 12px; /* top, right, bottom (12), left — сверху/по бокам 16, снизу 12 */
+  padding: 16px 16px 12px;
 
   [data-theme='dark'] & {
     background: var(--color-contrast-2);

@@ -133,9 +133,7 @@ export const LoginForm = ({ onSwitch, onClose }: AuthFormProps) => {
       </button>
 
       <div className="auth-form__footer">
-        <button type="button" className="auth-form__link">
-          Забыли пароль?
-        </button>
+        <span>Нет аккаунта?</span>
         <button type="button" className="auth-form__link" onClick={onSwitch}>
           Регистрация
         </button>

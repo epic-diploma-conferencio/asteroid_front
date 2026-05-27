@@ -1,8 +1,5 @@
 @use '@/shared/styles/breakpoints' as *;
 
-/* ============================================================
-   Page container — fills main area & scrolls when content overflows
-   ============================================================ */
 .research-page {
   --research-frame-max: calc(1000px + var(--space-8));
 
@@ -139,9 +136,6 @@
   }
 }
 
-/* ============================================================
-   Card
-   ============================================================ */
 .research-card {
   display: flex;
   flex-direction: column;
@@ -271,9 +265,6 @@
   }
 }
 
-/* ============================================================
-   Link-style action buttons (Удалить, Перегенерировать)
-   ============================================================ */
 .research-action {
   display: inline-flex;
   align-items: center;

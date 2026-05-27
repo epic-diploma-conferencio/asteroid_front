@@ -30,10 +30,6 @@ const toneFromScore = (score: number): RuleScoreStatus => {
   return 'failed';
 };
 
-/**
- * Лёгкий радиальный индикатор оценки (без recharts — чистый SVG,
- * чтобы тысяча карточек не клала браузер).
- */
 export const ScoreGauge = ({
   score,
   status,
@@ -48,12 +44,10 @@ export const ScoreGauge = ({
 
   const radius = (size - thickness) / 2;
   const circumference = 2 * Math.PI * radius;
-  // 270° арка вместо 360° — выглядит как "manometer", не как полный круг
   const sweep = 0.78;
   const arcLength = circumference * sweep;
   const filled = (safeScore / 100) * arcLength;
   const dashOffset = arcLength - filled;
-  // Поворачиваем стартовую точку, чтобы пустое место было снизу
   const rotation = useMemo(() => 90 + (1 - sweep) * 180, []);
 
   return (

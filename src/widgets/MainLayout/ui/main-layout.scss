@@ -1,17 +1,5 @@
 @use '@/shared/styles/breakpoints' as *;
 
-// .header {
-//   padding: 12px;
-
-//   @include md {
-//     padding: 24px;
-//   }
-
-//   @include lg {
-//     padding: 32px;
-//   }
-// }
-
 .main-layout {
   display: flex;
   flex-direction: column;

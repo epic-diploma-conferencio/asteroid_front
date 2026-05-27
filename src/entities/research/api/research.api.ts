@@ -49,11 +49,6 @@ export const researchApi = {
   delete: (id: string): Promise<void> =>
     api.delete(endpoints.research.DETAIL(id)).then(() => undefined),
 
-  /**
-   * Загрузка одного или нескольких исходных файлов на анализ.
-   * Бэк ожидает поле `files` (массив) либо `file` (одиночный) — НЕ zip.
-   * Каждый файл будет распределён воркеру по расширению.
-   */
   uploadFiles: (files: File[], language?: string): Promise<UploadProjectResponse> => {
     if (files.length === 0) {
       return Promise.reject(new Error('Не выбрано ни одного файла для загрузки.'));

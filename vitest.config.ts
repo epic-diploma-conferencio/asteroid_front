@@ -7,25 +7,16 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      // Зеркалим пути из tsconfig.app.json
       '@': resolve(__dirname, './src'),
     },
   },
 
   test: {
-    // jsdom эмулирует браузерное окружение для компонентных тестов
     environment: 'jsdom',
-
-    // Setup-файл запускается перед каждым тест-файлом (jest-dom матчеры + MSW-сервер)
     setupFiles: ['./src/tests/setup.ts'],
-
-    // Глобалы Vitest (describe, it, expect и т.д.) доступны без импортов
     globals: true,
-
-    // Обрабатываем CSS-модули и SCSS (предотвращает ошибки импорта)
     css: true,
 
-    // Покрытие кода
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],

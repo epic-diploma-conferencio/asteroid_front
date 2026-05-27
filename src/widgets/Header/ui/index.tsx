@@ -9,8 +9,6 @@ import './header.scss';
 
 import { AccountDropdown } from './AccountDropdown';
 
-const uploadStatusLabel = '0/1 загружено';
-
 export const Header = () => {
   const isAuth = useAuthStore((state) => state.token !== null);
   const { resolvedTheme, setMode } = useTheme();
@@ -32,8 +30,6 @@ export const Header = () => {
           <Link to={isAuth ? '/dashboard' : '/'} className="Header__brand" aria-label="ASTeroid">
             <span className="Header__logo">ASTeroid</span>
           </Link>
-
-          {!isAuth ? <span className="Header__status">{uploadStatusLabel}</span> : null}
         </div>
 
         <div className="Header__right">

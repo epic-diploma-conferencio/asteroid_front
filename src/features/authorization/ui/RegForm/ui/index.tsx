@@ -1,9 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as Checkbox from '@radix-ui/react-checkbox';
-import * as Label from '@radix-ui/react-label';
 import type { AxiosError } from 'axios';
 import { clsx } from 'clsx';
-import { Check, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import {
   useRef,
   useState,
@@ -11,7 +9,7 @@ import {
   type MouseEventHandler,
   type SetStateAction,
 } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
@@ -192,28 +190,6 @@ export const RegForm = ({ onSwitch, onClose }: AuthFormProps) => {
         <ErrorMessage message={errors.confirmPassword?.message} className="auth-form__error" />
       </div>
 
-      <div className="auth-form__check-row">
-        <Controller
-          control={control}
-          name="remember"
-          render={({ field }) => (
-            <Checkbox.Root
-              className="auth-form__checkbox"
-              id="remember"
-              checked={field.value}
-              onCheckedChange={(checked) => field.onChange(checked === true)}
-            >
-              <Checkbox.Indicator className="auth-form__checkbox-indicator">
-                <Check size={16} strokeWidth={3} />
-              </Checkbox.Indicator>
-            </Checkbox.Root>
-          )}
-        />
-        <Label.Root className="auth-form__checkbox-label" htmlFor="remember">
-          Запомнить меня
-        </Label.Root>
-      </div>
-
       <ErrorMessage
         message={errors.root?.message}
         className="auth-form__error auth-form__error--root"
@@ -224,11 +200,9 @@ export const RegForm = ({ onSwitch, onClose }: AuthFormProps) => {
       </button>
 
       <div className="auth-form__footer">
-        <button type="button" className="auth-form__link">
-          Забыли пароль?
-        </button>
+        <span>Уже есть аккаунт?</span>
         <button type="button" className="auth-form__link" onClick={onSwitch}>
-          Вход в аккаунт
+          Войти
         </button>
       </div>
     </form>

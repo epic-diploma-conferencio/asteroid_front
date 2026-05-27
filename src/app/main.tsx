@@ -14,7 +14,6 @@ if (!root) {
   throw new Error('Элемент #root не найден. Проверьте index.html.');
 }
 
-// Удалить статичный прелоадер после монтирования React
 const removePreloader = () => {
   const preloader = document.getElementById('app-preloader');
   if (preloader) {

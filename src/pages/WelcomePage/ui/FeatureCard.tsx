@@ -18,9 +18,7 @@ export const FeatureCard = ({ feature }: Props) => {
   return (
     <article className="welcome-card">
       <div className="welcome-card__image">
-        {!isImageLoaded ? (
-          <Loader className="welcome-card__image-loader" size="md" />
-        ) : null}
+        {!isImageLoaded ? <Loader className="welcome-card__image-loader" size="md" /> : null}
         <img
           src={feature.image}
           alt=""

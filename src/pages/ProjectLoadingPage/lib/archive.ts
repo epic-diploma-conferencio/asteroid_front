@@ -182,14 +182,6 @@ export const detectArchiveLanguage = (archive: PreparedArchive, selectedPaths: s
   return dominant ?? 'Mixed';
 };
 
-/**
- * Возвращает массив File-объектов, готовых к multipart-загрузке через поле `files[]`.
- * Раньше тут была обратная упаковка в zip — но бэк zip'ы не распаковывает,
- * он ждёт отдельные файлы и распределяет каждый по воркеру по расширению.
- *
- * Имя файла нормализуем: оставляем только basename, чтобы избежать риска
- * слэшей в filename'ах multipart (некоторые серверы их интерпретируют как путь).
- */
 export const buildSelectedFiles = (archive: PreparedArchive, selectedPaths: string[]): File[] => {
   const selectedFiles = validateSelectedArchiveFiles(archive, selectedPaths);
 

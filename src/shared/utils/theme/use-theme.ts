@@ -54,19 +54,6 @@ export function useSyncThemeEffect() {
   }, [mode]);
 }
 
-/**
- * Управление темой приложения.
- *
- * - `mode` — выбранный режим: `'light'`, `'dark'`, или `'system'` (по умолчанию).
- * - `resolvedTheme` — фактическая тема (`'light'` | `'dark'`), с учётом системной.
- * - `setMode` — установить конкретный режим.
- * - `toggle` — переключить между `light` и `dark`.
- *
- * Синхронизацию `data-theme` выполняет `useSyncThemeEffect()` в `ThemeProvider`.
- *
- * @example
- * const { resolvedTheme, toggle } = useTheme();
- */
 export function useTheme() {
   const { mode, setMode } = useThemeStore();
 

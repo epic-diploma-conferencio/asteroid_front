@@ -105,6 +105,7 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
     const target = cards.find((c) => c.id === id);
     if (target) {
       setExpandedCard(target);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -139,7 +140,6 @@ export const ResearchPage = ({ mode }: ResearchPageProps) => {
 
   const handleConfirmRegenerate = () => {
     setRegenerateOpen(false);
-    // TODO: заново выбрать правила и запустить анализ
   };
 
   const handleSaveProject = async (values: SaveProjectValues) => {

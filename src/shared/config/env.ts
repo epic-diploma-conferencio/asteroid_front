@@ -1,11 +1,5 @@
 import { z } from 'zod';
 
-/**
- * Валидация переменных окружения в рантайме.
- * При запуске приложения выбрасывает ошибку, если обязательные переменные
- * отсутствуют или имеют неверный формат.
- * Добавляйте новые переменные сюда по мере роста проекта.
- */
 const envSchema = z.object({
   VITE_API_URL: z.string().min(1, 'VITE_API_URL обязателен'),
   VITE_API_TIMEOUT: z
@@ -38,8 +32,6 @@ export const env = {
   appEnv: parsed.data.VITE_APP_ENV,
   isDev: import.meta.env.DEV,
   isProd: import.meta.env.PROD,
-  /** DevTools включены только если VITE_ENABLE_DEVTOOLS=true (или в dev-режиме по умолчанию) */
   enableDevtools: parsed.data.VITE_ENABLE_DEVTOOLS ?? import.meta.env.DEV,
-  /** MSW mock worker запускается только если VITE_USE_MOCKS=true */
   useMocks: parsed.data.VITE_USE_MOCKS,
 } as const;
