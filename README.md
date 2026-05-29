@@ -1,7 +1,5 @@
 # ASTeroid - уникальный проект для расширенного анализа ваших приложений!
 
-Сделан с любовью на основе [mayonezny/react-front-template](https://github.com/mayonezny/react-front-template)
-
 📖 **[Ультимативный гайд по всем библиотекам →](GUIDE.md)**
 
 ## Стек
