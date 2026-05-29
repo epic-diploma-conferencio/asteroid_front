@@ -142,7 +142,6 @@ export default [
       'playwright-report',
       'test-results',
       'node_modules',
-      'public/mockServiceWorker.js',
     ],
   },
 ];

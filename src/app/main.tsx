@@ -2,8 +2,6 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 
-import { env } from '@/shared/config';
-
 import { AppProviders } from './providers';
 import { router } from './router';
 
@@ -22,26 +20,12 @@ const removePreloader = () => {
   }
 };
 
-const render = () => {
-  createRoot(root).render(
-    <StrictMode>
-      <AppProviders>
-        <RouterProvider router={router} />
-      </AppProviders>
-    </StrictMode>,
-  );
-  removePreloader();
-};
+createRoot(root).render(
+  <StrictMode>
+    <AppProviders>
+      <RouterProvider router={router} />
+    </AppProviders>
+  </StrictMode>,
+);
 
-const bootstrap = async () => {
-  if (env.useMocks) {
-    const { worker } = await import('@/mocks/browser');
-    await worker.start({
-      onUnhandledRequest: 'bypass',
-      serviceWorker: { url: '/mockServiceWorker.js' },
-    });
-  }
-  render();
-};
-
-void bootstrap();
+removePreloader();

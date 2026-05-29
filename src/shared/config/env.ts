@@ -6,13 +6,9 @@ const envSchema = z.object({
     .string()
     .optional()
     .transform((v) => (v ? Number(v) : 15_000)),
-  VITE_APP_TITLE: z.string().optional().default('Frontend Template'),
+  VITE_APP_TITLE: z.string().optional().default('Asteroid'),
   VITE_APP_ENV: z.enum(['development', 'production', 'test']).optional().default('development'),
   VITE_ENABLE_DEVTOOLS: z
-    .string()
-    .optional()
-    .transform((v) => v === 'true'),
-  VITE_USE_MOCKS: z
     .string()
     .optional()
     .transform((v) => v === 'true'),
@@ -33,5 +29,4 @@ export const env = {
   isDev: import.meta.env.DEV,
   isProd: import.meta.env.PROD,
   enableDevtools: parsed.data.VITE_ENABLE_DEVTOOLS ?? import.meta.env.DEV,
-  useMocks: parsed.data.VITE_USE_MOCKS,
 } as const;
