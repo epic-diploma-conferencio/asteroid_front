@@ -31,10 +31,6 @@
     <title>ASTeroid</title>
 
     <style>
-      /* ─── App Preloader ──────────────────────────────────────────────────
-         Shown while JS loads. React removes it on mount via main.tsx.
-         Uses only CSS — no JS dependency, works even if bundle fails to load.
-      ──────────────────────────────────────────────────────────────────── */
       :root {
         --pre-bg: #f5f5f5;
         --pre-muted: rgba(22, 26, 29, 0.14);
@@ -107,7 +103,6 @@
   </head>
 
   <body>
-    <!-- Static preloader — removed by React after mount (see main.tsx) -->
     <div id="app-preloader" aria-hidden="true" aria-label="Loading application">
       <div class="pre-shell">
         <div class="pre-spinner"></div>

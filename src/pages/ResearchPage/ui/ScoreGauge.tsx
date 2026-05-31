@@ -3,13 +3,10 @@ import { useMemo } from 'react';
 import type { RuleScoreStatus } from '@/entities/research';
 
 interface Props {
-  /** 0..100 */
   score: number;
   status?: RuleScoreStatus;
   size?: number;
-  /** Толщина дуги. */
   thickness?: number;
-  /** Подпись под/над числом. */
   caption?: string;
   className?: string;
 }

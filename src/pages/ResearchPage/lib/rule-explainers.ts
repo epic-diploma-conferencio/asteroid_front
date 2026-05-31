@@ -11,20 +11,14 @@ const styleMultiplier = (style: RuleStyle): number => {
 };
 
 export interface RuleDriver {
-  /** Краткое название метрики, на которой держится оценка. */
   label: string;
-  /** Уже посчитанное человекочитаемое значение. */
   value: string;
-  /** Подсказка-почему. */
   detail: string;
 }
 
 export interface RuleExplainer {
-  /** Что меряет правило одной строкой. */
   summary: string;
-  /** «Формула» в человеческом виде. */
   formula: string;
-  /** Подсчитанные драйверы (то, что вытянуло score вверх/вниз). */
   drivers: (metrics: GraphMetrics, style: RuleStyle) => RuleDriver[];
 }
 

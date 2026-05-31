@@ -1,15 +1,10 @@
-# Dev-образ фронтенда: Vite-dev сервер с HMR.
-# Код монтируется томом из docker-compose (см. compose.yml).
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Зависимости устанавливаются в образе, чтобы не дёргать host'овый node_modules
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# В dev-режиме сами исходники проброшены volume'ом, копировать не обязательно,
-# но это гарантирует, что контейнер запустится и без bind-mount.
 COPY . .
 
 EXPOSE 5173

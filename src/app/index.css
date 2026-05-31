@@ -1,9 +1,6 @@
-/* 1) Normalize */
 @import 'modern-normalize';
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans+Caption:wght@400;700&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&family=Rubik:wght@400;500;600;700&family=Sarpanch:wght@700&display=swap');
 
-/* Official self-hosted Lato webfont kit with Cyrillic support.
-   Google Fonts serves the older basic-Latin web version for Lato. */
 @font-face {
   font-family: 'Lato';
   src: url('/fonts/lato/Lato-Regular.woff2') format('woff2');
@@ -68,37 +65,28 @@
   font-display: swap;
 }
 
-/* 2) Мягкий reset + удобные базовые правила */
 :root {
   color-scheme: light dark;
 
-  /* =========================
-     Палитра (из Figma)
-     ========================= */
   --color-white: #f5f5f5;
   --color-black: #161a1df2;
 
-  /* Бренд / статусы */
-  --color-success: #238636; /* Основной Зеленый */
-  --color-danger: #ba181b; /* Основной Красный */
+  --color-success: #238636;
+  --color-danger: #ba181b;
 
-  /* Нейтральные / служебные */
-  --color-inactive: #bec0c7; /* Неактивный */
-  --color-inactive-alpha: #7c7c7c40; /* Неактивн */
-  --color-checkbox: #00000040; /* Для чекбоксов */
-  --color-table-head: #7c7c7c; /* Для шапочек таблиц */
-  --color-contrast-1: #0d1117; /* Цвет контраста 1 */
-  --color-contrast-2: #11161c; /* Цвет контраста 2 */
-  --color-misc: #0f1c26f2; /* "хз" из фигмы */
+  --color-inactive: #bec0c7;
+  --color-inactive-alpha: #7c7c7c40;
+  --color-checkbox: #00000040;
+  --color-table-head: #7c7c7c;
+  --color-contrast-1: #0d1117;
+  --color-contrast-2: #11161c;
+  --color-misc: #0f1c26f2;
 
-  /* =========================
-     Светлая тема (дефолт)
-     ========================= */
-  --color-bg: #f5f5f5; /* Цвет Заливки Светлой Темы */
-  --color-surface: #f7f7f7; /* Шапочки светлые */
-  --color-text: #161a1df2; /* Основной черный (текст) */
-  --color-text-muted: #7c7c7c; /* Подписи */
-  --color-border: #00000026; /* Цвет линий Светлый */
+  --color-bg: #f5f5f5;
+  --color-surface: #f7f7f7;
+  --color-text: #161a1df2;
+  --color-text-muted: #7c7c7c;
+  --color-border: #00000026;
 
   --color-primary: var(--color-success);
   --color-primary-hover: color-mix(in oklab, var(--color-success) 85%, black);
@@ -109,7 +97,6 @@
   --focus-ring: 3px;
   --color-focus: color-mix(in oklab, var(--color-primary) 40%, transparent);
 
-  /* Радиусы/тени (универсально) */
   --radius-xs: 6px;
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -120,10 +107,6 @@
   --shadow-md: 0 2px 8px rgba(16, 24, 40, 0.1);
   --shadow-lg: 0 8px 24px rgba(16, 24, 40, 0.14);
 
-  /* =========================
-     Пространство (паддинги/гепы)
-     Скейл по 4px (t-shirt и числовой)
-     ========================= */
   --space-0: 0;
   --space-1: 4px;
   --space-1-n: -4px;
@@ -140,21 +123,17 @@
   --space-16: 64px;
   --space-18: 128px;
 
-  /* “Фасады” паддингов для компонентов */
-  --pad-2xs: var(--space-1); /* 4px  */
-  --pad-xs: var(--space-2); /* 8px  */
-  --pad-sm: var(--space-3); /* 12px */
-  --pad-md: var(--space-4); /* 16px */
-  --pad-lg: var(--space-6); /* 24px */
-  --pad-xl: var(--space-8); /* 32px */
-  --pad-2xl: var(--space-12); /* 48px */
-  --pad-3xl: var(--space-14); /* 56px */
-  --pad-4xl: var(--space-16); /* 64px */
+  --pad-2xs: var(--space-1);
+  --pad-xs: var(--space-2);
+  --pad-sm: var(--space-3);
+  --pad-md: var(--space-4);
+  --pad-lg: var(--space-6);
+  --pad-xl: var(--space-8);
+  --pad-2xl: var(--space-12);
+  --pad-3xl: var(--space-14);
+  --pad-4xl: var(--space-16);
   --pad-5xl: var(--space-18);
 
-  /* =========================
-     Типографика (из Figma)
-     ========================= */
   --font-heading: 'Rubik', ui-sans-serif, system-ui, sans-serif;
   --font-body: 'Lato', ui-sans-serif, system-ui, sans-serif;
   --font-caption: 'PT Sans Caption', ui-sans-serif, system-ui, sans-serif;
@@ -163,7 +142,6 @@
   --font-sans: var(--font-body);
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Размеры из Figma */
   --fs-12: 12px;
   --fs-16: 16px;
   --fs-20: 20px;
@@ -173,87 +151,64 @@
   --fs-48: 48px;
   --fs-64: 64px;
 
-  /* Высоты строк */
   --lh-tight: 1.2;
   --lh-normal: 1.5;
   --lh-relaxed: 1.7;
 
-  /* Веса */
   --fw-regular: 400;
   --fw-medium: 500;
   --fw-semibold: 600;
   --fw-bold: 700;
 }
 
-/* =========================
-   Типографические классы из Figma
-   ========================= */
-/* Figma: "little text 12pt" — PT Sans Caption Regular 12 */
 .t-little-12 {
   font: var(--fw-regular) var(--fs-12) / var(--lh-normal) var(--font-caption);
 }
-/* Figma: "Common text" — Lato Regular 16 */
 .t-common {
   font: var(--fw-regular) var(--fs-16) / var(--lh-relaxed) var(--font-body);
 }
-/* Figma: "CommonTextBalder" — Lato Medium 16 */
 .t-common-bold {
   font: var(--fw-medium) var(--fs-16) / var(--lh-relaxed) var(--font-body);
 }
-/* Figma: "CommonText bigger" — Lato Regular 20 */
 .t-common-big {
   font: var(--fw-regular) var(--fs-20) / var(--lh-relaxed) var(--font-body);
 }
-/* Figma: "Button text" — Rubik Medium 16 */
 .t-button {
   font: var(--fw-medium) var(--fs-16) / var(--lh-tight) var(--font-heading);
 }
-/* Figma: "ButtonTextNoBold (Rubik regular 16)" — Rubik Regular 16, underline */
 .t-button-link {
   font: var(--fw-regular) var(--fs-16) / var(--lh-tight) var(--font-heading);
   text-decoration: underline;
 }
-/* Figma: "24pt Headline" — Rubik Regular 24 */
 .t-h-24 {
   font: var(--fw-regular) var(--fs-24) / var(--lh-tight) var(--font-heading);
 }
-/* Figma: "32pt Headline" — Rubik Regular 32 */
 .t-h-32 {
   font: var(--fw-regular) var(--fs-32) / var(--lh-tight) var(--font-heading);
 }
-/* Figma: "32pt HL balder" — Rubik Medium 32 */
 .t-h-32-bold {
   font: var(--fw-medium) var(--fs-32) / var(--lh-tight) var(--font-heading);
 }
-/* Figma: "40pt Headline balder" — Rubik SemiBold 40 */
 .t-h-40 {
   font: var(--fw-semibold) var(--fs-40) / var(--lh-tight) var(--font-heading);
 }
-/* Figma: "48pt Headline" — Rubik Regular 48 */
 .t-h-48 {
   font: var(--fw-regular) var(--fs-48) / var(--lh-tight) var(--font-heading);
 }
-/* Figma: "64pt Headline" — Rubik Regular 64 */
 .t-h-64 {
   font: var(--fw-regular) var(--fs-64) / var(--lh-tight) var(--font-heading);
 }
 
-/* =========================
-   Тёмная тема (из Figma)
-   ========================= */
 [data-theme='dark'] {
-  --color-bg: #0d1117; /* Цвет Заливки Темной Темы */
-  --color-surface: #151b23; /* Светлые шапочки (dark header caps) */
-  --color-text: #ccd4de; /* Текст Темная Тема */
-  --color-text-muted: #535e66; /* ТемнТема Подписи */
-  --color-border: #3d444d; /* Цвет линий */
+  --color-bg: #0d1117;
+  --color-surface: #151b23;
+  --color-text: #ccd4de;
+  --color-text-muted: #535e66;
+  --color-border: #3d444d;
   --color-white: #f7f7f7;
   --color-white-muted: #f0f0f0;
 }
 
-/* =========================
-   Transitions
-   ========================= */
 :root {
   --transition-fast: 150ms ease;
   --transition-base: 200ms ease;
@@ -337,7 +292,6 @@ ol[role='list'] {
   margin: 0;
 }
 
-/* Фокус только для клавы */
 :focus:not(:focus-visible) {
   outline: none;
 }
@@ -347,7 +301,6 @@ ol[role='list'] {
   border-radius: var(--radius-sm);
 }
 
-/* Уменьшение анимаций при системной настройке */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;
@@ -357,12 +310,10 @@ ol[role='list'] {
   }
 }
 
-/* По умолчанию — контейнерная вёрстка без горизонтального скролла */
 #root {
   overflow-x: clip;
 }
 
-/* Удобные дефолты таблиц/форм */
 table {
   border-collapse: collapse;
   width: 100%;
@@ -376,12 +327,10 @@ textarea {
   resize: vertical;
 }
 
-/* Selection */
 ::selection {
   background: color-mix(in oklab, var(--color-primary) 35%, transparent);
 }
 
-/* Скрытые доступные элементы */
 .visually-hidden {
   position: absolute;
   width: 1px;

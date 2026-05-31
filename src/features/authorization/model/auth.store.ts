@@ -14,6 +14,6 @@ export const useAuthStore = create<AuthStore>()(
       setToken: (token) => set({ token }),
       clearToken: () => set({ token: null }),
     }),
-    { name: 'accessToken' }, // ключ в localStorage
+    { name: 'accessToken' },
   ),
 );
